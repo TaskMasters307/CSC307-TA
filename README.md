@@ -8,11 +8,17 @@ Contributing Steps:
     3. git checkout -b <your branch name> 
     
   To install dependencies:
+  
     1. npm install
+    
     2. npm install react react-dom
+    
     3. npm install -g nodemon
+    
     4. npm install express
+    
     5. npm install mongoose
+    
     6. npm install cors
     
   To install prettier: # Prettier is our styler of choice
