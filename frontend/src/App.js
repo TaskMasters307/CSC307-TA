@@ -51,30 +51,37 @@ function App() {
     </div>
   );
 
-  const TaskAdd = () => (
-    <div className="task-add">
-      <h2>Add New Task</h2>
-      <div className="add-form">
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Enter task description"
-        />
-        <div className="button-group">
-          <button onClick={() => setCurrentView('tasks')}>Cancel</button>
-          <button
-            onClick={() => {
-              addTask(newTask);
-              setCurrentView('tasks');
-            }}
-          >
-            Add Task
-          </button>
+  const TaskAdd = ({ addTask, setCurrentView }) => {
+    const [localTask, setLocalTask] = useState(''); // Local state for task input
+  
+    const handleInputChange = (e) => {
+      setLocalTask(e.target.value); // Update local state
+    };
+  
+    const handleAddTask = () => {
+      addTask(localTask);
+      setCurrentView('tasks');
+    };
+  
+    return (
+      <div className="task-add">
+        <h2>Add New Task</h2>
+        <div className="add-form">
+          <input
+            type="text"
+            value={localTask}
+            onChange={handleInputChange}
+            placeholder="Enter task description"
+          />
+          <div className="button-group">
+            <button onClick={() => setCurrentView('tasks')}>Cancel</button>
+            <button onClick={handleAddTask}>Add Task</button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+  
 
   const CalendarView = () => {
     const daysInMonth = new Date(
@@ -134,7 +141,10 @@ function App() {
       </nav>
       <main>
         {currentView === 'tasks' && <TaskList />}
-        {currentView === 'add' && <TaskAdd />}
+        {currentView === 'add' && (
+  <TaskAdd addTask={addTask} setCurrentView={setCurrentView} />
+        )}
+
         {currentView === 'calendar' && <CalendarView />}
       </main>
     </div>
