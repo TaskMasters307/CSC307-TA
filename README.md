@@ -1,6 +1,6 @@
 # CSC-307-TA
 
-CSC 307 Team Assignment: Arian Houschmand, Trey Martin, Sameer Nadeem, Duy Nguyen, Austin Voong
+CSC 307 Team Assignment: Arian Houshmand, Trey Martin, Sameer Nadeem, Duy Nguyen, Austin Voong
 
 Contributing Steps:
 
