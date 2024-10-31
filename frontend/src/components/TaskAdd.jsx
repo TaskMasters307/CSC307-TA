@@ -6,7 +6,7 @@ import React, { useState } from 'react';
  * Form for adding new tasks
  */
 const TaskAdd = ({ addTask, setCurrentView }) => {
-  // Local state for the task input field
+  // task input field
   const [localTask, setLocalTask] = useState('');
 
   const handleInputChange = (e) => {

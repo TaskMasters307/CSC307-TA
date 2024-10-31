@@ -8,6 +8,12 @@ import React from 'react';
 const Navigation = ({ currentView, setCurrentView }) => (
   <nav className="navigation">
     <button
+      className={currentView === 'welcome' ? 'active' : ''}
+      onClick={() => setCurrentView('welcome')}
+    >
+      Home
+    </button>
+    <button
       className={currentView === 'tasks' ? 'active' : ''}
       onClick={() => setCurrentView('tasks')}
     >
