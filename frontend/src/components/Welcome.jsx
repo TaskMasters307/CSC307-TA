@@ -35,6 +35,10 @@ const Welcome = ({ setCurrentView, username = 'User' }) => {
                     <h3>Point Multiplier</h3>
                     <p className="stat-value">1.5X</p>
                 </div>
+                <div className="stat-card">
+                    <h3>Current Global Rank</h3>
+                    <p className="stat-value">#5</p>
+                </div>
             </div>
             <div className="quick-nav">
                 <h3>Quick Navigation</h3>
