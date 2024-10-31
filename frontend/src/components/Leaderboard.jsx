@@ -6,8 +6,11 @@ import React from 'react';
  * Displays user rankings based on points
  * THIS CURRENTLY USES MOCK DATA
  */
+
 const Leaderboard = () => {
-  // Mock data for leaderboard
+  // Mock data for leaderboard, replace with database once implemented
+  // User ID should be randomly generated and unique
+  // Eventually, names should be clickable and completed tasks for that user should be displayed
   const mockUsers = [
     { id: 1, username: 'TaskMasterTester', points: 2500, rank: 1 },
     { id: 2, username: 'ProductivityPro', points: 2200, rank: 2 },
