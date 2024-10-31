@@ -9,11 +9,11 @@ import React from 'react';
 const Leaderboard = () => {
   // Mock data for leaderboard
   const mockUsers = [
-    { id: 1, username: 'TaskMaster', points: 2500, rank: 1 },
+    { id: 1, username: 'TaskMasterTester', points: 2500, rank: 1 },
     { id: 2, username: 'ProductivityPro', points: 2200, rank: 2 },
-    { id: 3, username: 'GoalGetter', points: 1800, rank: 3 },
-    { id: 4, username: 'AchievementHunter', points: 1600, rank: 4 },
-    { id: 5, username: 'TaskWarrior', points: 1400, rank: 5 },
+    { id: 3, username: 'GoalGarry', points: 1800, rank: 3 },
+    { id: 4, username: 'AchievementAndy', points: 1600, rank: 4 },
+    { id: 5, username: 'User', points: 150, rank: 5 },
   ];
 
   return (
