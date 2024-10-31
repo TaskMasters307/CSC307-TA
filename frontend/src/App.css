@@ -186,3 +186,42 @@ h1 {
 .icon {
   font-size: 20px;
 }
+
+/* Leaderboard Component Styles */
+.leaderboard {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-list {
+  margin-top: 20px;
+}
+
+.leaderboard-item {
+  display: grid;
+  grid-template-columns: 50px 1fr 100px;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.leaderboard-item:last-child {
+  border-bottom: none;
+}
+
+.rank {
+  font-weight: bold;
+  color: #666;
+}
+
+.username {
+  font-weight: 500;
+}
+
+.points {
+  text-align: right;
+  color: #007bff;
+  font-weight: bold;
+}

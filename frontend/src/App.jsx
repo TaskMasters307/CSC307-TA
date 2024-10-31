@@ -5,6 +5,8 @@ import TaskAdd from './components/TaskAdd'
 import Calendar from './components/Calendar'
 import Navigation from './components/Navigation'
 import Welcome from './components/Welcome'
+import Leaderboard from './components/Leaderboard'
+
 import './App.css'
 
 /**
@@ -74,6 +76,9 @@ function App() {
                         selectedDate={selectedDate}
                         setSelectedDate={setSelectedDate}
                     />
+                )}
+                {currentView === 'leaderboard' && (
+                    <Leaderboard />
                 )}
             </main>
         </div>
