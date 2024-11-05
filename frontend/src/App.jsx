@@ -6,6 +6,7 @@ import Calendar from './components/Calendar'
 import Navigation from './components/Navigation'
 import Welcome from './components/Welcome'
 import Leaderboard from './components/Leaderboard'
+import Login from './components/Login'
 
 import './App.css'
 
@@ -16,10 +17,13 @@ import './App.css'
 function App() {
     // State management for tasks and UI
     const [tasks, setTasks] = useState([]) // Stores all tasks
-    const [currentView, setCurrentView] = useState('welcome') // Controls which view is displayed
+    const [currentView, setCurrentView] = useState('login') // Controls which view is displayed
     const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
 
     //Adds a new task to the tasks array
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+    
 
     const addTask = (taskText) => {
         if (taskText.trim()) {
@@ -47,42 +51,55 @@ function App() {
         )
     }
 
+
+    const handleLoginSuccess = () => {
+        setIsLoggedIn(true);
+        setCurrentView('welcome'); // Switch to main content on successful login
+    };
+
     return (
         <div className="app">
-            <h1>TaskArena</h1>
-            <Navigation
-                currentView={currentView}
-                setCurrentView={setCurrentView}
-            />
-            <main>
-                {currentView === 'welcome' && (
-                    <Welcome setCurrentView={setCurrentView} username="User" />
-                )}
-                {currentView === 'tasks' && (
-                    <TaskList
-                        tasks={tasks}
-                        toggleTask={toggleTask}
+            {currentView === 'login' ? (
+                <Login onLoginSuccess={handleLoginSuccess} />
+            ) : (
+                <>
+                    <h1>TaskArena</h1>
+                    <Navigation
+                        currentView={currentView}
                         setCurrentView={setCurrentView}
                     />
-                )}
-                {currentView === 'add' && (
-                    <TaskAdd
-                        addTask={addTask}
-                        setCurrentView={setCurrentView}
-                    />
-                )}
-                {currentView === 'calendar' && (
-                    <Calendar
-                        selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
-                    />
-                )}
-                {currentView === 'leaderboard' && (
-                    <Leaderboard />
-                )}
-            </main>
+                    <main>
+                        {currentView === 'welcome' && (
+                            <Welcome
+                                setCurrentView={setCurrentView}
+                                username={username}
+                            />
+                        )}
+                        {currentView === 'tasks' && (
+                            <TaskList
+                                tasks={tasks}
+                                toggleTask={toggleTask}
+                                setCurrentView={setCurrentView}
+                            />
+                        )}
+                        {currentView === 'add' && (
+                            <TaskAdd
+                                addTask={addTask}
+                                setCurrentView={setCurrentView}
+                            />
+                        )}
+                        {currentView === 'calendar' && (
+                            <Calendar
+                                selectedDate={selectedDate}
+                                setSelectedDate={setSelectedDate}
+                            />
+                        )}
+                        {currentView === 'leaderboard' && <Leaderboard />}
+                    </main>
+                </>
+            )}
         </div>
-    )
+    );
 }
 
-export default App
+export default App;
