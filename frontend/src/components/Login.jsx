@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-
-const Login = ({ onLoginSuccess }) => { // Accept onLoginSuccess prop
+import Signup from './Signup';
+const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -20,6 +20,7 @@ const Login = ({ onLoginSuccess }) => { // Accept onLoginSuccess prop
         onLoginSuccess();
       }
     };
+    
   
     return (
         <div className="login-container">
@@ -55,6 +56,7 @@ const Login = ({ onLoginSuccess }) => { // Accept onLoginSuccess prop
             <button type="submit" className="login-button">
               Login
             </button>
+            <button className="open-button" onClick={PopSignup} >Sign up</button>
           </form>
         </div>
       );

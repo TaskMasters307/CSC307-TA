@@ -216,7 +216,7 @@ h1 {
   color: #666;
 }
 
-.username {
+header {
   font-weight: 500;
 }
 
@@ -226,7 +226,7 @@ h1 {
   font-weight: bold;
 }
 
-.login-container {
+.login-container, .Signup-form{
   max-width: 425px;
   margin: 0 auto;
   padding: 20px;
@@ -235,14 +235,14 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.login-header {
+.login-header, .Signup-header{
   text-align: center;
   color: #333;
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.login-form {
+.login-form, .Signup-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -253,7 +253,7 @@ h1 {
   color: #333;
 }
 
-.login-input {
+.login-input, input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;

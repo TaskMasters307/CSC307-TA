@@ -9,6 +9,7 @@ import Leaderboard from './components/Leaderboard'
 import Login from './components/Login'
 
 import './App.css'
+import Signup from './components/Signup'
 
 /**
  * Main App Component
@@ -55,14 +56,59 @@ function App() {
     const handleLoginSuccess = () => {
         setIsLoggedIn(true);
         setCurrentView('welcome'); // Switch to main content on successful login
+        return (
+        <div>
+        <h1>TaskArena</h1>
+        <Navigation
+            currentView={currentView}
+            setCurrentView={setCurrentView}
+        />
+        <main>
+            {currentView === 'welcome' && (
+                <Welcome
+                    setCurrentView={setCurrentView}
+                    username={username}
+                />
+            )}
+            {currentView === 'tasks' && (
+                <TaskList
+                    tasks={tasks}
+                    toggleTask={toggleTask}
+                    setCurrentView={setCurrentView}
+                />
+            )}
+            {currentView === 'add' && (
+                <TaskAdd
+                    addTask={addTask}
+                    setCurrentView={setCurrentView}
+                />
+            )}
+            {currentView === 'calendar' && (
+                <Calendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+            )}
+            {currentView === 'leaderboard' && <Leaderboard />}
+        </main>
+    </div>
+        
+        )
     };
-
+    function CloseForm() {
+        
+        setIsLoggedIn(false);
+        setCurrentView('login'); // Switch to main content on successful login
+    };
+    function handleSignup(){
+        setCurrentView('signup');
+        
+    }
     return (
         <div className="app">
-            {currentView === 'login' ? (
-                <Login onLoginSuccess={handleLoginSuccess} />
-            ) : (
-                <>
+            {isLoggedIn ? (
+                // Main app content after login
+                <div>
                     <h1>TaskArena</h1>
                     <Navigation
                         currentView={currentView}
@@ -96,8 +142,24 @@ function App() {
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}
                     </main>
+                </div>
+            ) : (
+                // Login/Signup forms
+                <>
+                    {currentView === 'login' ? (
+                        <Login 
+                            onLoginSuccess={handleLoginSuccess}
+                            PopSignup={handleSignup}
+                        />
+                    ) : currentView === "signup" ? (
+                        <Signup 
+                            LoginSuccess={handleLoginSuccess}
+                            closeForm={CloseForm}
+                        />
+                    ) : null}
                 </>
             )}
+            
         </div>
     );
 }
