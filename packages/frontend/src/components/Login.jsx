@@ -4,7 +4,6 @@ import { Is_User_Name_Exist, MatchAccount } from './Utilities'
 const Login = ({ onLoginSuccess, PopSignup }) => {
     // Accept onLoginSuccess prop
     const [username, setUsername] = useState('')
-      //tesing CI
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
@@ -19,7 +18,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => {
             })
             .catch((error) => {
                 console.log(error)
-            })
+                                      })
     }
 
     const handleLogin = (e) => {
