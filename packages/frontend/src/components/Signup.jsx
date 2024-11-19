@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import { useState } from 'react'
 import { Is_User_Name_Exist } from './Utilities'
 import { FetchPostUser } from './httpUltilities'
