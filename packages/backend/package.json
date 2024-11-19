@@ -6,6 +6,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" ",
+        "build": "echo 'No build step required'",
         "start": "npx nodemon backend_with_db.js",
         "lint": "npx eslint ."
     },
