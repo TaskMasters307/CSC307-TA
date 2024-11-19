@@ -1,12 +1,15 @@
 function FetchPostUser(account) {
-    const promise = fetch('https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net/adduser/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+    const promise = fetch(
+        'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net/adduser/',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
 
-        body: JSON.stringify(account),
-    })
+            body: JSON.stringify(account),
+        }
+    )
     //console.log(`function postUser(account) account = ${JSON.stringify(account)}`);
     //console.log(`postUser: ${account}`)
     return promise
