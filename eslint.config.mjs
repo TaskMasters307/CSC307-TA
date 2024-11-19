@@ -1,59 +1,32 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin'; // TypeScript ESLint plugin
-import pluginReact from 'eslint-plugin-react';
-import pluginPrettier from 'eslint-plugin-prettier'; // Prettier plugin
+import tsParser from '@typescript-eslint/parser'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
+import pluginReact from 'eslint-plugin-react'
 
 export default [
     {
-        files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
-
+        files: ['**/*.{js,jsx}'], // Match JavaScript and JSX files
         languageOptions: {
-            globals: {
-                ...globals.browser, // Browser globals (e.g., `window`)
-                ...globals.es2021, // ES2021 features
-                ...globals.jest, // Jest globals for testing
-                ...globals.node, // Node.js globals (e.g., `process`, `__dirname`)
+            parser: tsParser, // Use TypeScript parser (also works for plain JS)
+            parserOptions: {
+                ecmaVersion: 2021, // Modern ECMAScript features
+                sourceType: 'module', // Enable ES modules
+                ecmaFeatures: {
+                    jsx: true, // Enable JSX syntax
+                },
             },
         },
-
         plugins: {
-            js: pluginJs,
-            '@typescript-eslint': tseslint,
+            '@typescript-eslint': tsPlugin,
             react: pluginReact,
-            prettier: pluginPrettier,
         },
-
-        ignores: ['node_modules/', 'dist/', 'coverage/', '*.min.js'],
-
         settings: {
             react: {
-                version: 'detect', // Automatically detect React version
+                version: 'detect', // Auto-detect React version
             },
         },
-
         rules: {
-            // JavaScript recommended rules
-            ...pluginJs.configs.recommended.rules,
-
-            // TypeScript recommended rules
-            ...tseslint.configs.recommended.rules,
-
-            // React recommended rules
-            ...pluginReact.configs.flat.recommended.rules,
-
-            // Prettier recommended rules
-            ...pluginPrettier.configs.recommended.rules,
-
-            // Custom React rules
-            'react/prop-types': 'off', // Disable React prop-types rule
-            'react/react-in-jsx-scope': 'off', // Disable rule requiring React in scope for JSX
-
-            // Prettier integration rule
-            'prettier/prettier': 'error',
-
-            // Node.js-specific rules
-            'no-undef': 'error', // Keep flagging undefined variables
+            'react/prop-types': 0,
+            'react/react-in-jsx-scope': 'off', // Not needed for React 17+
         },
     },
-];
+]

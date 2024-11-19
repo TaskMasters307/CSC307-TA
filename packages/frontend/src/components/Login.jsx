@@ -18,7 +18,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => {
             })
             .catch((error) => {
                 console.log(error)
-                                      })
+            })
     }
 
     const handleLogin = (e) => {
