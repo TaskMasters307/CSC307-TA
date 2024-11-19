@@ -1,5 +1,5 @@
 function FetchPostUser(account) {
-    const promise = fetch('http://localhost:8001/adduser/', {
+    const promise = fetch('https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net/adduser/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -14,14 +14,14 @@ function FetchPostUser(account) {
 
 function FetchFindUserName(username) {
     const promise = fetch(
-        `http://localhost:8001/findusername?username=${username}`
+        `https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net/findusername?username=${username}`
     )
     return promise
 }
 function FindAccount(username, password) {
     //console.log(username, password);
     const promise = fetch(
-        `http://localhost:8001/findaccount?username=${username}&password=${password}`
+        `https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net/findaccount?username=${username}&password=${password}`
     )
     return promise
 }
