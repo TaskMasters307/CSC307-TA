@@ -27,7 +27,7 @@ export default [
         rules: {
             'react/prop-types': 0,
             'react/react-in-jsx-scope': 'off', // Not needed for React 17+
-            'no-unused-vars': 'off'
+            'no-unused-vars': 'off',
         },
     },
 ]
