@@ -1,8 +1,8 @@
-import globals from 'globals'
-import pluginJs from '@eslint/js'
-import tseslint from '@typescript-eslint/eslint-plugin' // TypeScript ESLint plugin
-import pluginReact from 'eslint-plugin-react'
-import pluginPrettier from 'eslint-plugin-prettier' // Prettier plugin
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin'; // TypeScript ESLint plugin
+import pluginReact from 'eslint-plugin-react';
+import pluginPrettier from 'eslint-plugin-prettier'; // Prettier plugin
 
 export default [
     {
@@ -13,6 +13,7 @@ export default [
                 ...globals.browser, // Browser globals (e.g., `window`)
                 ...globals.es2021, // ES2021 features
                 ...globals.jest, // Jest globals for testing
+                ...globals.node, // Node.js globals (e.g., `process`, `__dirname`)
             },
         },
 
@@ -50,6 +51,9 @@ export default [
 
             // Prettier integration rule
             'prettier/prettier': 'error',
+
+            // Node.js-specific rules
+            'no-undef': 'error', // Keep flagging undefined variables
         },
     },
-]
+];
