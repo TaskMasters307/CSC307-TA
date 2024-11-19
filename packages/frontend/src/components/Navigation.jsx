@@ -9,8 +9,7 @@ const Navigation = ({ currentView, setCurrentView }) => (
     <nav className="navigation">
         <button
             className={currentView === 'welcome' ? 'active' : ''}
-            onClick={() => 
-                ('welcome')}
+            onClick={() => 'welcome'}
         >
             Home
         </button>
@@ -33,6 +32,6 @@ const Navigation = ({ currentView, setCurrentView }) => (
             Leaderboard
         </button>
     </nav>
-);
+)
 
-export default Navigation;
+export default Navigation

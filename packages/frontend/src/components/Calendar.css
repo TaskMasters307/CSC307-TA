@@ -29,7 +29,7 @@ h1 {
 }
 
 .filter-buttons button:hover {
-    background-color: #357ABD;
+    background-color: #357abd;
 }
 
 /* Month navigation */
@@ -54,7 +54,7 @@ h1 {
 }
 
 .arrow:hover {
-    color: #357ABD;
+    color: #357abd;
 }
 
 /* Calendar grid layout */
@@ -81,7 +81,9 @@ h1 {
     padding: 10px;
     min-height: 100px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
+    transition:
+        background-color 0.3s,
+        transform 0.2s;
 }
 
 .calendar-day:hover {
@@ -128,7 +130,7 @@ h1 {
     background-color: #81c784;
 }
 
-.task input[type="checkbox"] {
+.task input[type='checkbox'] {
     cursor: pointer;
 }
 
