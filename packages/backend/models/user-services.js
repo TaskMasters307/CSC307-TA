@@ -6,7 +6,7 @@ mongoose.set('debug', true)
 
 mongoose
     .connect(
-        'mongodb+srv://csc-307-ta:csc307ta@csc-307-ta.j0i3u.mongodb.net/user_list?retryWrites=true&w=majority&appName=CSC-307-TA',
+        'mongodb+srv://csc-307-ta:csc307ta@csc-307-ta.j0i3u.mongodb.net/user_list?retryWrites=true&w=majority&appName=CSC-307-TA'
     )
     .catch((error) =>
         console.log('cant connect to mongodb\nERROR say:\n', error)
