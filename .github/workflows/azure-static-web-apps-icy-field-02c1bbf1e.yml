@@ -31,8 +31,8 @@ jobs:
             # Step 4: Create env file
             - name: Create env file
               run: |
-                 cd packages/frontend
-                 echo "REACT_APP_API_URL=${{ secrets.BACKEND_URL }}" > .env
+                  cd packages/frontend
+                  echo "REACT_APP_API_URL=${{ secrets.BACKEND_URL }}" > .env
 
             # Step 5: Build the project
             - name: Build Project

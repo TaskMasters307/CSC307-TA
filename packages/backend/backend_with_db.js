@@ -37,17 +37,17 @@ const logRequest = (req, res, next) => {
 app.use(logRequest)
 
 app.get('/', (req, res) => {
-    res.json({ 
+    res.json({
         message: 'TaskArena API is running',
         endpoints: {
             findAccount: '/findaccount',
             findUsername: '/findusername',
             addUser: '/adduser',
-            users: '/users'
+            users: '/users',
         },
-        status: 'ok'
-    });
-});
+        status: 'ok',
+    })
+})
 
 //  FIRST FETCH
 app.get('/users', async (req, res) => {
@@ -58,9 +58,9 @@ app.get('/users', async (req, res) => {
         res.json(result)
     } catch (error) {
         console.log('Error getting users: ', error)
-        res.status(500).json({ 
-            success: false, 
-            message: 'An error occurred while retrieving users.' 
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while retrieving users.',
         })
     }
 })
@@ -68,28 +68,28 @@ app.get('/users', async (req, res) => {
 app.get('/findaccount', async (req, res) => {
     const username = req.query.username
     const password = req.query.password
-    console.log("Finding account for: ", username)
-    try{
+    console.log('Finding account for: ', username)
+    try {
         if (!username || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'Username and password are required.'
+                message: 'Username and password are required.',
             })
         }
         const result = await userServices.findOneAccount(username, password)
         if (!result) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 LoginStatus: false,
-                message: 'Invalid username or password' 
+                message: 'Invalid username or password',
             })
         } else {
             res.status(201).send({ LoginStatus: true })
         }
     } catch (error) {
         console.log('Login error: ', error)
-        res.status(500).json({ 
+        res.status(500).json({
             LoginStatus: false,
-            message: 'An error occurred during login' 
+            message: 'An error occurred during login',
         })
     }
 })
@@ -114,21 +114,20 @@ app.get('/users/:id', async (req, res) => {
     try {
         const result = await userServices.findUserById(id)
         if (!result) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'User not found' 
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
             })
         }
         res.json({ users_list: result })
     } catch (error) {
         console.error('Error finding user by ID:', error)
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error retrieving user' 
+        res.status(500).json({
+            success: false,
+            message: 'Error retrieving user',
         })
     }
 })
-
 
 //   ADD USER
 app.post('/adduser', async (req, res) => {
@@ -138,7 +137,7 @@ app.post('/adduser', async (req, res) => {
         if (!user.username || !user.password) {
             return res.status(400).json({
                 success: false,
-                message: 'Username and password are required'
+                message: 'Username and password are required',
             })
         }
 
@@ -147,7 +146,7 @@ app.post('/adduser', async (req, res) => {
         if (existingUser) {
             return res.status(409).json({
                 success: false,
-                message: 'Username already exists'
+                message: 'Username already exists',
             })
         }
 
@@ -157,7 +156,7 @@ app.post('/adduser', async (req, res) => {
         console.error('Error adding user:', error)
         res.status(500).json({
             success: false,
-            message: 'Error creating user'
+            message: 'Error creating user',
         })
     }
 })

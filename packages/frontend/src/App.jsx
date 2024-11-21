@@ -23,7 +23,7 @@ function App() {
 
     //Adds a new task to the tasks array
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [username, setUsername] = useState('') // eslint-disable-line no-unused-vars
+    const [username, setUsername] = useState('')
 
     const addTask = (taskText) => {
         if (taskText.trim()) {
