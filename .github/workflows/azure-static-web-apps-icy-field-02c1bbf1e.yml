@@ -44,4 +44,4 @@ jobs:
           action: 'upload'
           app_location: '/packages/frontend'
           api_location: ''
-          output_location: 'dist'
+          output_location: 'build' # Changed from 'dist' to 'build'
