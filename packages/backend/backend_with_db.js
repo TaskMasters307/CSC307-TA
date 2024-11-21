@@ -93,6 +93,12 @@ app.delete('/users/:id', async (req, res) => {
     }
 })
 //--------------------------------------------
+app.use((req, res, next) => {
+    console.log(`Request received: ${req.method} ${req.url}`)
+    console.log(`Request body: ${JSON.stringify(req.body)}`)
+    console.log(`Request query: ${JSON.stringify(req.query)}`)
+    next()
+})
 
 app.listen(process.env.PORT || port, () => {
     console.log('REST API is listening.')
