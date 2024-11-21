@@ -6,12 +6,16 @@ import userServices from './models/user-services.js'
 const app = express()
 const port = 8001
 
-app.use(cors())
+const allowedOrigins = ['http://localhost:3000', 'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net'];
+
+app.use(cors({
+    origin: allowedOrigins, // Allow these origins
+    methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
+}));
+
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.send(`Hello World! ${process.env.MONGODB_URI}`)
-})
+
 
 //  FIRST FETCH
 app.get('/users', async (req, res) => {
