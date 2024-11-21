@@ -6,48 +6,16 @@ import userServices from './models/user-services.js'
 const app = express()
 const port = 8001
 
-const allowedOrigins = [
-    'http://localhost:3000',
-    'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net',
-]
+const allowedOrigins = ['http://localhost:3000', 'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net'];
 
-app.use(
-    cors({
-        origin: allowedOrigins, // Allow these origins
-        methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
-        credentials: true, // Enable credentials for cookies and HTTP auth
-        optionsSuccessStatus: 200, //
-    })
-)
+app.use(cors({
+    origin: allowedOrigins, // Allow these origins
+    methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
+}));
 
 app.use(express.json())
 
-// Logging middleware
-const logRequest = (req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`)
-    if (Object.keys(req.body).length > 0) {
-        console.log('Body:', req.body)
-    }
-    if (Object.keys(req.query).length > 0) {
-        console.log('Query:', req.query)
-    }
-    next()
-}
 
-app.use(logRequest)
-
-app.get('/', (req, res) => {
-    res.json({
-        message: 'TaskArena API is running',
-        endpoints: {
-            findAccount: '/findaccount',
-            findUsername: '/findusername',
-            addUser: '/adduser',
-            users: '/users',
-        },
-        status: 'ok',
-    })
-})
 
 //  FIRST FETCH
 app.get('/users', async (req, res) => {
