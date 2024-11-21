@@ -15,6 +15,7 @@ jobs:
         runs-on: ubuntu-latest
         name: Build and Deploy Job
         steps:
+            # Step 1: Check out the repository
             - uses: actions/checkout@v3
               with:
                   submodules: true
@@ -26,10 +27,12 @@ jobs:
               with:
                   node-version: '18'
 
-            # Step 3: Install dependencies
+            # Step 3: Clean npm cache and install dependencies
             - name: Install Dependencies
               run: |
                   cd packages/frontend
+                  npm cache clean --force
+                  rm -rf node_modules package-lock.json
                   npm install
 
             # Step 4: Lint and fix issues (Optional)
