@@ -94,7 +94,6 @@ const Calendar = () => {
                 <TaskList
                     tasks={tasks}
                     toggleTask={toggleTaskCompletion}
-                    setCurrentView={() => {}}
                 />
             </div>
             <div className="filter-buttons">
