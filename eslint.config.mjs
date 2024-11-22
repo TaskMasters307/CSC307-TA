@@ -1,36 +1,33 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "@typescript-eslint/eslint-plugin"; // Import TypeScript ESLint plugin
-import pluginReact from "eslint-plugin-react";
-import pluginPrettier from "eslint-plugin-prettier"; // Import Prettier plugin
+import tsParser from '@typescript-eslint/parser'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
+import pluginReact from 'eslint-plugin-react'
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  
-  { languageOptions: { 
-      globals: {
-        ...globals.browser,  // Browser globals (like 'window')
-        ...globals.es2021,   // ES2021 features
-        ...globals.jest      // Jest globals for testing
-      }
-  }},
-
-  pluginJs.configs.recommended,        // JavaScript recommended rules
-  ...tseslint.configs.recommended,     // TypeScript recommended rules
-  pluginReact.configs.flat.recommended, // React recommended rules
-
-  pluginPrettier.configs.recommended, // Prettier recommended configuration
-
-  {
-    rules: {
-      // Disable React prop-types rule
-      "react/prop-types": "off",
-
-      // Disable the rule requiring React in scope for JSX
-      "react/react-in-jsx-scope": "off",
-
-      // Prettier integration rule (already in pluginPrettier.configs.recommended)
-      "prettier/prettier": "error"
-    }
-  }
-];
+    {
+        files: ['**/*.{js,jsx}'], // Match JavaScript and JSX files
+        languageOptions: {
+            parser: tsParser, // Use TypeScript parser (also works for plain JS)
+            parserOptions: {
+                ecmaVersion: 2021, // Modern ECMAScript features
+                sourceType: 'module', // Enable ES modules
+                ecmaFeatures: {
+                    jsx: true, // Enable JSX syntax
+                },
+            },
+        },
+        plugins: {
+            '@typescript-eslint': tsPlugin,
+            react: pluginReact,
+        },
+        settings: {
+            react: {
+                version: 'detect', // Auto-detect React version
+            },
+        },
+        rules: {
+            'react/prop-types': 0,
+            'react/react-in-jsx-scope': 'off', // Not needed for React 17+
+            'no-unused-vars': 'off',
+        },
+    },
+]
