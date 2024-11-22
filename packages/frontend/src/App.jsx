@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from 'react-router-dom'
 import TaskList from './components/TaskList'
 import TaskAdd from './components/TaskAdd'
 import Calendar from './components/Calendar'
@@ -11,16 +16,15 @@ import Signup from './components/Signup'
 
 import './App.css'
 
-
 /**
  * Main App Component
  * Manages the application state and renders the main UI
  */
- function App() {
-    const [tasks, setTasks] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
+function App() {
+    const [tasks, setTasks] = useState([])
+    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [username, setUsername] = useState('')
 
     const addTask = (taskText) => {
         if (taskText.trim()) {
@@ -33,25 +37,25 @@ import './App.css'
                     date: selectedDate,
                     points: 10,
                 },
-            ]);
+            ])
         }
-    };
+    }
 
     const toggleTask = (id) => {
         setTasks(
             tasks.map((task) =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
-        );
-    };
+        )
+    }
 
     const handleLoginSuccess = () => {
-        setIsLoggedIn(true);
-    };
+        setIsLoggedIn(true)
+    }
 
     const handleSignup = () => {
-        setIsLoggedIn(false);
-    };
+        setIsLoggedIn(false)
+    }
 
     return (
         <div className="app">
@@ -62,14 +66,22 @@ import './App.css'
                         <Navigation />
                         <main>
                             <Routes>
-                                <Route path="/" element={<Navigate to="/welcome" />} />
+                                <Route
+                                    path="/"
+                                    element={<Navigate to="/welcome" />}
+                                />
                                 <Route
                                     path="/welcome"
                                     element={<Welcome username={username} />}
                                 />
                                 <Route
                                     path="/tasks"
-                                    element={<TaskList tasks={tasks} toggleTask={toggleTask} />}
+                                    element={
+                                        <TaskList
+                                            tasks={tasks}
+                                            toggleTask={toggleTask}
+                                        />
+                                    }
                                 />
                                 <Route
                                     path="/add"
@@ -84,7 +96,10 @@ import './App.css'
                                         />
                                     }
                                 />
-                                <Route path="/leaderboard" element={<Leaderboard />} />
+                                <Route
+                                    path="/leaderboard"
+                                    element={<Leaderboard />}
+                                />
                             </Routes>
                         </main>
                     </div>
@@ -92,7 +107,9 @@ import './App.css'
                     <Routes>
                         <Route
                             path="/login"
-                            element={<Login onLoginSuccess={handleLoginSuccess} />}
+                            element={
+                                <Login onLoginSuccess={handleLoginSuccess} />
+                            }
                         />
                         <Route
                             path="/signup"
@@ -103,7 +120,7 @@ import './App.css'
                 )}
             </Router>
         </div>
-    );
+    )
 }
 
-export default App;
+export default App

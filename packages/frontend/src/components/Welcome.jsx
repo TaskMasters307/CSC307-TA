@@ -1,14 +1,13 @@
 // src/components/Welcome.jsx
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom'
 
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
 const Welcome = ({ setCurrentView, username = 'User' }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     // Quick Navigation, not really necessary but looks cool i guess
     const quickNavButtons = [
         { view: 'tasks', label: 'Task List', icon: '📝' },

@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 /**
  * Navigation Component
@@ -32,6 +32,6 @@ const Navigation = () => (
             Leaderboard
         </NavLink>
     </nav>
-);
+)
 
-export default Navigation;
+export default Navigation

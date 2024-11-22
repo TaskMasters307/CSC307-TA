@@ -91,10 +91,7 @@ const Calendar = () => {
             <h1>Task Calendar</h1>
             <div className="task-controls">
                 <TaskAdd addTask={addTask} />
-                <TaskList
-                    tasks={tasks}
-                    toggleTask={toggleTaskCompletion}
-                />
+                <TaskList tasks={tasks} toggleTask={toggleTaskCompletion} />
             </div>
             <div className="filter-buttons">
                 <button onClick={() => filterTasks('high')}>
