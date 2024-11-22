@@ -24,6 +24,7 @@ function App() {
     const [tasks, setTasks] = useState([])
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [username] = useState(''); 
 
 
     const addTask = (taskText) => {
