@@ -1,31 +1,27 @@
-// src/App.jsx
-import React, { useState } from 'react'
-import TaskList from './components/TaskList'
-import TaskAdd from './components/TaskAdd'
-import Calendar from './components/Calendar'
-import Navigation from './components/Navigation'
-import Welcome from './components/Welcome'
-import Leaderboard from './components/Leaderboard'
-import Login from './components/Login'
+import React, { useState } from 'react';
+import TaskList from './components/TaskList';
+import TaskAdd from './components/TaskAdd';
+import Calendar from './components/Calendar';
+import Navigation from './components/Navigation';
+import Welcome from './components/Welcome';
+import Leaderboard from './components/Leaderboard';
+import Login from './components/Login';
+import Signup from './components/Signup';
 
-import './App.css'
-import Signup from './components/Signup'
+import './App.css';
 
 /**
  * Main App Component
  * Manages the application state and renders the main UI
  */
 function App() {
-    // State management for tasks and UI
-    const [tasks, setTasks] = useState([]) // Stores all tasks
-    const [currentView, setCurrentView] = useState('login') // Controls which view is displayed
-    const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
+    const [tasks, setTasks] = useState([]); // Stores all tasks
+    const [currentView, setCurrentView] = useState('login'); // Controls which view is displayed
+    const [selectedDate, setSelectedDate] = useState(new Date()); // Selected date for calendar
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Tracks login state
+    const [username, setUsername] = useState(''); // Stores the logged-in username
 
-    //Adds a new task to the tasks array
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
-    
-
+    // Adds a new task
     const addTask = (taskText) => {
         if (taskText.trim()) {
             setTasks([
@@ -37,73 +33,45 @@ function App() {
                     date: selectedDate,
                     points: 10, // Default points value
                 },
-            ])
+            ]);
         }
-    }
+    };
 
-    /**
-     * Toggles the completion status of a task
-     */
+    // Toggles task completion
     const toggleTask = (id) => {
         setTasks(
             tasks.map((task) =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
-        )
-    }
+        );
+    };
 
-
-    const handleLoginSuccess = () => {
+    // Handles successful login
+    const handleLoginSuccess = (username) => {
         setIsLoggedIn(true);
-        setCurrentView('welcome'); // Switch to main content on successful login
-        return (
-        <div>
-        <h1>TaskArena</h1>
-        <Navigation
-            currentView={currentView}
-            setCurrentView={setCurrentView}
-        />
-        <main>
-            {currentView === 'welcome' && (
-                <Welcome
-                    setCurrentView={setCurrentView}
-                    username={username}
-                />
-            )}
-            {currentView === 'tasks' && (
-                <TaskList
-                    tasks={tasks}
-                    toggleTask={toggleTask}
-                    setCurrentView={setCurrentView}
-                />
-            )}
-            {currentView === 'add' && (
-                <TaskAdd
-                    addTask={addTask}
-                    setCurrentView={setCurrentView}
-                />
-            )}
-            {currentView === 'calendar' && (
-                <Calendar
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
-            )}
-            {currentView === 'leaderboard' && <Leaderboard />}
-        </main>
-    </div>
-        
-        )
+        setUsername(username);
+        setCurrentView('welcome');
     };
-    function CloseForm() {
-        
+
+    // Handles successful signup
+    const handleSignupSuccess = (username) => {
+        setIsLoggedIn(true);
+        setUsername(username);
+        setCurrentView('welcome');
+    };
+
+    // Logs the user out
+    const handleLogout = () => {
         setIsLoggedIn(false);
-        setCurrentView('login'); // Switch to main content on successful login
+        setUsername('');
+        setCurrentView('login');
     };
-    function handleSignup(){
+
+    // Switches to signup view
+    const handleSignupView = () => {
         setCurrentView('signup');
-        
-    }
+    };
+
     return (
         <div className="app">
             {isLoggedIn ? (
@@ -113,6 +81,7 @@ function App() {
                     <Navigation
                         currentView={currentView}
                         setCurrentView={setCurrentView}
+                        onLogout={handleLogout}
                     />
                     <main>
                         {currentView === 'welcome' && (
@@ -147,19 +116,18 @@ function App() {
                 // Login/Signup forms
                 <>
                     {currentView === 'login' ? (
-                        <Login 
+                        <Login
                             onLoginSuccess={handleLoginSuccess}
-                            PopSignup={handleSignup}
+                            onSignup={handleSignupView}
                         />
-                    ) : currentView === "signup" ? (
-                        <Signup 
-                            LoginSuccess={handleLoginSuccess}
-                            closeForm={CloseForm}
+                    ) : currentView === 'signup' ? (
+                        <Signup
+                            onSignupSuccess={handleSignupSuccess}
+                            onCancel={() => setCurrentView('login')}
                         />
                     ) : null}
                 </>
             )}
-            
         </div>
     );
 }

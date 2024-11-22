@@ -1,29 +1,49 @@
-// src/components/Leaderboard.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { addAuthHeader } from './httpUtilities'; // Helper function to include auth token
 
 /**
  * Leaderboard Component
- * Displays user rankings based on points
- * THIS CURRENTLY USES MOCK DATA
+ * Fetches and displays user rankings from the backend
  */
 
 const Leaderboard = () => {
-  // Mock data for leaderboard, replace with database once implemented
-  // User ID should be randomly generated and unique
-  // Eventually, names should be clickable and completed tasks for that user should be displayed
-  const mockUsers = [
-    { id: 1, username: 'TaskMasterTester', points: 2500, rank: 1 },
-    { id: 2, username: 'ProductivityPro', points: 2200, rank: 2 },
-    { id: 3, username: 'GoalGarry', points: 1800, rank: 3 },
-    { id: 4, username: 'AchievementAndy', points: 1600, rank: 4 },
-    { id: 5, username: 'User', points: 150, rank: 5 },
-  ];
+  const [users, setUsers] = useState([]); // State to store leaderboard data
+  const [error, setError] = useState(null);
+
+  // Fetch leaderboard data from the backend
+  const fetchLeaderboard = async () => {
+    try {
+      const response = await fetch('/leaderboard', {
+        method: 'GET',
+        headers: addAuthHeader(), // Include auth token in headers
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        setUsers(data); // Assuming the backend returns an array of users
+      } else if (response.status === 401) {
+        setError('Unauthorized. Please log in to view the leaderboard.');
+      } else {
+        setError('Failed to fetch leaderboard data. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error fetching leaderboard:', err);
+      setError('Unable to connect to the server. Please try again later.');
+    }
+  };
+
+  // Fetch leaderboard data when the component mounts
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
 
   return (
     <div className="leaderboard">
       <h2>Leaderboard</h2>
+      {error && <p className="error-message">{error}</p>}
+      {!error && users.length === 0 && <p>Loading leaderboard...</p>}
       <div className="leaderboard-list">
-        {mockUsers.map(user => (
+        {users.map((user) => (
           <div key={user.id} className="leaderboard-item">
             <div className="rank">#{user.rank}</div>
             <div className="username">{user.username}</div>

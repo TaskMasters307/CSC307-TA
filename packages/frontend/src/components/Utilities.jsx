@@ -33,3 +33,10 @@
     MatchAccount
   } 
   
+  export function addAuthHeader(headers = {}) {
+    const token = localStorage.getItem("authToken");
+    return token
+      ? { ...headers, Authorization: `Bearer ${token}` }
+      : headers;
+  }
+
