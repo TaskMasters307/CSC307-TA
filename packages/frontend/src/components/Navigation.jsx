@@ -1,37 +1,38 @@
+// src/components/Navigation.jsx
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 
 /**
  * Navigation Component
- * Handles navigation between different views
+ * Handles switching between different views
  */
-const Navigation = () => (
+const Navigation = ({ currentView, setCurrentView }) => (
     <nav className="navigation">
         <button
             className={currentView === 'welcome' ? 'active' : ''}
-            onClick={() => setCurrentView('welcome')}
+            onClick={() => 
+                ('welcome')}
         >
             Home
-        </NavLink>
-        <NavLink
-            to="/tasks"
-            className={({ isActive }) => (isActive ? 'active' : '')}
+        </button>
+        <button
+            className={currentView === 'tasks' ? 'active' : ''}
+            onClick={() => setCurrentView('tasks')}
         >
             Tasks
-        </NavLink>
-        <NavLink
-            to="/calendar"
-            className={({ isActive }) => (isActive ? 'active' : '')}
+        </button>
+        <button
+            className={currentView === 'calendar' ? 'active' : ''}
+            onClick={() => setCurrentView('calendar')}
         >
             Calendar
-        </NavLink>
-        <NavLink
-            to="/leaderboard"
-            className={({ isActive }) => (isActive ? 'active' : '')}
+        </button>
+        <button
+            className={currentView === 'leaderboard' ? 'active' : ''}
+            onClick={() => setCurrentView('leaderboard')}
         >
             Leaderboard
-        </NavLink>
+        </button>
     </nav>
-)
+);
 
-export default Navigation
+export default Navigation;

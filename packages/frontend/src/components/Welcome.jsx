@@ -1,13 +1,11 @@
 // src/components/Welcome.jsx
-import React, { useEffect } from 'react'
-import { FetchUserStats } from './httpUltilities'
+import React from 'react'
 
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
-const Welcome = ({ setCurrentView, username, stats, onStatsUpdate }) => {
-    useEffect(() => {}, [username])
+const Welcome = ({ setCurrentView, username = 'User' }) => {
     // Quick Navigation, not really necessary but looks cool i guess
     const quickNavButtons = [
         { view: 'tasks', label: 'Task List', icon: '📝' },
@@ -23,23 +21,23 @@ const Welcome = ({ setCurrentView, username, stats, onStatsUpdate }) => {
             <div className="stats-summary">
                 <div className="stat-card">
                     <h3>Your Points</h3>
-                    <p className="stat-value">{stats.totalPoints}</p>
+                    <p className="stat-value">150</p>
                 </div>
                 <div className="stat-card">
                     <h3>Tasks Completed</h3>
-                    <p className="stat-value">{stats.tasksCompleted}</p>
+                    <p className="stat-value">12</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Streak</h3>
-                    <p className="stat-value">{stats.currentStreak}</p>
+                    <p className="stat-value">5 days</p>
                 </div>
                 <div className="stat-card">
                     <h3>Point Multiplier</h3>
-                    <p className="stat-value">{stats.pointsMultiplier}</p>
+                    <p className="stat-value">1.5X</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Global Rank</h3>
-                    <p className="stat-value">#{stats.globalRank || '-'}</p>
+                    <p className="stat-value">#5</p>
                 </div>
             </div>
             <div className="quick-nav">
@@ -48,7 +46,7 @@ const Welcome = ({ setCurrentView, username, stats, onStatsUpdate }) => {
                     {quickNavButtons.map((button) => (
                         <button
                             key={button.view}
-                            onClick={() => navigate(`/${button.view}`)}
+                            onClick={() => setCurrentView(button.view)}
                             className="quick-nav-button"
                         >
                             <span className="icon">{button.icon}</span>
