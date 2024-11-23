@@ -6,10 +6,8 @@ import { FetchUserStats } from './httpUltilities'
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
-const Welcome = ({setCurrentView, username, stats, onStatsUpdate }) => {
-    useEffect(() => {
-
-    }, [username])
+const Welcome = ({ setCurrentView, username, stats, onStatsUpdate }) => {
+    useEffect(() => {}, [username])
     // Quick Navigation, not really necessary but looks cool i guess
     const quickNavButtons = [
         { view: 'tasks', label: 'Task List', icon: '📝' },
@@ -50,7 +48,7 @@ const Welcome = ({setCurrentView, username, stats, onStatsUpdate }) => {
                     {quickNavButtons.map((button) => (
                         <button
                             key={button.view}
-                            onClick={() => setCurrentView(button.view)}
+                            onClick={() => navigate(`/${button.view}`)}
                             className="quick-nav-button"
                         >
                             <span className="icon">{button.icon}</span>
