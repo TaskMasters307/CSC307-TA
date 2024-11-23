@@ -6,44 +6,62 @@ import userServices from './models/user-services.js'
 const app = express()
 const port = 8001
 
-const allowedOrigins = ['http://localhost:3000', 'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net'];
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://taskarena-hxd7fcczhcdgfnch.westus3-01.azurewebsites.net',
+]
 
-app.use(cors({
-    origin: allowedOrigins, // Allow these origins
-    methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
-}));
+app.use(
+    cors({
+        origin: allowedOrigins, // Allow these origins
+        methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
+    })
+)
 
 app.use(express.json())
 
-
-
 //  FIRST FETCH
 app.get('/users', async (req, res) => {
-    const name = req.query['username']
-    const job = req.query['password']
+    const { username, password } = req.query
     try {
-        const result = await userServices.getUsers(name, job)
-        console.log('app.get-result== ', result)
+        const result = await userServices.getUsers(username, password)
+        console.log('Users retrieved: ', result)
+        res.json(result)
     } catch (error) {
-        console.log(error)
-        res.status(500).send('An error ocurred in the server.')
+        console.log('Error getting users: ', error)
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while retrieving users.',
+        })
     }
 })
 
 app.get('/findaccount', async (req, res) => {
     const username = req.query.username
     const password = req.query.password
-    console.log(req.query)
+    console.log('Finding account for: ', username)
     try {
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username and password are required.',
+            })
+        }
         const result = await userServices.findOneAccount(username, password)
-        if (result === null) {
-            throw new Error('Could not find account')
+        if (!result) {
+            return res.status(404).json({
+                LoginStatus: false,
+                message: 'Invalid username or password',
+            })
         } else {
             res.status(201).send({ LoginStatus: true })
         }
     } catch (error) {
-        console.log(error)
-        res.status(404).send({ LoginStatus: false })
+        console.log('Login error: ', error)
+        res.status(500).json({
+            LoginStatus: false,
+            message: 'An error occurred during login',
+        })
     }
 })
 
@@ -64,21 +82,54 @@ app.get('/findusername', async (req, res) => {
 })
 app.get('/users/:id', async (req, res) => {
     const id = req.params['id']
-    const result = await userServices.findUserById(id)
-    if (result === undefined || result === null)
-        res.status(404).send('Resource not found.')
-    else {
-        res.send({ users_list: result })
+    try {
+        const result = await userServices.findUserById(id)
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            })
+        }
+        res.json({ users_list: result })
+    } catch (error) {
+        console.error('Error finding user by ID:', error)
+        res.status(500).json({
+            success: false,
+            message: 'Error retrieving user',
+        })
     }
 })
 
 //   ADD USER
 app.post('/adduser', async (req, res) => {
     const user = req.body
+    try {
+        // Basic validation
+        if (!user.username || !user.password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username and password are required',
+            })
+        }
 
-    const savedUser = await userServices.addUser(user)
-    if (savedUser) res.status(201).send(savedUser)
-    else res.status(500).end()
+        // Check if username already exists
+        const existingUser = await userServices.findUserByName(user.username)
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: 'Username already exists',
+            })
+        }
+
+        const savedUser = await userServices.addUser(user)
+        res.status(201).json(savedUser)
+    } catch (error) {
+        console.error('Error adding user:', error)
+        res.status(500).json({
+            success: false,
+            message: 'Error creating user',
+        })
+    }
 })
 
 //-------------delete-----------------
