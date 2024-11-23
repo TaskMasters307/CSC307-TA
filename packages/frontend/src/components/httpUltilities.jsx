@@ -1,5 +1,5 @@
 function FetchPostUser(account) {
-    const promise = fetch("http://localhost:8001/adduser/", {
+    const promise = fetch("http://localhost:8001/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

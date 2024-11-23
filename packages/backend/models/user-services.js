@@ -6,7 +6,7 @@ import 'dotenv/config';
 mongoose.set("debug", true);
 
 mongoose
-  .connect("mongodb+srv://csc-307-ta:csc307ta@csc-307-ta.j0i3u.mongodb.net/user_list?retryWrites=true&w=majority&appName=CSC-307-TA", {
+  .connect("mongodb+srv://csc-307-ta:csc307ta@csc-307-ta.j0i3u.mongodb.net/hashPassword?retryWrites=true&w=majority&appName=CSC-307-TA", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     
@@ -51,6 +51,7 @@ function addUser(user) {
 
 
   const userToAdd = new userModel(user);
+  console.log("adding user: ", user)
   const promise = userToAdd.save();
   return promise;
 }
