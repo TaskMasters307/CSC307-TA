@@ -75,12 +75,45 @@ app.get('/users/:id', async (req, res) => {
 
 //   ADD USER
 app.post('/adduser', async (req, res) => {
-    const user = req.body
+    try {
+        const { username, password } = req.body;
+        
+        // Validate input
+        if (!username || !password) {
+            return res.status(400).json({ 
+                error: 'Username and password are required' 
+            });
+        }
 
-    const savedUser = await userServices.addUser(user)
-    if (savedUser) res.status(201).send(savedUser)
-    else res.status(500).end()
-})
+        // Check if username already exists
+        const existingUser = await userServices.findUserByName(username);
+        if (existingUser) {
+            return res.status(409).json({ 
+                error: 'Username already exists' 
+            });
+        }
+
+        // Add user
+        const savedUser = await userServices.addUser(req.body);
+        console.log('User saved:', savedUser);
+        
+        if (savedUser) {
+            res.status(201).json({
+                success: true,
+                user: savedUser
+            });
+        } else {
+            res.status(500).json({ 
+                error: 'Failed to create user' 
+            });
+        }
+    } catch (error) {
+        console.error('Error in /adduser:', error);
+        res.status(500).json({ 
+            error: error.message || 'Internal server error' 
+        });
+    }
+});
 
 //-------------delete-----------------
 app.delete('/users/:id', async (req, res) => {
@@ -99,7 +132,7 @@ app.delete('/users/:id', async (req, res) => {
 })
 
 //get user stats
-app.get('/user/:username/status', async (req, res) => {
+app.get('/user/:username/stats', async (req, res) => {
     const { username } = req.params
     try {
         const stats = await userServices.getUserStats(username)
@@ -128,6 +161,44 @@ app.put('/user/:username/stats', async (req, res) => {
     } catch (error) {
         console.error('Error updating user stats:', error)
         res.status(500).json({ error: 'Server error' })
+    }
+})
+
+//get user tasks
+app.get('/user/:username/tasks', async (req, res) => {
+    try {
+        const tasks = await userServices.getUserTasks(req.params.username)
+        res.json(tasks)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch tasks' })
+    }
+
+})
+
+// Add task
+app.post('/user/:username/tasks', async (req, res) => {
+    try {
+        const newTask = await userServices.addUserTask(
+            req.params.username,
+            req.body
+        )
+        res.status(201).json(newTask)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add task' })
+    }
+})
+
+// Update task
+app.put('/user/:username/tasks/:taskId', async (req, res) => {
+    try {
+        const updatedTask = await userServices.updateUserTask(
+            req.params.username,
+            req.params.taskId,
+            req.body
+        )
+        res.json(updatedTask)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update task' })
     }
 })
 

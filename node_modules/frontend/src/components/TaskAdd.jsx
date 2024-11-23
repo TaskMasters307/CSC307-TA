@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { AddUserTask } from './httpUltilities.jsx'
 
 /**
  * TaskAdd Component
@@ -9,6 +10,7 @@ const TaskAdd = ({ addTask }) => {
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [priority, setPriority] = useState('low')
+    const [error, setError] = useState('')
 
     const handleAddTask = () => {
         if (title && date) {

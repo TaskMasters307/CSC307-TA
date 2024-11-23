@@ -1,11 +1,15 @@
 // src/components/Welcome.jsx
-import React from 'react'
+import React, { useEffect } from 'react'
+import { FetchUserStats } from './httpUltilities'
 
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
-const Welcome = ({ setCurrentView, username = 'User' }) => {
+const Welcome = ({setCurrentView, username, stats, onStatsUpdate }) => {
+    useEffect(() => {
+
+    }, [username])
     // Quick Navigation, not really necessary but looks cool i guess
     const quickNavButtons = [
         { view: 'tasks', label: 'Task List', icon: '📝' },
@@ -21,23 +25,23 @@ const Welcome = ({ setCurrentView, username = 'User' }) => {
             <div className="stats-summary">
                 <div className="stat-card">
                     <h3>Your Points</h3>
-                    <p className="stat-value">150</p>
+                    <p className="stat-value">{stats.totalPoints}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Tasks Completed</h3>
-                    <p className="stat-value">12</p>
+                    <p className="stat-value">{stats.tasksCompleted}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Streak</h3>
-                    <p className="stat-value">5 days</p>
+                    <p className="stat-value">{stats.currentStreak}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Point Multiplier</h3>
-                    <p className="stat-value">1.5X</p>
+                    <p className="stat-value">{stats.pointsMultiplier}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Global Rank</h3>
-                    <p className="stat-value">#5</p>
+                    <p className="stat-value">#{stats.globalRank || '-'}</p>
                 </div>
             </div>
             <div className="quick-nav">

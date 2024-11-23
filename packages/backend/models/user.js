@@ -6,9 +6,10 @@ const UserSchema = new mongoose.Schema(
         username: {
             type: String,
             required: true,
+            unique: true,
             trim: true,
             validate(value) {
-                if (value.length <= 0)
+                if (value.length <= 2)
                     throw new Error(
                         'Invalid job, must be at least 2 characters.'
                     )
@@ -19,7 +20,7 @@ const UserSchema = new mongoose.Schema(
             required: true,
             trim: true,
             validate(value) {
-                if (value.length <= 0)
+                if (value.length <= 2)
                     throw new Error(
                         'Invalid job, must be at least 2 characters.'
                     )

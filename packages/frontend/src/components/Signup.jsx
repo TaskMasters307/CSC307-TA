@@ -7,7 +7,7 @@ function Signup({ closeForm, LoginSuccess }) {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null)
 
-    function CreateAccount(account) {
+    async function CreateAccount(account) {
         Is_User_Name_Exist(username)
             .then((exist) => {
                 //If User name already exits alert
