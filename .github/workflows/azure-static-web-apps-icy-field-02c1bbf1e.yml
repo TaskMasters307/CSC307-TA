@@ -25,7 +25,6 @@ jobs:
             # Step 3: Install dependencies
             - name: Install Dependencies
               run: |
-                  cd packages/frontend
                   npm install
 
             # Step 4: Create env file
