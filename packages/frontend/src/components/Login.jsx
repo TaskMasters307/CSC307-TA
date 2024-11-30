@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import Signup from './Signup';
 import { Is_User_Name_Exist, MatchAccount } from './Utilities';
+import { FetchLogin } from './httpUltilities';
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
   
     function LoginCheck(account) {
-      MatchAccount(account).
+      FetchLogin(account).
       then((res) => {
         if (res.status === 404) {
           setError('Account not Found');
         }
-        else {
+        else if(res.status === 401) {
+          setError("Password Not Match")
+        }
+        
+        else if (res.status === 201) {
           onLoginSuccess();
         }
       }).

@@ -10,6 +10,7 @@ import Login from './components/Login'
 
 import './App.css'
 import Signup from './components/Signup'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 /**
  * Main App Component
@@ -105,6 +106,16 @@ function App() {
         
     }
     return (
+        /*
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/TaskArena" element={<Welcome />} />
+      </Routes>
+    </Router>
+    */
+    
         <div className="app">
             {isLoggedIn ? (
                 // Main app content after login
@@ -147,10 +158,16 @@ function App() {
                 // Login/Signup forms
                 <>
                     {currentView === 'login' ? (
-                        <Login 
-                            onLoginSuccess={handleLoginSuccess}
-                            PopSignup={handleSignup}
-                        />
+                        
+                            
+                            
+                                <Login 
+                                onLoginSuccess={handleLoginSuccess}
+                                PopSignup={handleSignup}
+                                />
+                            
+                    
+                        
                     ) : currentView === "signup" ? (
                         <Signup 
                             LoginSuccess={handleLoginSuccess}
@@ -160,7 +177,7 @@ function App() {
                 </>
             )}
             
-        </div>
+        </div> 
     );
 }
 

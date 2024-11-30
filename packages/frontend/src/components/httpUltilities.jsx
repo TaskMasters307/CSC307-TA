@@ -13,6 +13,21 @@ function FetchPostUser(account) {
 
   }
 
+  function FetchLogin(account) {
+    const promise = fetch("http://localhost:8001/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(account)
+    });
+    //console.log(`function postUser(account) account = ${JSON.stringify(account)}`);
+    //console.log(`postUser: ${account}`)
+    return promise;
+
+  }
+
   function FetchFindUserName(username) {
     const promise = fetch(`http://localhost:8001/findusername?username=${username}`);
     return promise;
@@ -25,5 +40,6 @@ function FetchPostUser(account) {
   export  {
     FetchFindUserName,
     FetchPostUser,
-    FindAccount
+    FindAccount,
+    FetchLogin
   }
