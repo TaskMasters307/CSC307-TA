@@ -10,7 +10,7 @@ import Login from './components/Login'
 
 import './App.css'
 import Signup from './components/Signup'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 /**
  * Main App Component
@@ -23,9 +23,8 @@ function App() {
     const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
 
     //Adds a new task to the tasks array
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
-    
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [username, setUsername] = useState('')
 
     const addTask = (taskText) => {
         if (taskText.trim()) {
@@ -53,57 +52,53 @@ function App() {
         )
     }
 
-
     const handleLoginSuccess = () => {
-        setIsLoggedIn(true);
-        setCurrentView('welcome'); // Switch to main content on successful login
+        setIsLoggedIn(true)
+        setCurrentView('welcome') // Switch to main content on successful login
         return (
-        <div>
-        <h1>TaskArena</h1>
-        <Navigation
-            currentView={currentView}
-            setCurrentView={setCurrentView}
-        />
-        <main>
-            {currentView === 'welcome' && (
-                <Welcome
-                    setCurrentView={setCurrentView}
-                    username={username}
-                />
-            )}
-            {currentView === 'tasks' && (
-                <TaskList
-                    tasks={tasks}
-                    toggleTask={toggleTask}
+            <div>
+                <h1>TaskArena</h1>
+                <Navigation
+                    currentView={currentView}
                     setCurrentView={setCurrentView}
                 />
-            )}
-            {currentView === 'add' && (
-                <TaskAdd
-                    addTask={addTask}
-                    setCurrentView={setCurrentView}
-                />
-            )}
-            {currentView === 'calendar' && (
-                <Calendar
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
-            )}
-            {currentView === 'leaderboard' && <Leaderboard />}
-        </main>
-    </div>
-        
+                <main>
+                    {currentView === 'welcome' && (
+                        <Welcome
+                            setCurrentView={setCurrentView}
+                            username={username}
+                        />
+                    )}
+                    {currentView === 'tasks' && (
+                        <TaskList
+                            tasks={tasks}
+                            toggleTask={toggleTask}
+                            setCurrentView={setCurrentView}
+                        />
+                    )}
+                    {currentView === 'add' && (
+                        <TaskAdd
+                            addTask={addTask}
+                            setCurrentView={setCurrentView}
+                        />
+                    )}
+                    {currentView === 'calendar' && (
+                        <Calendar
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                        />
+                    )}
+                    {currentView === 'leaderboard' && <Leaderboard />}
+                </main>
+            </div>
         )
-    };
+    }
     function CloseForm() {
-        
-        setIsLoggedIn(false);
-        setCurrentView('login'); // Switch to main content on successful login
-    };
-    function handleSignup(){
-        setCurrentView('signup');
-        
+        setIsLoggedIn(false)
+        setCurrentView('login') // Switch to main content on successful login
+    }
+    function handleSignup() {
+        setCurrentView('signup')
     }
     return (
         /*
@@ -115,7 +110,7 @@ function App() {
       </Routes>
     </Router>
     */
-    
+
         <div className="app">
             {isLoggedIn ? (
                 // Main app content after login
@@ -158,27 +153,20 @@ function App() {
                 // Login/Signup forms
                 <>
                     {currentView === 'login' ? (
-                        
-                            
-                            
-                                <Login 
-                                onLoginSuccess={handleLoginSuccess}
-                                PopSignup={handleSignup}
-                                />
-                            
-                    
-                        
-                    ) : currentView === "signup" ? (
-                        <Signup 
+                        <Login
+                            onLoginSuccess={handleLoginSuccess}
+                            PopSignup={handleSignup}
+                        />
+                    ) : currentView === 'signup' ? (
+                        <Signup
                             LoginSuccess={handleLoginSuccess}
                             closeForm={CloseForm}
                         />
                     ) : null}
                 </>
             )}
-            
-        </div> 
-    );
+        </div>
+    )
 }
 
-export default App;
+export default App

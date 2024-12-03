@@ -1,12 +1,11 @@
 import express from 'express'
 import cors from 'cors'
 
-
 import userServices from './models/user-services.js'
 
-import "./auth.js"
-import { authenticateUser, loginUser, registerUser } from './auth.js';
-import  dotenv from "dotenv"
+import './auth.js'
+import { authenticateUser, loginUser, registerUser } from './auth.js'
+import dotenv from 'dotenv'
 dotenv.config()
 const app = express()
 const port = 8001
@@ -79,20 +78,18 @@ app.get('/users/:id', async (req, res) => {
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
     const savedUser = req.body
-   // console.log(`/signup `, savedUser)
-    userServices.addUser(savedUser);
+    // console.log(`/signup `, savedUser)
+    userServices.addUser(savedUser)
     if (savedUser) res.status(201).send(savedUser)
-    
     else res.status(500).end()
 })
 // LOGIN
-app.post('/login',loginUser, async (req, res, next) => {
+app.post('/login', loginUser, async (req, res, next) => {
     const savedUser = req.body
-    const username = req.body.username;
-    const password = req.body.password;
+    const username = req.body.username
+    const password = req.body.password
     //res.send("sending from login/ ")
     //console.log(savedUser);
-   
 })
 
 //-------------delete-----------------
