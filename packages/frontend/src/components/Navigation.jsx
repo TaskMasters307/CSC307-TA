@@ -5,33 +5,27 @@ import '../css/Navigation.css'
  * Navigation Component
  * Handles switching between different views
  */
-const Navigation = ({ currentView, setCurrentView }) => (
-    <nav className="navigation">
-        <button
-            className={currentView === 'welcome' ? 'active' : ''}
-            onClick={() => setCurrentView('welcome')}
-        >
-            Home
-        </button>
-        <button
-            className={currentView === 'tasks' ? 'active' : ''}
-            onClick={() => setCurrentView('tasks')}
-        >
-            Tasks
-        </button>
-        <button
-            className={currentView === 'calendar' ? 'active' : ''}
-            onClick={() => setCurrentView('calendar')}
-        >
-            Calendar
-        </button>
-        <button
-            className={currentView === 'leaderboard' ? 'active' : ''}
-            onClick={() => setCurrentView('leaderboard')}
-        >
-            Leaderboard
-        </button>
-    </nav>
-);
+const Navigation = ({ currentView, setCurrentView }) => {
+    const navItems = [
+        { view: 'welcome', label: 'Home', icon: '🏠' },
+        { view: 'tasks', label: 'Tasks', icon: '📝' },
+        { view: 'calendar', label: 'Calendar', icon: '📅' },
+        { view: 'leaderboard', label: 'Leaderboard', icon: '🏆' }
+    ];
+    return (
+        <nav className="navigation">
+            {navItems.map(item => (
+                <button
+                    key={item.view}
+                    className={`nav-button ${currentView === item.view ? 'active' : ''}`}
+                    onClick={() => setCurrentView(item.view)}
+                >
+                    <span className="nav-icon">{item.icon}</span>
+                    <span className="nav-label">{item.label}</span>
+                </button>
+            ))}
+        </nav>
+    );
+};
 
 export default Navigation;
