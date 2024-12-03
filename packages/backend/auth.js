@@ -81,7 +81,7 @@ export function authenticateUser(req, res, next) {
 export async function loginUser(req, res, next) {
   const LoginUser = req.body;
   const username = req.body.username;
-  //console.log("LoginUser", LoginUser);
+  console.log("LoginUser", LoginUser);
   try {
     const findOne =  await userServices.findUserByName(username);
     //console.log(findOne.password);
