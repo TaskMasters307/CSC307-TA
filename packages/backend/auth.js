@@ -76,3 +76,66 @@ export function authenticateUser(req, res, next) {
     );
   }
 }
+
+
+export async function loginUser(req, res, next) {
+  const LoginUser = req.body;
+  const username = req.body.username;
+  //console.log("LoginUser", LoginUser);
+  try {
+    const findOne =  await userServices.findUserByName(username);
+    //console.log(findOne.password);
+    if(!findOne) {
+      res.status(404).send(`Mongo database not found ${loginUser}`);
+    }
+    else {
+      console.log("mongo found account")
+
+      const matchedPassword = await bcrypt.compare(req.body.password, findOne.password)
+      if(matchedPassword) {
+        console.log("password matched")
+        res.status(201).send("password matched")
+      }
+      else {
+        console.log("password not matched")
+        res.ok = true
+        res.message = "password not matched"
+        console.log(res.message)
+        res.body = "aslkdalskd"
+        res.status(401).send()
+      }
+    
+    }
+  }
+  
+  catch(error) {
+    res.send(`mongo findUerByName() error: ${error}`);
+  }
+    
+   
+    
+    
+
+  
+
+ /* if (!retrievedUser) {
+    // invalid username
+    res.status(401).send("Unauthorized");
+  }  else {
+    bcrypt
+      .compare(pwd, retrievedUser.hashedPassword)
+      .then((matched) => {
+        if (matched) {
+          generateAccessToken(username).then((token) => {
+            res.status(200).send({ token: token });
+          });
+        } else {
+          // invalid password
+          res.status(401).send("Unauthorized");
+        }
+      })
+      .catch(() => {
+        res.status(401).send("Unauthorized");
+      });
+  } */
+}

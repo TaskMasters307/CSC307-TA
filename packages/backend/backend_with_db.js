@@ -5,7 +5,7 @@ import cors from 'cors'
 import userServices from './models/user-services.js'
 
 import "./auth.js"
-import { authenticateUser, registerUser } from './auth.js';
+import { authenticateUser, loginUser, registerUser } from './auth.js';
 import  dotenv from "dotenv"
 dotenv.config()
 const app = express()
@@ -84,6 +84,15 @@ app.post('/signup', registerUser, async (req, res, next) => {
     if (savedUser) res.status(201).send(savedUser)
     
     else res.status(500).end()
+})
+// LOGIN
+app.post('/login',loginUser, async (req, res, next) => {
+    const savedUser = req.body
+    const username = req.body.username;
+    const password = req.body.password;
+    //res.send("sending from login/ ")
+    //console.log(savedUser);
+   
 })
 
 //-------------delete-----------------
