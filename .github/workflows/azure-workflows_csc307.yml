@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - csc307
 on:
     push:
         branches:
-            - main
+            - azure-workflows
     workflow_dispatch:
 
 jobs:
@@ -22,13 +22,12 @@ jobs:
                   node-version: '20.x'
 
             - name: npm install, build, and test
+              working-directory: packages/backend
               run: |
-                  cd packages/backend
-                  npm install -g nodemon
-                  npm install cors
-                  npm install dotenv
-                  npm install express
-                  npm install mongoose
+
+                  npm install --workspaces=false
+                  pwd
+                  ls
                   npm run -w backend build --if-present
                   npm run -w backend test --if-present
 
