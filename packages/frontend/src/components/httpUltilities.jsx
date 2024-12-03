@@ -1,5 +1,7 @@
+const URL = "https://csc307-cjbaece4hebag3hj.westus3-01.azurewebsites.net"
+//const URL = "http://localhost:8001"
 function FetchPostUser(account) {
-    const promise = fetch("http://localhost:8001/signup", {
+    const promise = fetch(`${URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,7 +16,7 @@ function FetchPostUser(account) {
   }
 
   function FetchLogin(account) {
-    const promise = fetch("http://localhost:8001/login", {
+    const promise = fetch(`${URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,12 +31,12 @@ function FetchPostUser(account) {
   }
 
   function FetchFindUserName(username) {
-    const promise = fetch(`http://localhost:8001/findusername?username=${username}`);
+    const promise = fetch(`${URL}/findusername?username=${username}`);
     return promise;
   }
   function FindAccount(username, password) {
     //console.log(username, password);
-    const promise = fetch (`http://localhost:8001/findaccount?username=${username}&password=${password}`);
+    const promise = fetch (`${URL}/findaccount?username=${username}&password=${password}`);
     return promise;
   }
   export  {
