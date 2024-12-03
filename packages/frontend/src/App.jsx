@@ -19,7 +19,7 @@ import Signup from './components/Signup'
 function App() {
     // State management for tasks and UI
     const [tasks, setTasks] = useState([]) // Stores all tasks
-    const [currentView, setCurrentView] = useState('login') // Controls which view is displayed
+    const [currentView, setCurrentView] = useState('signup') // Controls which view is displayed
     const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
 
     //Adds a new task to the tasks array
@@ -102,7 +102,9 @@ function App() {
         setCurrentView('login'); // Switch to main content on successful login
     };
     function handleSignup(){
+        
         setCurrentView('signup');
+        //
         
     }
     return (
