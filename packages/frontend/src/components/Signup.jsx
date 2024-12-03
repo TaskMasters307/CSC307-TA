@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Is_User_Name_Exist } from './Utilities'
-import { FetchLogin } from './httpUltilities'
+import { FetchSignUp } from './httpUltilities'
 
 function Signup({ closeForm, LoginSuccess }) {
     const [username, setUsername] = useState('')
@@ -18,7 +18,7 @@ function Signup({ closeForm, LoginSuccess }) {
                 }
                 // else if username not exits then create an account on data
                 else {
-                    FetchLogin(account)
+                    FetchSignUp(account)
                         .then((res) => {
                             if (res.status === 500) {
                                 setError('error 500')

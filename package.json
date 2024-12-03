@@ -7,7 +7,7 @@
         "lint": "npx eslint . && npx prettier --check .",
         "test": "echo \"Error: no test specified\" ",
         "backend": "npm -w packages/backend start",
-        "frontend": "npm -w packages/frontend start",
+        "frontend": "npm -w packages/frontend run vite-start",
         "build-frontend": "npm -w packages/frontend run build",
         "build-backend": "npm -w packages/backend run build",
         "lint-backend": "npm -w packages/backend run lint",
