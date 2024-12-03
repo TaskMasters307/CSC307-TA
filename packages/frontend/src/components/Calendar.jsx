@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import TaskAdd from './TaskAdd'
 import TaskList from './TaskList'
-import './Calendar.css'
+import '../css/Calendar.css'
 
 const Calendar = () => {
     const [tasks, setTasks] = useState([])

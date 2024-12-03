@@ -9,7 +9,7 @@ import { authenticateUser, loginUser, registerUser } from './auth.js';
 import  dotenv from "dotenv"
 dotenv.config()
 const app = express()
-const port = 8001
+const port = process.env.PORT || 8001
 
 app.use(cors())
 app.use(express.json())

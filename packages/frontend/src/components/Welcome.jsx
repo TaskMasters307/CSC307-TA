@@ -1,6 +1,6 @@
 // src/components/Welcome.jsx
 import React from 'react'
-
+import '../css/Welcome.css'
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features

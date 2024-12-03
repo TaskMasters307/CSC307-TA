@@ -1,6 +1,6 @@
 // src/components/Navigation.jsx
 import React from 'react'
-
+import '../css/Navigation.css'
 /**
  * Navigation Component
  * Handles switching between different views
@@ -9,8 +9,7 @@ const Navigation = ({ currentView, setCurrentView }) => (
     <nav className="navigation">
         <button
             className={currentView === 'welcome' ? 'active' : ''}
-            onClick={() => 
-                ('welcome')}
+            onClick={() => setCurrentView('welcome')}
         >
             Home
         </button>
