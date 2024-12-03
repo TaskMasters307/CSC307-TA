@@ -32,6 +32,12 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+        # Install dependencies
+      - name: Install dependencies
+        run: |
+          cd packages/frontend
+          npm install  # or npm ci for cleaner install
+          
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
