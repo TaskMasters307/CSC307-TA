@@ -1,4 +1,4 @@
-import { FetchFindUserName, FindAccount } from './httpUltilities'
+import { FetchFindUserName, FindAccount } from '../httpUltilities'
 
 function Is_User_Name_Exist(uname) {
     return FetchFindUserName(uname)

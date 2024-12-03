@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Is_User_Name_Exist } from './Utilities'
-import { FetchPostUser } from './httpUltilities'
+import { FetchPostUser } from '../httpUltilities'
 
 function Signup({ closeForm, LoginSuccess }) {
     const [username, setUsername] = useState('')

@@ -1,39 +1,42 @@
-import React, { useState } from 'react'
-import Signup from './Signup'
-import { Is_User_Name_Exist, MatchAccount } from './Utilities'
-import { FetchLogin } from './httpUltilities'
-const Login = ({ onLoginSuccess, PopSignup }) => {
-    // Accept onLoginSuccess prop
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+import React, { useState } from 'react';
+import { FetchLogin } from '../httpUltilities';
 
-    function LoginCheck(account) {
-        FetchLogin(account)
-            .then((res) => {
-                if (res.status === 404) {
-                    setError('Account not Found')
-                } else if (res.status === 401) {
-                    setError('Password Not Match')
-                } else if (res.status === 201) {
-                    onLoginSuccess()
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
+const Login = ({ onLoginSuccess, PopSignup }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const LoginCheck = async (account) => {
+        try {
+            const res = await FetchLogin(account);
+
+            if (res.status === 404) {
+                setError('Account not found.');
+            } else if (res.status === 401) {
+                setError('Incorrect password.');
+            } else if (res.status === 200) {
+                const user = await res.json(); // Get user details from response
+                onLoginSuccess(user); // Call the login success handler with user data
+            } else {
+                setError('Unexpected error occurred. Please try again.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('Failed to log in. Please try again.');
+        }
+    };
 
     const handleLogin = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!username || !password) {
-            setError('Username and password are required.')
-            return
+            setError('Username and password are required.');
+            return;
         }
-        const account = { username: username, password: password }
-        LoginCheck(account)
-    }
+
+        const account = { username, password };
+        LoginCheck(account);
+    };
 
     return (
         <div className="login-container">
@@ -45,8 +48,8 @@ const Login = ({ onLoginSuccess, PopSignup }) => {
                         type="text"
                         value={username}
                         onChange={(e) => {
-                            setUsername(e.target.value)
-                            setError('') // Reset error on input change
+                            setUsername(e.target.value);
+                            setError(''); // Reset error on input change
                         }}
                         className="login-input"
                         placeholder="Enter your username"
@@ -58,8 +61,8 @@ const Login = ({ onLoginSuccess, PopSignup }) => {
                         type="password"
                         value={password}
                         onChange={(e) => {
-                            setPassword(e.target.value)
-                            setError('') // Reset error on input change
+                            setPassword(e.target.value);
+                            setError(''); // Reset error on input change
                         }}
                         className="login-input"
                         placeholder="Enter your password"
@@ -69,11 +72,13 @@ const Login = ({ onLoginSuccess, PopSignup }) => {
                 <button type="submit" className="login-button">
                     Login
                 </button>
-                <button className="open-button" onClick={PopSignup}>
-                    Sign up
+                <button type="button" className="open-button" onClick={PopSignup}>
+                    Sign Up
                 </button>
             </form>
         </div>
-    )
-}
-export default Login
+    );
+};
+
+export default Login;
+

@@ -1,82 +1,101 @@
 import React, { useState, useEffect } from 'react'
 import TaskAdd from './TaskAdd'
 import TaskList from './TaskList'
+import {FetchAddTask, FetchTasks, } from '../httpUltilities.jsx';
 import './Calendar.css'
 
-const Calendar = () => {
-    const [tasks, setTasks] = useState([])
+const Calendar = ({ userId, tasks, setTasks, toggleTask, selectedDate }) => {
     const [filter, setFilter] = useState(null)
     const [currentDate, setCurrentDate] = useState(new Date())
     const dates = generateDatesForMonth(currentDate)
+    
 
     useEffect(() => {
-        const initialTasks = [
-            {
-                id: 1,
-                title: 'Task 1',
-                date: '2024-11-08',
-                priority: 'high',
-                isCompleted: false,
-            },
-            {
-                id: 2,
-                title: 'Task 2',
-                date: '2024-11-09',
-                priority: 'medium',
-                isCompleted: false,
-            },
-        ]
-        setTasks(initialTasks)
-    }, [])
+        const fetchTasks = () => {
+            FetchTasks(userId)
+                .then((data) => setTasks(data))
+                .catch((error) => console.error('Error fetching tasks:', error));
+        };
+        if (userId) fetchTasks();
+    }, [userId]);
 
-    const addTask = (newTask) => setTasks([...tasks, newTask])
+
+    const addTask = async (taskText) => {
+        const newTask = {
+            title: taskText,
+            date: selectedDate.toISOString().split('T')[0],
+            priority: 'low',
+            userId, // Ensure this is populated correctly
+        };
+    
+        console.log('Adding Task:', newTask); // Log the task object
+    
+        try {
+            await FetchAddTask(newTask);
+            const updatedTasks = await FetchTasks(userId);
+            setTasks(updatedTasks);
+        } catch (error) {
+            console.error('Failed to add task:', error.message);
+            alert('Failed to add task. Please try again.');
+        }
+    };
+
+
 
     const toggleTaskCompletion = (taskId) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === taskId
-                    ? { ...task, isCompleted: !task.isCompleted }
-                    : task
-            )
-        )
-    }
+        const taskToUpdate = tasks.find((task) => task._id === taskId);
+        if (!taskToUpdate) return;
 
-    const filterTasks = (priority) => setFilter(priority)
+        const updatedTask = { ...taskToUpdate, isCompleted: !taskToUpdate.isCompleted };
+        setTasks((prevTasks) =>
+            prevTasks.map((task) => (task._id === taskId ? updatedTask : task))
+        );
+
+        // Roll back in case of an error
+        FetchAddTask(updatedTask).catch((error) => {
+            console.error('Error updating task:', error);
+            setTasks((prevTasks) =>
+                prevTasks.map((task) =>
+                    task._id === taskId ? taskToUpdate : task
+                )
+            );
+        });
+    };
+
+    const filterTasks = (priority) => setFilter(priority);
 
     const filteredTasks = filter
         ? tasks.filter((task) => task.priority === filter)
-        : tasks
+        : tasks;
+
 
     const renderTasksForDate = (date) => {
-        return filteredTasks
+        if (!Array.isArray(tasks)) return null;
+
+        return tasks
             .filter((task) => task.date === date)
             .map((task) => (
-                <div
-                    key={task.id}
-                    className={`task ${task.priority}`}
-                    draggable
-                    onDragStart={(e) =>
-                        e.dataTransfer.setData('taskId', task.id)
-                    }
-                >
+                <div key={task._id} className={`task ${task.priority}`}>
                     <input
                         type="checkbox"
                         checked={task.isCompleted}
-                        onChange={() => toggleTaskCompletion(task.id)}
+                        onChange={() => toggleTask(task._id)} // Use the toggleTask prop
                     />
                     <span>{task.title}</span>
                 </div>
-            ))
-    }
+            ));
+    };
+        
+        
 
     const onDrop = (event, date) => {
-        const taskId = event.dataTransfer.getData('taskId')
-        setTasks(
-            tasks.map((task) =>
-                task.id === parseInt(taskId) ? { ...task, date: date } : task
+        const taskId = event.dataTransfer.getData('taskId');
+        setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+                task._id === taskId ? { ...task, date } : task
             )
-        )
-    }
+        );
+    };
 
     const onDragOver = (event) => event.preventDefault()
 
@@ -86,17 +105,16 @@ const Calendar = () => {
         setCurrentDate(newDate)
     }
 
+
     return (
         <div className="calendar-container">
             <h1>Task Calendar</h1>
             <div className="task-controls">
-                <TaskAdd addTask={addTask} />
-                <TaskList tasks={tasks} toggleTask={toggleTaskCompletion} />
+                <TaskAdd addTask={addTask} userId={userId} />
+                <TaskList tasks={tasks} setTasks={setTasks} />
             </div>
             <div className="filter-buttons">
-                <button onClick={() => filterTasks('high')}>
-                    High Priority
-                </button>
+                <button onClick={() => filterTasks('high')}>High Priority</button>
                 <button onClick={() => filterTasks('medium')}>
                     Medium Priority
                 </button>
@@ -136,8 +154,8 @@ const Calendar = () => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 const generateDatesForMonth = (currentDate) => {
     const year = currentDate.getFullYear()
