@@ -10,7 +10,7 @@ import Login from './components/Login'
 
 import './App.css'
 import Signup from './components/Signup'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 /**
  * Main App Component

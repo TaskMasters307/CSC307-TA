@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Signup from './Signup';
-import { Is_User_Name_Exist, MatchAccount } from './Utilities';
+//import Signup from './Signup';
+//import { Is_User_Name_Exist, MatchAccount } from './Utilities';
 import { FetchLogin } from './httpUltilities';
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
@@ -8,8 +8,8 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [error, setError] = useState('');
   
     function LoginCheck(account) {
-      FetchLogin(account).
-      then((res) => {
+      FetchLogin(account)
+      .then((res) => {
         if (res.status === 404) {
           setError('Account not Found');
         }
@@ -20,8 +20,8 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
         else if (res.status === 201) {
           onLoginSuccess();
         }
-      }).
-      catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
       })
     }

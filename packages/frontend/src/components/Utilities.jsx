@@ -2,8 +2,8 @@
   import {FetchFindUserName, FindAccount } from "./httpUltilities"
 
   function Is_User_Name_Exist(uname) {
-    return FetchFindUserName(uname).
-    then((res) => {
+    return FetchFindUserName(uname)
+    .then((res) => {
       if(!res.ok) {
         throw new Error("checking User Name error");
       }
