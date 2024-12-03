@@ -10,6 +10,7 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^7.0.1",
+        "react-script": "^2.0.5",
         "react-scripts": "^5.0.1",
         "resolve": "^1.22.8",
         "web-vitals": "^2.1.4"
@@ -39,6 +40,15 @@
         ]
     },
     "devDependencies": {
-        "eslint-config-react-app": "^7.0.1"
-    }
+        "@types/react": "^18.2.66",
+        "@types/react-dom": "^18.2.22",
+        "@vitejs/plugin-react": "^4.2.1",
+        "eslint": "^8.57.0",
+        "eslint-config-react-app": "^7.0.1",
+        "eslint-plugin-react": "^7.34.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.6",
+        "vite": "^5.4.11"
+    },
+    "extends": "react-app"
 }
