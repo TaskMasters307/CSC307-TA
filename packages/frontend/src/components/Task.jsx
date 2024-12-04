@@ -4,7 +4,7 @@ import TaskAdd from './TaskAdd'
 import TaskList from './TaskList'
 import '../css/Task.css'
 
-const Task = ({ tasks, addTask, toggleTaskCompletion }) => {
+const Task = ({ tasks, setTasks, addTask, toggleTaskCompletion }) => {
     const [filter, setFilter] = useState(null)
     const [activeFilter, setActiveFilter] = useState(null);
     
@@ -29,7 +29,9 @@ const Task = ({ tasks, addTask, toggleTaskCompletion }) => {
             <div className="task-controls">
                 <TaskAdd addTask={addTask} />
                 <div className="task-list-container">
-                    <TaskList tasks={filteredTasks} toggleTask={toggleTaskCompletion} />
+                    <TaskList tasks={filteredTasks} 
+                    toggleTask={toggleTaskCompletion}
+                    setTasks={setTasks} />
                     <div className="filter-buttons">
                         {filterButtons.map(button => (
                             <button 

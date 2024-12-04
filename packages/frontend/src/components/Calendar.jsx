@@ -86,30 +86,38 @@ const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
 }
 
 const generateDatesForMonth = (currentDate) => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
-    // Log the first day of the month
-    const firstOfMonth = new Date(year, month, 1)
-    console.log("First of month:", firstOfMonth)
-    console.log("Day of week for first:", firstOfMonth.getDay())
-    const firstDay = new Date(year, month, 1).getDay()
-    const dates = []
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    // Get first day of current month
+    const firstOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+    );
+    
+    const daysInMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+    ).getDate();
 
-    console.log("Days in month:", daysInMonth)
-    // Add empty slots for days before the first of the month
-    if (firstDay > 0) {  // Only add empty slots if first day isn't Sunday
-        for (let i = 0; i < firstDay; i++) {
-            dates.push(null)
-        }
+    const firstDayOfWeek = firstOfMonth.getDay();
+    const dates = [];
+
+    // Add empty slots for previous month
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        dates.push(null);
     }
-    console.log("First day:", firstDay)
+
+    // Add dates for current month starting from 0 to offset the visual shift
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(Date.UTC(year, month, day))
-        dates.push(date.toISOString().split('T')[0])
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day + 1
+        ).toISOString().split('T')[0];
+        dates.push(date);
     }
-    console.log("Generated dates:", dates)
-    return dates
+
+    return dates;
 }
 
 export default Calendar

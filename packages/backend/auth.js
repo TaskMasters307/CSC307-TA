@@ -104,26 +104,6 @@ export async function loginUser(req, res, next) {
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
-  
+    
 
- /* if (!retrievedUser) {
-    // invalid username
-    res.status(401).send("Unauthorized");
-  }  else {
-    bcrypt
-      .compare(pwd, retrievedUser.hashedPassword)
-      .then((matched) => {
-        if (matched) {
-          generateAccessToken(username).then((token) => {
-            res.status(200).send({ token: token });
-          });
-        } else {
-          // invalid password
-          res.status(401).send("Unauthorized");
-        }
-      })
-      .catch(() => {
-        res.status(401).send("Unauthorized");
-      });
-  } */
 }

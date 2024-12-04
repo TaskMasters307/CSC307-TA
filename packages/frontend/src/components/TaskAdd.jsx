@@ -14,11 +14,13 @@ const TaskAdd = ({ addTask }) => {
 
     const handleAddTask = () => {
         if (title && date) {
+            const taskDate = new Date(date);
+            taskDate.setDate(taskDate.getDate() + 1);
             // Create new task with selected date and priority
             const newTask = {
                 id: Date.now(),
                 title,
-                date,
+                date: taskDate.toISOString().split('T')[0],
                 priority,
                 isCompleted: false,
             }
