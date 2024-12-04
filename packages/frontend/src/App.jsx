@@ -41,8 +41,8 @@ function App() {
     const handleLoginSuccess = (id) => {
         console.log('Setting userId:', id);
         setIsLoggedIn(true);
-        setCurrentView('welcome'); // Switch to main content on successful login
         setUserId(id); // Save the userId for task association
+        setCurrentView('welcome'); // Switch to main content on successful login
         return (
         <div>
         <h1>TaskArena</h1>
@@ -123,10 +123,10 @@ function App() {
                         )}
                         {currentView === 'tasks' && (
                             <Task
-                                tasks={tasks}
-                                addTask={addTask}
-                                toggleTaskCompletion={toggleTaskCompletion}
-                                userId={userId} // Pass userId here
+                            tasks={tasks}
+                            addTask={(task) => setTasks([...tasks, task])}
+                            toggleTaskCompletion={toggleTaskCompletion}
+                            userId={userId} // Pass userId here
                             />
                         )}
                         {currentView === 'calendar' && (

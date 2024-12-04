@@ -125,34 +125,21 @@ app.post('/login', loginUser, async (req, res) => {
 
 
 
-app.post('/login', async (req, res) => {
+app.post('/tasks', async (req, res) => {
+    const { title, date, priority, userId } = req.body;
+
+    if (!title || !date || !userId) {
+        return res.status(400).send('Missing required fields');
+    }
+
     try {
-        const { username, password } = req.body;
-
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required' });
-        }
-
-        // Replace this with your actual user authentication logic
-        const user = await userServices.findOneAccount(username, password);
-
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid username or password' });
-        }
-
-        // Include `userId` in the response
-        res.status(200).json({
-            userId: user._id, // MongoDB `_id` or equivalent unique user identifier
-            username: user.username,
-            message: 'Login successful',
-        });
+        const task = await taskServices.addTask({ title, date, priority, userId });
+        res.status(201).send(task);
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ error: 'An error occurred during login' });
+        console.error('Error adding task:', error);
+        res.status(500).send('Error adding task');
     }
 });
-
-
 
 
 //-------------delete-----------------

@@ -12,13 +12,10 @@ const Task = ({ tasks, addTask, toggleTaskCompletion, userId }) => {
     // Fetch tasks when userId changes
     useEffect(() => {
         if (userId) {
-            console.log('Fetching tasks for userId:', userId);
             fetch(`/tasks/${userId}`)
                 .then((response) => response.json())
                 .then((userTasks) => setTasks(userTasks))
                 .catch((error) => console.error('Error fetching tasks:', error));
-        } else {
-            console.error('Cannot fetch tasks: userId is null or undefined');
         }
     }, [userId]);
 
