@@ -111,31 +111,33 @@ export async function loginUser(req, res, next) {
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
-    
-   
-    
-    
+ 
+}
 
-  
+export async function loginUser2(req, res, next) {
+  const { username, password } = req.body;
+  console.log("Received login request:", req.body);
 
- /* if (!retrievedUser) {
-    // invalid username
-    res.status(401).send("Unauthorized");
-  }  else {
-    bcrypt
-      .compare(pwd, retrievedUser.hashedPassword)
-      .then((matched) => {
-        if (matched) {
-          generateAccessToken(username).then((token) => {
-            res.status(200).send({ token: token });
-          });
-        } else {
-          // invalid password
-          res.status(401).send("Unauthorized");
-        }
-      })
-      .catch(() => {
-        res.status(401).send("Unauthorized");
-      });
-  } */
+  try {
+      const findOne = await userServices.findUserByName(username);
+      if (!findOne) {
+          console.log("User not found:", username);
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      console.log("User found:", findOne);
+
+      const matchedPassword = await bcrypt.compare(password, findOne.password);
+      if (!matchedPassword) {
+          console.log("Invalid password for user:", username);
+          return res.status(401).json({ error: "Invalid password" });
+      }
+
+      console.log("Password matched for user:", username);
+      req.user = findOne;
+      next();
+  } catch (error) {
+      console.error("Error in loginUser middleware:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
 }

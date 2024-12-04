@@ -5,7 +5,7 @@ import cors from 'cors'
 import userServices from './models/user-services.js'
 
 import "./auth.js"
-import { authenticateUser, loginUser, registerUser } from './auth.js';
+import { authenticateUser, loginUser2, registerUser } from './auth.js';
 import  dotenv from "dotenv"
 dotenv.config()
 const app = express()
@@ -97,30 +97,22 @@ app.post('/signup', registerUser, async (req, res, next) => {
     else res.status(500).end()
 })
 // LOGIN
-app.post('/login', loginUser, async (req, res) => {
+app.post('/login', loginUser2, async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const user = req.user; // Access the validated user from `loginUser`
 
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required' });
-        }
-
-        const user = await userServices.findOneAccount(username, password);
-
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid username or password' });
-        }
-
+        // Send the successful login response
         res.status(200).json({
             userId: user._id, // MongoDB `_id`
             username: user.username,
-            message: 'Login successful',
+            message: "Login successful",
         });
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ error: 'An error occurred during login' });
+        console.error("Error during login route handler:", error);
+        res.status(500).json({ error: "An error occurred during login" });
     }
 });
+
 
 
 

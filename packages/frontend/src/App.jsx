@@ -123,10 +123,10 @@ function App() {
                         )}
                         {currentView === 'tasks' && (
                             <Task
-                            tasks={tasks}
-                            addTask={(task) => setTasks([...tasks, task])}
-                            toggleTaskCompletion={toggleTaskCompletion}
-                            userId={userId} // Pass userId here
+                                tasks={tasks}
+                                addTask={addTask}
+                                toggleTaskCompletion={toggleTaskCompletion}
+                                userId={userId} // Pass userId here
                             />
                         )}
                         {currentView === 'calendar' && (

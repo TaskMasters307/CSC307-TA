@@ -12,9 +12,20 @@ const Task = ({ tasks, addTask, toggleTaskCompletion, userId }) => {
     // Fetch tasks when userId changes
     useEffect(() => {
         if (userId) {
-            fetch(`/tasks/${userId}`)
-                .then((response) => response.json())
-                .then((userTasks) => setTasks(userTasks))
+            fetch(`http://localhost:8001/tasks?userId=${userId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch tasks: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Fetched tasks:', data);
+                    setTasks(data);
+                })
                 .catch((error) => console.error('Error fetching tasks:', error));
         }
     }, [userId]);

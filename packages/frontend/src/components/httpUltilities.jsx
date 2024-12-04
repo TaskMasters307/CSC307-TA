@@ -39,6 +39,8 @@ function FetchSignUp(account) {
     const promise = fetch (`${URL}/findaccount?username=${username}&password=${password}`);
     return promise;
   }
+
+  
   export  {
     FetchFindUserName,
     FetchSignUp,
