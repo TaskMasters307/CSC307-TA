@@ -10,7 +10,8 @@ const Navigation = ({ currentView, setCurrentView }) => {
         { view: 'welcome', label: ' Home', icon: '🏠' },
         { view: 'tasks', label: ' Tasks', icon: '📝' },
         { view: 'calendar', label: ' Calendar', icon: '📅' },
-        { view: 'leaderboard', label: ' Leaderboard', icon: '🏆' }
+        { view: 'leaderboard', label: ' Leaderboard', icon: '🏆' },
+        { view: 'settings', label: ' Settings', icon: '⚙️' },
     ];
     return (
         <nav className="navigation">

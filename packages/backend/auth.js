@@ -22,12 +22,12 @@ export function registerUser(req, res, next) {
       .then((hashedPassword) => {
         generateAccessToken(username).then((token) => {
           console.log("Token:", token);
-          
+
           req.body.password = hashedPassword;
           console.log(`req.body.password`, req.body.password)
           //res.status(201).send({ token: token });
             next();
-          
+
         });
       });
   }
@@ -35,7 +35,7 @@ export function registerUser(req, res, next) {
 
 
 function generateAccessToken(username) {
-    
+
   return new Promise((resolve, reject) => {
     jwt.sign(
       { username: username },
@@ -104,10 +104,10 @@ export async function loginUser(req, res, next) {
         res.body = "aslkdalskd"
         res.status(401).send()
       }
-    
+
     }
   }
-  
+
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
