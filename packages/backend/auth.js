@@ -104,4 +104,30 @@ export async function loginUser(req, res, next) {
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
+    
+   
+    
+    
+
+  
+
+ /* if (!retrievedUser) {
+    // invalid username
+    res.status(401).send("Unauthorized");
+  }  else {
+    bcrypt
+      .compare(pwd, retrievedUser.hashedPassword)
+      .then((matched) => {
+        if (matched) {
+          generateAccessToken(username).then((token) => {
+            res.status(200).send({ token: token });
+          });
+        } else {
+            console.log('Password did not match');
+            res.status(401).json({ error: 'Invalid username or password' });
+        }
+    } catch (error) {
+        console.error('Error in loginUser:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 }
