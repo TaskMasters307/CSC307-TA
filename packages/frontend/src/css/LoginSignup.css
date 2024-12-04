@@ -4,7 +4,7 @@
     max-width: 425px;
     margin: 0 auto;
     padding: 20px;
-    background: white;
+    background: #ebead4;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -34,7 +34,7 @@ input {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 100%;
+    width: 95%;
 }
 
 .error-message,
@@ -80,3 +80,14 @@ input {
 .login-button:hover {
     background: #0056b3;
 }
+
+.task-arena-logo {
+    display: block;
+    width: 250px; /* Adjust the width as needed */
+    margin: 0 auto 20px;
+  }
+  
+  .task-arena-logo img {
+    width: 100%;
+    height: auto;
+  }
