@@ -1,0 +1,20 @@
+/* Navigation css*/
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.navigation button {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+}
+
+.navigation button.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}

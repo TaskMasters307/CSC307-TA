@@ -1,7 +1,7 @@
 import React from 'react'
-
+import '../css/Task.css'
 const TaskList = ({ tasks, toggleTask }) => (
-    <div className="task-list">
+    <div className="task-add">
         <h2>Tasks</h2>
         <div className="tasks">
             {tasks.map((task) => (
