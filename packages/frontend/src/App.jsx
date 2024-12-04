@@ -1,110 +1,50 @@
-// src/App.jsx
-import React, { useState } from 'react'
-import Calendar from './components/Calendar'
-import Navigation from './components/Navigation'
-import Welcome from './components/Welcome'
-import Leaderboard from './components/Leaderboard'
-import Login from './components/Login'
-import Task from './components/Task'
-import Settings from './components/Settings'
+import React, { useState } from 'react';
+import Calendar from './components/Calendar';
+import Navigation from './components/Navigation';
+import Welcome from './components/Welcome';
+import Leaderboard from './components/Leaderboard';
+import Login from './components/Login';
+import Task from './components/Task';
+import Settings from './components/Settings';
 
-import './App.css'
-import Signup from './components/Signup'
-//import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+import Signup from './components/Signup';
 
-/**
- * Main App Component
- * Manages the application state and renders the main UI
- */
 function App() {
-    // State management for tasks and UI
-    const [tasks, setTasks] = useState([]) // Stores all tasks
-    const addTask = (newTask) => setTasks([...tasks, newTask]);
-
-    const toggleTaskCompletion = (taskId) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === taskId
-                    ? { ...task, isCompleted: !task.isCompleted }
-                    : task
-            )
-        )
-    }
-    const [currentView, setCurrentView] = useState('signup') // Controls which view is displayed
-    const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
-
-    //Adds a new task to the tasks array
+    // State for overall app management
+    const [currentView, setCurrentView] = useState('signup'); // Controls which view is displayed
+    const [selectedDate, setSelectedDate] = useState(new Date()); // Selected date for the calendar
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
-    const [userId, setUserId] = useState(null)
+    const [userId, setUserId] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
+    // Handle login success
     const handleLoginSuccess = (id) => {
         console.log('Setting userId:', id);
         setIsLoggedIn(true);
         setUserId(id); // Save the userId for task association
         setCurrentView('welcome'); // Switch to main content on successful login
-        return (
-        <div>
-        <h1>TaskArena</h1>
-        <Navigation
-            currentView={currentView}
-            setCurrentView={setCurrentView}
-        />
-        <main>
-            {currentView === 'welcome' && (
-                <Welcome
-                    setCurrentView={setCurrentView}
-                    username={username}
-                />
-            )}
-            {currentView === 'tasks' && <Task />}
-            {currentView === 'calendar' && (
-                <Calendar
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
-            )}
-            {currentView === 'leaderboard' && <Leaderboard />}
-        </main>
-    </div>
-        
-        )
     };
-    function CloseForm() {
-        
-        setIsLoggedIn(false);
-        setCurrentView('login'); // Switch to main content on successful login
-    };
-    function handleSignup(){
-        
-        setCurrentView('signup');
-        
-    }
 
-    //settings component
-    const [isDarkMode, setIsDarkMode] = useState(false);
-
+    // Toggle dark mode
     const toggleDarkMode = () => {
         setIsDarkMode((prevMode) => !prevMode);
     };
 
+    // Handle logout
     const handleLogout = () => {
-    // Implement your logout logic here
-    setIsLoggedIn(false);
-    setCurrentView('login');
+        setIsLoggedIn(false);
+        setUserId(null);
+        setCurrentView('login');
+    };
+
+    // Switch back to signup
+    const handleSignup = () => {
+        setCurrentView('signup');
     };
 
     return (
-        /*
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/TaskArena" element={<Welcome />} />
-      </Routes>
-    </Router>
-    */
-    
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             {isLoggedIn ? (
                 // Main app content after login
@@ -122,19 +62,12 @@ function App() {
                             />
                         )}
                         {currentView === 'tasks' && (
-                            <Task
-                                tasks={tasks}
-                                addTask={addTask}
-                                toggleTaskCompletion={toggleTaskCompletion}
-                                userId={userId} // Pass userId here
-                            />
+                            <Task userId={userId} />
                         )}
                         {currentView === 'calendar' && (
                             <Calendar
                                 selectedDate={selectedDate}
                                 setSelectedDate={setSelectedDate}
-                                tasks={tasks}
-                                setTasks={setTasks}
                             />
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}
@@ -151,26 +84,19 @@ function App() {
                 // Login/Signup forms
                 <>
                     {currentView === 'login' ? (
-                        
-                            
-                            
-                                <Login 
-                                onLoginSuccess={handleLoginSuccess}
-                                PopSignup={handleSignup}
-                                />
-                            
-                    
-                        
-                    ) : currentView === "signup" ? (
-                        <Signup 
+                        <Login
+                            onLoginSuccess={handleLoginSuccess}
+                            PopSignup={handleSignup}
+                        />
+                    ) : currentView === 'signup' ? (
+                        <Signup
                             LoginSuccess={handleLoginSuccess}
-                            closeForm={CloseForm}
+                            closeForm={() => setCurrentView('login')}
                         />
                     ) : null}
                 </>
             )}
-            
-        </div> 
+        </div>
     );
 }
 

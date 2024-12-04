@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-
-
+import taskServices from './models/task-services.js'
 import userServices from './models/user-services.js'
 
 import "./auth.js"
@@ -80,12 +79,13 @@ app.get('/tasks/:userId', async (req, res) => {
     const userId = req.params.userId;
     try {
         const tasks = await taskServices.getTasksByUser(userId);
-        res.status(200).send(tasks);
+        res.status(200).send(tasks); // Return tasks (empty array if none found)
     } catch (error) {
         console.error('Error fetching tasks:', error);
         res.status(500).send('Error fetching tasks');
     }
 });
+
 
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
@@ -132,6 +132,27 @@ app.post('/tasks', async (req, res) => {
         res.status(500).send('Error adding task');
     }
 });
+
+app.put('/tasks/:taskId', async (req, res) => {
+    const { taskId } = req.params;
+    const updatedData = req.body;
+
+    try {
+        if (!mongoose.Types.ObjectId.isValid(taskId)) {
+            return res.status(400).send({ error: 'Invalid task ID' });
+        }
+
+        const updatedTask = await Task.findByIdAndUpdate(taskId, updatedData, { new: true });
+        if (!updatedTask) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).json(updatedTask);
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).send({ error: 'Failed to update task' });
+    }
+});
+
 
 
 //-------------delete-----------------

@@ -1,22 +1,23 @@
-import React from 'react'
-import '../css/Task.css'
+import React from 'react';
+import '../css/Task.css';
+
 const TaskList = ({ tasks, toggleTask }) => (
     <div className="task-add">
         <h2>Tasks</h2>
         <div className="tasks">
             {tasks.map((task) => (
                 <div
-                    key={task.id}
+                    key={task._id} // Use the MongoDB `_id` for a unique key
                     className={`task-item ${task.priority}`}
                     draggable
                     onDragStart={(e) =>
-                        e.dataTransfer.setData('taskId', task.id)
+                        e.dataTransfer.setData('taskId', task._id) // Use `_id` for drag data
                     }
                 >
                     <input
                         type="checkbox"
                         checked={task.isCompleted}
-                        onChange={() => toggleTask(task.id)}
+                        onChange={() => toggleTask(task._id)} // Use `_id` to toggle tasks
                     />
                     <span className={task.isCompleted ? 'completed' : ''}>
                         {task.title} - {task.date}
@@ -26,6 +27,6 @@ const TaskList = ({ tasks, toggleTask }) => (
             ))}
         </div>
     </div>
-)
+);
 
-export default TaskList
+export default TaskList;

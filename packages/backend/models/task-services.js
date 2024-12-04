@@ -18,11 +18,6 @@ mongoose
 
 // **Task Services**
 
-// Get all tasks for a specific user
-function getTasksByUser(userId) {
-    return Task.find({ userId });
-}
-
 // Get a single task by ID
 function getTaskById(taskId) {
     return Task.findById(taskId);
@@ -45,6 +40,25 @@ function updateTask(taskId, updates) {
 function deleteTask(taskId) {
     return Task.findByIdAndDelete(taskId);
 }
+
+async function getTasksByUser(userId) {
+    try {
+        // Validate the userId
+        if (!mongoose.isValidObjectId(userId)) {
+            throw new Error(`Invalid userId format: ${userId}`);
+        }
+
+        // Find tasks using userId
+        const tasks = await Task.find({ userId });
+        return tasks;
+    } catch (error) {
+        console.error('Error in getTasksByUser:', error.message);
+        throw error; // Propagate the error to the caller
+    }
+}
+
+
+
 
 export default {
     getTasksByUser,
