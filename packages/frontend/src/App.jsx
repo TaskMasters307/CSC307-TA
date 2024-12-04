@@ -54,7 +54,12 @@ function App() {
                     username={username}
                 />
             )}
-            {currentView === 'tasks' && <Task />}
+            {currentView === 'tasks' && <Task 
+                tasks={tasks}
+                setTasks={setTasks}
+                addTask={addTask}
+                toggleTaskCompletion={toggleTaskCompletion}
+            />}
             {currentView === 'calendar' && (
                 <Calendar
                     selectedDate={selectedDate}
