@@ -1,11 +1,103 @@
-/* frontend/src/App.css */
-.app {
+/* src/App.css */
+
+/* Default styles */
+body {
+    background-color: #fff;
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  .app {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-}
-
-h1 {
+  }
+  
+  h1 {
     text-align: center;
-    color: #333;
-}
+  }
+  
+  /* Navigation */
+  .navigation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .navigation .nav-button {
+    padding: 8px 16px;
+    margin: 0 8px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navigation .nav-button.active {
+    background-color: #4285F4;
+    color: #fff;
+  }
+  
+  /* Tasks */
+  .task-container {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  /* Calendar */
+  .calendar-container {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  /* Leaderboard */
+  .leaderboard-container {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  /* Settings */
+  .settings-container {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  /* Dark mode styles */
+  .dark-mode {
+    background-color: #1f1f1f;
+    color: #f5f5f5;
+  }
+  
+  .dark-mode .navigation .nav-button {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+  }
+  
+  .dark-mode .navigation .nav-button.active {
+    background-color: #3f3f3f;
+  }
+  
+  .dark-mode .task-container {
+    background-color: #2f2f2f;
+  }
+  
+  .dark-mode .calendar-container {
+    background-color: #2f2f2f;
+  }
+  
+  .dark-mode .leaderboard-container {
+    background-color: #2f2f2f;
+  }
+  
+  .dark-mode .settings-container {
+    background-color: #2f2f2f;
+  }

@@ -1,13 +1,12 @@
 // src/App.jsx
 import React, { useState } from 'react'
-import TaskList from './components/TaskList'
-import TaskAdd from './components/TaskAdd'
 import Calendar from './components/Calendar'
 import Navigation from './components/Navigation'
 import Welcome from './components/Welcome'
 import Leaderboard from './components/Leaderboard'
 import Login from './components/Login'
 import Task from './components/Task'
+import Settings from './components/Settings'
 
 import './App.css'
 import Signup from './components/Signup'
@@ -78,6 +77,20 @@ function App() {
         setCurrentView('signup');
         
     }
+
+    //settings component
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    const toggleDarkMode = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+    };
+
+    const handleLogout = () => {
+    // Implement your logout logic here
+    setIsLoggedIn(false);
+    setCurrentView('login');
+    };
+
     return (
         /*
     <Router>
@@ -89,7 +102,7 @@ function App() {
     </Router>
     */
     
-        <div className="app">
+        <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             {isLoggedIn ? (
                 // Main app content after login
                 <div>
@@ -123,6 +136,13 @@ function App() {
                             />
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}
+                        {currentView === 'settings' && (
+                            <Settings
+                                onLogout={handleLogout}
+                                toggleDarkMode={toggleDarkMode}
+                                isDarkMode={isDarkMode}
+                            />
+                        )}
                     </main>
                 </div>
             ) : (
