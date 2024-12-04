@@ -37,8 +37,9 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
 
-    const handleLoginSuccess = () => {
+    const handleLoginSuccess = (username) => {
         setIsLoggedIn(true);
+        setUsername(username);
         setCurrentView('welcome'); // Switch to main content on successful login
         return (
         <div>

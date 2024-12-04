@@ -112,6 +112,76 @@ app.delete('/users/:id', async (req, res) => {
 })
 //--------------------------------------------
 
+//user schema
+//Create a new task for a user
+app.post('/tasks', authenticateUser, async (req, res) => {
+    const userId = req.user._id;
+    const task = req.body;
+    try {
+        const savedUser = await userServices.createTask(userId, task);
+        res.status(201).json(savedUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create task' });
+    }
+});
+
+// Get all tasks for a user
+app.get('/tasks', authenticateUser, async (req, res) => {
+    const userId = req.user._id;
+    try {
+        const userWithTasks = await userServices.getUserTasks(userId);
+        res.json(userWithTasks.tasks);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve tasks' });
+    }
+});
+
+// Update a task
+app.put('/tasks/:taskId', authenticateUser, async (req, res) => {
+    const taskId = req.params.taskId;
+    const updatedTask = req.body;
+    try {
+        const savedTask = await userServices.updateTask(taskId, updatedTask);
+        res.json(savedTask);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update task' });
+    }
+});
+
+// Delete a task
+app.delete('/tasks/:taskId', authenticateUser, async (req, res) => {
+    const taskId = req.params.taskId;
+    try {
+        await userServices.deleteTask(taskId);
+        res.sendStatus(204);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete task' });
+    }
+});
+
+// Update user statistics
+app.put('/users/:userId/statistics', authenticateUser, async (req, res) => {
+    const userId = req.params.userId;
+    const statistics = req.body;
+    try {
+        const updatedUser = await userServices.updateUserStatistics(userId, statistics);
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update user statistics' });
+    }
+});
+
+// Get user statistics
+app.get('/users/:username/statistics', async (req, res) => {
+    const username = req.params.username;
+    try {
+      const statistics = await userServices.getUserStatistics(username);
+      res.json(statistics);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve user statistics' });
+    }
+  });
+
 app.listen(process.env.PORT || port, () => {
     console.log('REST API is listening.')
 })

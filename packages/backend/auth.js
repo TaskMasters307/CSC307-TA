@@ -4,9 +4,6 @@ import userServices from './models/user-services.js'
 import  dotenv from "dotenv"
 dotenv.config()
 
-
-const creds = [];
-
 export function registerUser(req, res, next) {
   const username = req.body.username; // from form
   const pwd = req.body.password  
@@ -66,11 +63,12 @@ export function authenticateUser(req, res, next) {
       token,
       process.env.TOKEN_SECRET,
       (error, decoded) => {
-        if (decoded) {
-          next();
-        } else {
+        if (error) {
           console.log("JWT error:", error);
-          res.status(401).end();
+          res.status(401).send("Unauthorized");
+        } else {
+          req.user = { _id: decoded.userId };
+          next();
         }
       }
     );
@@ -94,15 +92,12 @@ export async function loginUser(req, res, next) {
       const matchedPassword = await bcrypt.compare(req.body.password, findOne.password)
       if(matchedPassword) {
         console.log("password matched")
-        res.status(201).send("password matched")
+        const token = await generateAccessToken(username);
+        res.status(200).send({ token: token});
       }
       else {
         console.log("password not matched")
-        res.ok = true
-        res.message = "password not matched"
-        console.log(res.message)
-        res.body = "aslkdalskd"
-        res.status(401).send()
+        res.status(401).json({ error: 'Invalid username or password' });
       }
 
     }

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import userModel from "./user.js"
+import userModel from "./user.js";
+import taskModel from "./task.js";
 import 'dotenv/config';
 
 
@@ -68,6 +69,37 @@ function deleteUser(id) {
   return userModel.findByIdAndDelete(id);
 }
 
+function createTask(userId, task){
+  const newTask = new taskModel({
+    user: userId,
+    ...task
+  });
+  return newTask.save().then((savedTask) => {
+    return userModel.findByIdAndUpdate(userId, { $push: { tasks: savedTask._id } }, { new: true });
+  });
+
+}
+
+function getUserTasks(userId) {
+  return userModel.findById(userId).populate('tasks');
+}
+
+function updateTask(taskId, updatedTask) {
+  return taskModel.findByIdAndUpdate(taskId, updatedTask, { new: true });
+}
+
+function deleteTask(taskId) {
+  return taskModel.findByIdAndDelete(taskId);
+}
+
+function updateUserStatistics(userId, statistics) {
+  return userModel.findByIdAndUpdate(userId, { $set: { statistics } }, { new: true });
+}
+
+function getUserStatistics(username) {
+  return userModel.findOne({ username: username }, 'statistics');
+}
+
 export default {
   addUser,
   getUsers,
@@ -76,5 +108,10 @@ export default {
   findUserByJob,
   deleteUser,
   findOneAccount,
-
+  createTask,
+  getUserTasks,
+  updateTask,
+  deleteTask,
+  updateUserStatistics,
+  getUserStatistics
 };
