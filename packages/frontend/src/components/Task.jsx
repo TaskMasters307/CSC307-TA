@@ -4,13 +4,27 @@ import TaskAdd from './TaskAdd'
 import TaskList from './TaskList'
 import '../css/Task.css'
 
-const Task = ({ tasks, addTask, toggleTaskCompletion }) => {
-    const [filter, setFilter] = useState(null)
+const Task = ({ tasks, addTask, toggleTaskCompletion, userId }) => {
+    const [filter, setFilter] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
-    
+    const [userTasks, setTasks] = useState([]);
+
+    // Fetch tasks when userId changes
+    useEffect(() => {
+        if (userId) {
+            console.log('Fetching tasks for userId:', userId);
+            fetch(`/tasks/${userId}`)
+                .then((response) => response.json())
+                .then((userTasks) => setTasks(userTasks))
+                .catch((error) => console.error('Error fetching tasks:', error));
+        } else {
+            console.error('Cannot fetch tasks: userId is null or undefined');
+        }
+    }, [userId]);
+
     const filteredTasks = filter
-        ? tasks.filter((task) => task.priority === filter)
-        : tasks;
+        ? userTasks.filter((task) => task.priority === filter)
+        : userTasks;
 
     const filterButtons = [
         { value: 'high', label: 'High Priority' },
@@ -27,7 +41,7 @@ const Task = ({ tasks, addTask, toggleTaskCompletion }) => {
     return (
         <div className="task-container">
             <div className="task-controls">
-                <TaskAdd addTask={addTask} />
+                <TaskAdd addTask={addTask} userId={userId} />
                 <div className="task-list-container">
                     <TaskList tasks={filteredTasks} toggleTask={toggleTaskCompletion} />
                     <div className="filter-buttons">

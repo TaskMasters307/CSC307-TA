@@ -36,10 +36,13 @@ function App() {
     //Adds a new task to the tasks array
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [userId, setUserId] = useState(null)
 
-    const handleLoginSuccess = () => {
+    const handleLoginSuccess = (id) => {
+        console.log('Setting userId:', id);
         setIsLoggedIn(true);
         setCurrentView('welcome'); // Switch to main content on successful login
+        setUserId(id); // Save the userId for task association
         return (
         <div>
         <h1>TaskArena</h1>
@@ -121,11 +124,10 @@ function App() {
                         {currentView === 'tasks' && (
                             <Task
                                 tasks={tasks}
-                                setTasks={setTasks}
                                 addTask={addTask}
                                 toggleTaskCompletion={toggleTaskCompletion}
-                                selectedDate={selectedDate}
-                                />
+                                userId={userId} // Pass userId here
+                            />
                         )}
                         {currentView === 'calendar' && (
                             <Calendar

@@ -76,6 +76,17 @@ app.get('/users/:id', async (req, res) => {
     }
 })
 
+app.get('/tasks/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const tasks = await taskServices.getTasksByUser(userId);
+        res.status(200).send(tasks);
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        res.status(500).send('Error fetching tasks');
+    }
+});
+
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
     const savedUser = req.body
@@ -86,14 +97,63 @@ app.post('/signup', registerUser, async (req, res, next) => {
     else res.status(500).end()
 })
 // LOGIN
-app.post('/login',loginUser, async (req, res, next) => {
-    const savedUser = req.body
-    const username = req.body.username;
-    const password = req.body.password;
-    //res.send("sending from login/ ")
-    //console.log(savedUser);
-   
-})
+app.post('/login', loginUser, async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+
+        const user = await userServices.findOneAccount(username, password);
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        res.status(200).json({
+            userId: user._id, // MongoDB `_id`
+            username: user.username,
+            message: 'Login successful',
+        });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'An error occurred during login' });
+    }
+});
+
+
+
+
+app.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+
+        // Replace this with your actual user authentication logic
+        const user = await userServices.findOneAccount(username, password);
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // Include `userId` in the response
+        res.status(200).json({
+            userId: user._id, // MongoDB `_id` or equivalent unique user identifier
+            username: user.username,
+            message: 'Login successful',
+        });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'An error occurred during login' });
+    }
+});
+
+
+
 
 //-------------delete-----------------
 app.delete('/users/:id', async (req, res) => {
