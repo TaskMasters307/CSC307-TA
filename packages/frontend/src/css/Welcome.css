@@ -89,7 +89,7 @@
     justify-content: center;
     gap: 0.25rem;
 }
-
+/*
 .quick-nav {
     margin-top: 2.5rem;
 }
@@ -141,6 +141,7 @@
 .quick-nav-button:hover .icon {
     transform: scale(1.1);
   }
+    */
   
   /* Responsive adjustments */
   @media (max-width: 768px) {
