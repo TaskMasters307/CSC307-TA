@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Calendar from './components/Calendar'
 import Navigation from './components/Navigation'
 import Welcome from './components/Welcome'
@@ -96,6 +96,10 @@ function App() {
     setCurrentView('login');
     };
 
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', isDarkMode);
+    }, [isDarkMode]);
+
     return (
         /*
     <Router>
@@ -118,35 +122,47 @@ function App() {
                     />
                     <main>
                         {currentView === 'welcome' && (
-                            <Welcome
+                            <div className="welcome-container">
+                                <Welcome
                                 setCurrentView={setCurrentView}
                                 username={username}
                             />
+                            </div>
                         )}
                         {currentView === 'tasks' && (
+                            <div className="task-container">
                             <Task
-                                tasks={tasks}
-                                setTasks={setTasks}
-                                addTask={addTask}
-                                toggleTaskCompletion={toggleTaskCompletion}
-                                selectedDate={selectedDate}
-                                />
+                              tasks={tasks}
+                              setTasks={setTasks}
+                              addTask={addTask}
+                              toggleTaskCompletion={toggleTaskCompletion}
+                              selectedDate={selectedDate}
+                            />
+                          </div>
                         )}
                         {currentView === 'calendar' && (
+                            <div className="calendar-container">
                             <Calendar
-                                selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
-                                tasks={tasks}
-                                setTasks={setTasks}
+                              selectedDate={selectedDate}
+                              setSelectedDate={setSelectedDate}
+                              tasks={tasks}
+                              setTasks={setTasks}
                             />
+                            </div>
                         )}
-                        {currentView === 'leaderboard' && <Leaderboard />}
+                        {currentView === 'leaderboard' && (
+                        <div className="leaderboard-container">
+                        <Leaderboard />
+                      </div>
+                      )}
                         {currentView === 'settings' && (
+                            <div className="settings-container">
                             <Settings
                                 onLogout={handleLogout}
                                 toggleDarkMode={toggleDarkMode}
                                 isDarkMode={isDarkMode}
                             />
+                            </div>
                         )}
                     </main>
                 </div>

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 //import { Is_User_Name_Exist, MatchAccount } from './Utilities';
 import '../css/LoginSignup.css'
 import { FetchLogin } from './httpUltilities';
+import logo from '../assets/taskarena-logo.jpeg';
+
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -41,6 +43,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     
   
     return (
+      <div> <img src={logo} alt="Task Arena" className="task-arena-logo" />
         <div className="login-container">
           <h2 className="login-header">Login</h2>
           <form onSubmit={handleLogin} className="login-form">
@@ -76,6 +79,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
             </button>
             <button className="open-button" onClick={PopSignup} >Sign up</button>
           </form>
+        </div>
         </div>
       );
     };
