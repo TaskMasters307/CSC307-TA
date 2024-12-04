@@ -104,11 +104,6 @@ export async function loginUser(req, res, next) {
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
-    
-   
-    
-    
-
   
 
  /* if (!retrievedUser) {
@@ -123,11 +118,12 @@ export async function loginUser(req, res, next) {
             res.status(200).send({ token: token });
           });
         } else {
-            console.log('Password did not match');
-            res.status(401).json({ error: 'Invalid username or password' });
+          // invalid password
+          res.status(401).send("Unauthorized");
         }
-    } catch (error) {
-        console.error('Error in loginUser:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+      })
+      .catch(() => {
+        res.status(401).send("Unauthorized");
+      });
+  } */
 }
