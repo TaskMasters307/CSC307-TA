@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import TaskList from './components/TaskList';
-import TaskAdd from './components/TaskAdd';
-import Calendar from './components/Calendar';
-import Navigation from './components/Navigation';
-import Welcome from './components/Welcome';
-import Leaderboard from './components/Leaderboard';
-import Login from './components/Login';
-import Signup from './components/Signup';
+// src/App.jsx
+import React, { useState } from 'react'
+import TaskList from './components/TaskList'
+import TaskAdd from './components/TaskAdd'
+import Calendar from './components/Calendar'
+import Navigation from './components/Navigation'
+import Welcome from './components/Welcome'
+import Leaderboard from './components/Leaderboard'
+import Login from './components/Login'
+import { FetchAddTask, FetchUpdateTask, FetchTasks } from './httpUltilities'
 
-import { FetchTasks, FetchAddTask, FetchUpdateTask } from './httpUltilities';
-import './App.css';
+import './App.css'
+import Signup from './components/Signup'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+/**
+ * Main App Component
+ * Manages the application state and renders the main UI
+ */
 function App() {
-    const [tasks, setTasks] = useState([]);
-    const [currentView, setCurrentView] = useState('login');
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    // State management for tasks and UI
+    const [tasks, setTasks] = useState([]) // Stores all tasks
+    const [currentView, setCurrentView] = useState('login') // Controls which view is displayed
+    const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
+
+    //Adds a new task to the tasks array
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState(null);
@@ -107,9 +116,10 @@ function App() {
         setTasks([]);
         setCurrentView('login');
     };
-
-    const handleSignup = () => setCurrentView('signup');
-
+    function handleSignup(){
+        setCurrentView('signup');
+        
+    }
     return (
         <div className="app">
             {isLoggedIn ? (

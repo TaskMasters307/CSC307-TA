@@ -45,11 +45,16 @@ function findUserById(id) {
     return userModel.findById(id)
 }
 
-function addUser(user) {
-    const userToAdd = new userModel(user)
-    console.log('adding user: ', user)
-    const promise = userToAdd.save()
-    return promise
+async function addUser(user) {
+    try {
+        const hashedPassword = await bcrypt.hash(user.password, 10); // Adjust salt rounds as needed
+        user.password = hashedPassword;
+        const userToAdd = new userModel(user);
+        return await userToAdd.save();
+    } catch (error) {
+        console.error('Error adding user:', error);
+        throw error;
+    }
 }
 
 function findUserByName(username) {
