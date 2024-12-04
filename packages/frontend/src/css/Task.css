@@ -209,3 +209,57 @@
         text-align: center;
     }
 }
+
+/* Dark Mode Styles */
+.dark-mode .task-list,
+.dark-mode .task-add {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+    box-shadow: none;
+}
+
+.darkmode .task-container {
+    background-color: #2f2f2f;
+}
+.dark-mode .task-item.high {
+    background-color: #3e0e0e;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+.dark-mode .task-item.medium {
+    background-color: #422206;
+    border-color: #b45309;
+    color: #fde68a;
+}
+
+.dark-mode .task-item.low {
+    background-color: #0c4a37;
+    border-color: #059669;
+    color: #a7f3d0;
+}
+
+.dark-mode .delete-button {
+    color: #f87171;
+}
+
+.dark-mode .delete-button:hover {
+    color: #ef4444;
+}
+
+.dark-mode .filter-button {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+    border-color: #444;
+}
+
+.dark-mode .filter-button:hover {
+    background-color: #3f3f3f;
+    color: #e5e7eb;
+}
+
+.dark-mode .filter-button.active {
+    background-color: #3b82f6;
+    color: #f5f5f5;
+    border-color: #3b82f6;
+}
