@@ -1,5 +1,6 @@
 // src/components/Leaderboard.jsx
 import React from 'react'
+import '../css/Leaderboard.css'
 
 /**
  * Leaderboard Component

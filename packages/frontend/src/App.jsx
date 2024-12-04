@@ -7,6 +7,7 @@ import Navigation from './components/Navigation'
 import Welcome from './components/Welcome'
 import Leaderboard from './components/Leaderboard'
 import Login from './components/Login'
+import Task from './components/Task'
 
 import './App.css'
 import Signup from './components/Signup'
@@ -19,40 +20,23 @@ import Signup from './components/Signup'
 function App() {
     // State management for tasks and UI
     const [tasks, setTasks] = useState([]) // Stores all tasks
+    const addTask = (newTask) => setTasks([...tasks, newTask]);
+
+    const toggleTaskCompletion = (taskId) => {
+        setTasks(
+            tasks.map((task) =>
+                task.id === taskId
+                    ? { ...task, isCompleted: !task.isCompleted }
+                    : task
+            )
+        )
+    }
     const [currentView, setCurrentView] = useState('signup') // Controls which view is displayed
     const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for calendar
 
     //Adds a new task to the tasks array
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
-    
-
-    const addTask = (taskText) => {
-        if (taskText.trim()) {
-            setTasks([
-                ...tasks,
-                {
-                    id: Date.now(),
-                    text: taskText,
-                    completed: false,
-                    date: selectedDate,
-                    points: 10, // Default points value
-                },
-            ])
-        }
-    }
-
-    /**
-     * Toggles the completion status of a task
-     */
-    const toggleTask = (id) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, completed: !task.completed } : task
-            )
-        )
-    }
-
 
     const handleLoginSuccess = () => {
         setIsLoggedIn(true);
@@ -71,19 +55,7 @@ function App() {
                     username={username}
                 />
             )}
-            {currentView === 'tasks' && (
-                <TaskList
-                    tasks={tasks}
-                    toggleTask={toggleTask}
-                    setCurrentView={setCurrentView}
-                />
-            )}
-            {currentView === 'add' && (
-                <TaskAdd
-                    addTask={addTask}
-                    setCurrentView={setCurrentView}
-                />
-            )}
+            {currentView === 'tasks' && <Task />}
             {currentView === 'calendar' && (
                 <Calendar
                     selectedDate={selectedDate}
@@ -104,7 +76,6 @@ function App() {
     function handleSignup(){
         
         setCurrentView('signup');
-        //
         
     }
     return (
@@ -135,22 +106,20 @@ function App() {
                             />
                         )}
                         {currentView === 'tasks' && (
-                            <TaskList
+                            <Task
                                 tasks={tasks}
-                                toggleTask={toggleTask}
-                                setCurrentView={setCurrentView}
-                            />
-                        )}
-                        {currentView === 'add' && (
-                            <TaskAdd
+                                setTasks={setTasks}
                                 addTask={addTask}
-                                setCurrentView={setCurrentView}
-                            />
+                                toggleTaskCompletion={toggleTaskCompletion}
+                                selectedDate={selectedDate}
+                                />
                         )}
                         {currentView === 'calendar' && (
                             <Calendar
                                 selectedDate={selectedDate}
                                 setSelectedDate={setSelectedDate}
+                                tasks={tasks}
+                                setTasks={setTasks}
                             />
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}

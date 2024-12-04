@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 //import { AddUserTask } from './httpUltilities.jsx'
-
+import '../css/Task.css'
 /**
  * TaskAdd Component
  * Form for adding new tasks with date and priority
