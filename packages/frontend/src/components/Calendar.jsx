@@ -6,19 +6,22 @@ const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
     const dates = generateDatesForMonth(currentDate)
 
     const renderTasksForDate = (date) => {
+        console.log('Rendering tasks for date:', date);
+        console.log('Filtered tasks:', tasks.filter(task => task.date === date));
         return tasks
-            .filter(task => task.date === date)
-            .map(task => (
-                <div
-                    key={task.id}
-                    className={`calendar-task ${task.priority} ${task.isCompleted ? 'completed' : ''}`}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, task.id)}
-                >
-                    <span>{task.title}</span>
-                </div>
-            ))
-    }
+          .filter(task => task.date === date)
+          .map(task => (
+            <div
+              key={task.id}
+              className={`calendar-task ${task.priority} ${task.isCompleted ? 'completed' : ''}`}
+              draggable
+              onDragStart={(e) => handleDragStart(e, task.id)}
+            >
+              <span>{task.title}</span>
+            </div>
+          ));
+    };
+      
 
     const handleDragStart = (e, taskId) => {
         e.dataTransfer.setData('taskId', taskId);
@@ -27,14 +30,15 @@ const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
     const handleDrop = (e, date) => {
         e.preventDefault();
         const taskId = parseInt(e.dataTransfer.getData('taskId'));
-        
-        // Update the task's date
-        setTasks(tasks.map(task => 
-            task.id === taskId 
-                ? { ...task, date: date }
-                : task
+        console.log('Dropping task ID:', taskId, 'to date:', date);
+      
+        setTasks(tasks.map(task =>
+          task.id === taskId
+            ? { ...task, date: date }
+            : task
         ));
-    }
+      };
+      
 
     const handleDragOver = (e) => {
         e.preventDefault();
