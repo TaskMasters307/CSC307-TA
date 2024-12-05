@@ -10,44 +10,41 @@ export function registerUser(req, res, next) {
     const username = req.body.username // from form
     const pwd = req.body.password
 
-  if (!username || !pwd) {
-    res.status(400).send("Bad request: Invalid input data.");
-  } else if (userServices.findOneAccount(username)) {
-    res.status(409).send("Username already taken");
-  } else {
-    bcrypt
-      .genSalt(10)
-      .then((salt) => bcrypt.hash(pwd, salt))
-      .then((hashedPassword) => {
-        generateAccessToken(username).then((token) => {
-          console.log("Token:", token);
-
-          req.body.password = hashedPassword;
-          console.log(`req.body.password`, req.body.password)
-          //res.status(201).send({ token: token });
-            next();
-
-        });
-      });
-  }
+    if (!username || !pwd) {
+        res.status(400).send("Bad request: Invalid input data.");
+    } else if (creds.find((c) => c.username === username)) {
+        res.status(409).send("Username already taken");
+    } else {
+        bcrypt
+            .genSalt(10)
+            .then((salt) => bcrypt.hash(pwd, salt))
+            .then((hashedPassword) => {
+                generateAccessToken(username).then((token) => {
+                    console.log("Token:", token);
+                    req.body.password = hashedPassword;
+                    console.log(`req.body.password`, req.body.password)
+                    creds.push({ username, hashedPassword });
+                    next();
+                });
+            });
+    }
 }
 
-function generateAccessToken(username) {
-
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      { username: username },
-      process.env.TOKEN_SECRET,
-      { expiresIn: "1d" },
-      (error, token) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(token);
-        }
-      }
-    );
-  });
+export function generateAccessToken(username) {
+    return new Promise((resolve, reject) => {
+        jwt.sign(
+            { username: username },
+            process.env.TOKEN_SECRET,
+            { expiresIn: "1d" },
+            (error, token) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(token);
+                }
+            }
+        );
+    });
 }
 
 export function authenticateUser(req, res, next) {
@@ -72,38 +69,42 @@ export function authenticateUser(req, res, next) {
 }
 
 export async function loginUser(req, res, next) {
-  const LoginUser = req.body;
-  const username = req.body.username;
-  console.log("LoginUser", LoginUser);
-  try {
-    const findOne =  await userServices.findUserByName(username);
-    //console.log(findOne.password);
-    if(!findOne) {
-      res.status(404).send(`Mongo database not found ${loginUser}`);
-    }
-    else {
-      console.log("mongo found account")
-
-      const matchedPassword = await bcrypt.compare(req.body.password, findOne.password)
-      if(matchedPassword) {
-        console.log("password matched")
-        res.status(201).send("password matched")
-      }
-      else {
-        console.log("password not matched")
-        res.ok = true
-        res.message = "password not matched"
-        console.log(res.message)
-        res.body = "aslkdalskd"
-        res.status(401).send()
-      }
-
-    }
-  }
-
-  catch(error) {
-    res.send(`mongo findUerByName() error: ${error}`);
-  }
+    const LoginUser = req.body;
+    const username = req.body.username;
+    console.log("LoginUser", LoginUser);
     
-
+    try {
+        const findOne = creds.find((c) => c.username === username);
+        
+        if(!findOne) {
+            res.status(404).send(`User not found ${loginUser}`);
+        }
+        else {
+            console.log("User found in creds")
+            
+            const matchedPassword = await bcrypt.compare(req.body.password, findOne.hashedPassword)
+            if(matchedPassword) {
+                console.log("password matched")
+                // Generate token here
+                const token = await generateAccessToken(username);
+                // Send token in response
+                res.status(200).json({
+                    message: "Login successful",
+                    token: token
+                });
+            }
+            else {
+                console.log("password not matched")
+                res.status(401).json({
+                    message: "Invalid credentials"
+                });
+            }
+        }
+    }
+    catch(error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            message: `Login error: ${error.message}`
+        });
+    }
 }

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-//import Signup from './Signup';
-//import { Is_User_Name_Exist, MatchAccount } from './Utilities';
 import '../css/LoginSignup.css'
 import { FetchLogin } from './httpUltilities';
 import logo from '../assets/taskarena-logo.jpeg';
 
-const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
+const Login = ({ onLoginSuccess, PopSignup }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,16 +15,25 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
           setError('Account not Found');
         }
         else if(res.status === 401) {
-          setError("Password Not Match")
+          setError("Password Not Match");
         }
-        
         else if (res.status === 201) {
+          // Handle successful login with token
+          return res.json(); // Parse the JSON response
+        }
+      })
+      .then(data => {
+        if (data && data.token) {
+          // Store the token
+          localStorage.setItem('token', data.token);
+          // Call the success handler
           onLoginSuccess();
         }
       })
       .catch((error) => {
-        console.log(error);
-      })
+        console.log('Login error:', error);
+        setError('Login failed. Please try again.');
+      });
     }
 
     const handleLogin = (e) => {
@@ -36,14 +43,13 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
         setError('Username and password are required.');
         return;
       }
-      const account = {"username": username, "password": password}
+      const account = {"username": username, "password": password};
       LoginCheck(account);
-      
     };
     
-  
     return (
-      <div> <img src={logo} alt="Task Arena" className="task-arena-logo" />
+      <div> 
+        <img src={logo} alt="Task Arena" className="task-arena-logo" />
         <div className="login-container">
           <h2 className="login-header">Login</h2>
           <form onSubmit={handleLogin} className="login-form">
@@ -77,10 +83,13 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
             <button type="submit" className="login-button">
               Login
             </button>
-            <button className="open-button" onClick={PopSignup} >Sign up</button>
+            <button type="button" className="open-button" onClick={PopSignup}>
+              Sign up
+            </button>
           </form>
         </div>
-        </div>
-      );
-    };
+      </div>
+    );
+};
+
 export default Login;

@@ -1,80 +1,54 @@
 import React, { useState } from 'react';
-import { Is_User_Name_Exist } from './Utilities'
-import { FetchSignUp } from './httpUltilities'
+import { FetchSignUp } from './httpUltilities';
+import { Is_User_Name_Exist } from './Utilities';
 import logo from '../assets/taskarena-logo.jpeg';
-import '../css/LoginSignup.css'
+import '../css/LoginSignup.css';
 
 function Signup({ closeForm, LoginSuccess }) {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
 
     async function CreateAccount(account) {
-        Is_User_Name_Exist(username)
-            .then((exist) => {
-                //If User name already exits alert
-                if (exist) {
-                    //alert("Username already exist");
-                    setError('Account already exist')
-                    //setError(null);
-                }
-                // else if username not exits then create an account on data
-                else {
-                    FetchSignUp(account)
-                        .then((res) => {
-                            if (res.status === 500) {
-                                setError('error 500')
-                                throw error('PostUser error 500')
-                            } else {
-                                alert('Account created successful')
-                                LoginSuccess()
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                }
-            })
-            .catch((error) => {
-                console.log('Is_User_Name_Exist() error')
-            })
+        try {
+            const exists = await Is_User_Name_Exist(username);
+            
+            if (exists) {
+                setError('Account already exists');
+                return;
+            }
+
+            const response = await FetchSignUp(account);
+            
+            if (response.token) {
+                // Store the token in localStorage
+                localStorage.setItem('token', response.token);
+                alert('Account created successfully');
+                LoginSuccess();
+            } else {
+                throw new Error('No token received');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            setError('Failed to create account. Please try again.');
+        }
     }
 
     function handleSignup(e) {
-        e.preventDefault()
-        setError(null)
+        e.preventDefault();
+        setError(null);
+
         if (!username || !password) {
-            setError('Username and password are required.')
-            return
-        } else {
-            const account = { username: username, password: password }
-            //console.log("account= " , account);
-            CreateAccount(account)
+            setError('Username and password are required.');
+            return;
+        }
 
-            /* if(!Is_User_Name_Exist(username)) {
-        console.log("creating account");
-        postUser(account).
-        then((res) => {
-        //console.log(res.status);
-        if(res.status === 500) {
-          throw new Error("error ading user");
-        }
-        else {
-          console.log(res.json());
-          return res.json();
-        }
+        const account = { 
+            username: username, 
+            password: password 
+        };
         
-        }).then((data) => {
-
-          alert(`Sign up successful`);
-        }).catch((error) => {
-          console.log("catching error:", error);
-        })
-      }
-      else {
-        //alert("Username already exsits");
-      } */
-        }
+        CreateAccount(account);
     }
 
     return (
@@ -91,10 +65,8 @@ function Signup({ closeForm, LoginSuccess }) {
                     name="username"
                     required
                     value={username}
-                    onChange={(e) => {
-                        setUsername(e.target.value)
-                    }}
-                ></input>
+                    onChange={(e) => setUsername(e.target.value)}
+                />
 
                 <label className="login-label">
                     <b>Password</b>
@@ -105,14 +77,10 @@ function Signup({ closeForm, LoginSuccess }) {
                     name="password"
                     required
                     value={password}
-                    onChange={(e) => {
-                        setPassword(e.target.value)
-                    }}
-                ></input>
+                    onChange={(e) => setPassword(e.target.value)}
+                />
                 {error && (
-                    <p
-                        className={`signup-error-message ${error ? 'animate' : ''}`}
-                    >
+                    <p className={`signup-error-message ${error ? 'animate' : ''}`}>
                         {error}
                     </p>
                 )}
@@ -132,6 +100,7 @@ function Signup({ closeForm, LoginSuccess }) {
                 </button>
             </form>
         </div>
-    )
+    );
 }
-export default Signup
+
+export default Signup;
