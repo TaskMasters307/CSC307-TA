@@ -28,4 +28,25 @@ router.put('/:userId/stats', async (req, res) => {
     }
 });
 
+router.get('/leaderboard', async (req, res) => {
+    try {
+        // Get all users, sorted by points in descending order
+        const users = await User.find({}, 'username statistics')
+            .sort({ 'statistics.totalPoints': -1 })
+            .limit(10);  // Limit to top 10 users
+
+        const leaderboardData = users.map((user, index) => ({
+            rank: index + 1,
+            username: user.username,
+            points: user.statistics?.totalPoints || 0,
+            tasksCompleted: user.statistics?.tasksCompleted || 0
+        }));
+
+        res.status(200).json(leaderboardData);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Failed to fetch leaderboard data' });
+    }
+});
+
 export default router;
