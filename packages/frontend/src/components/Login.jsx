@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 //import Signup from './Signup';
 //import { Is_User_Name_Exist, MatchAccount } from './Utilities';
+const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
 import '../css/LoginSignup.css'
 import { FetchLogin } from './httpUltilities';
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
@@ -10,7 +11,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
   
     async function FetchLogin(account) {
       try {
-          const response = await fetch(`http://localhost:8001/login`, {
+          const response = await fetch(`${URL}/login`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(account),

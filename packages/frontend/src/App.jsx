@@ -6,6 +6,8 @@ import Leaderboard from './components/Leaderboard';
 import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
+const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+
 
 import './App.css';
 import Signup from './components/Signup';
@@ -22,7 +24,7 @@ function App() {
     // Function to fetch tasks for the logged-in user
     const fetchUserTasks = async (userId) => {
         try {
-            const response = await fetch(`http://localhost:8001/tasks/${userId}`);
+            const response = await fetch(`${URL}/tasks/${userId}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch tasks: ${response.status}`);
             }
