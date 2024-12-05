@@ -6,8 +6,8 @@ import Leaderboard from './components/Leaderboard';
 import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
-const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-
+//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+const URL = "http://localhost:8001"
 
 import './App.css';
 import Signup from './components/Signup';
@@ -81,7 +81,6 @@ function App() {
     };
 
     //settings component
-    const [isDarkMode, setIsDarkMode] = useState(false);
     // Toggle dark mode
     const toggleDarkMode = () => {
         setIsDarkMode((prevMode) => !prevMode);

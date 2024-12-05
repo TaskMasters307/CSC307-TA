@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskAdd from './TaskAdd';
 import TaskList from './TaskList';
 import '../css/Task.css';
-const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+const URL = "http://localhost:8001"
 
 const Task = ({ userId, tasks, setTasks }) => {
+    const [filter, setFilter] = useState(null)
+    const [activeFilter, setActiveFilter] = useState(null);
+    
+    const filteredTasks = filter
+        ? tasks.filter((task) => task.priority === filter)
+        : tasks;
+
+    const filterButtons = [
+        { value: 'high', label: 'High Priority' },
+        { value: 'medium', label: 'Medium Priority' },
+        { value: 'low', label: 'Low Priority' },
+        { value: null, label: 'Show All' }
+    ];
+
+    const handleFilterClick = (priority) => {
+        setFilter(priority);
+        setActiveFilter(priority);
+    };
+
     const handleAddTask = async (newTask) => {
         try {
             const response = await fetch(`${URL}/tasks`, {

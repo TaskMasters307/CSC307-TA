@@ -12,9 +12,7 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
             .map((task) => (
                 <div
                     key={task._id}
-                    className={`calendar-task ${task.priority} ${
-                        task.isCompleted ? 'completed' : ''
-                    }`}
+                    className={`calendar-task ${task.priority} ${task.isCompleted ? 'completed' : ''}`}
                     draggable
                     onDragStart={(e) => handleDragStart(e, task._id)}
                 >
@@ -32,10 +30,11 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     const handleDrop = (e, date) => {
         e.preventDefault();
         const taskId = e.dataTransfer.getData('taskId');
-        const updatedTasks = tasks.map((task) =>
-            task._id === taskId ? { ...task, date } : task
-        );
-        setTasks(updatedTasks);
+        setTasks(tasks.map(task => 
+            task.id === taskId 
+                ? { ...task, date: date }
+                : task
+        ));
     };
 
     const handleDragOver = (e) => {
@@ -117,11 +116,15 @@ const generateDatesForMonth = (currentDate) => {
 
     // Add dates for current month starting from 0 to offset the visual shift
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(Date.UTC(year, month, day))
-        dates.push(date.toISOString().split('T')[0])
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day + 1
+        ).toISOString().split('T')[0];
+        dates.push(date);
     }
-    console.log("Generated dates:", dates)
-    return dates
+
+    return dates;
 }
 
 export default Calendar;
