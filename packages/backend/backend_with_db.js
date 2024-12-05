@@ -29,9 +29,9 @@ mongoose
     .catch((error) =>
         console.log('cant connect to mongodb\nERROR say:\n', error)
     );
-
-console.log(`process.env.SECRET_TOKEN`, process.env.TOKEN_SECRET)
-console.log(`process.env.MONGODB_URI`, process.env.MONGODB_URI)
+// remove when cleaning code
+// console.log(`process.env.SECRET_TOKEN`, process.env.TOKEN_SECRET)
+// console.log(`process.env.MONGODB_URI`, process.env.MONGODB_URI)
 
 app.get('/', (req, res) => {
     res.send(`Hello World! ${process.env.MONGODB_URI}`)
