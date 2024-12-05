@@ -33,12 +33,12 @@ function FetchSignUp(account) {
   }
 
   function FetchFindUserName(username) {
-    const promise = fetch(`${API_URL}/api/findusername?username=${username}`);
+    const promise = fetch(`${API_URL}/findusername?username=${username}`);
     return promise;
   }
   function FindAccount(username, password) {
     //console.log(username, password);
-    const promise = fetch (`${API_URL}/api/findaccount?username=${username}&password=${password}`);
+    const promise = fetch (`${API_URL}/findaccount?username=${username}&password=${password}`);
     return promise;
   }
 
