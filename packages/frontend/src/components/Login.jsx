@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-//import Signup from './Signup';
-//import { Is_User_Name_Exist, MatchAccount } from './Utilities';
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
 import '../css/LoginSignup.css'
-import { FetchLogin } from './httpUltilities';
 import logo from '../assets/taskarena-logo.jpeg';
+
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "http://localhost:8001";
 
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
@@ -14,7 +13,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
   
     async function FetchLogin(account) {
       try {
-          const response = await fetch(`${URL}/login`, {
+          const response = await fetch(`${API_URL}/login`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(account),

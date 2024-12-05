@@ -36,11 +36,6 @@ function updateTask(taskId, updates) {
     return Task.findByIdAndUpdate(taskId, updates, { new: true });
 }
 
-// Delete a task
-function deleteTask(taskId) {
-    return Task.findByIdAndDelete(taskId);
-}
-
 async function getTasksByUser(userId) {
     try {
         // Validate the userId
@@ -60,8 +55,24 @@ async function findByIdAndUpdate(taskId, updates) {
     return await Task.findByIdAndUpdate(taskId, updates, { new: true });
 }
 
+// Delete a task
+async function deleteTask(taskId) {
+    try {
+        // Validate taskId
+        if (!mongoose.isValidObjectId(taskId)) {
+            throw new Error(`Invalid taskId format: ${taskId}`);
+        }
 
-
+        const deletedTask = await Task.findByIdAndDelete(taskId);
+        if (!deletedTask) {
+            throw new Error('Task not found');
+        }
+        return deletedTask;
+    } catch (error) {
+        console.error('Error in deleteTask:', error.message);
+        throw error;
+    }
+}
 
 export default {
     getTasksByUser,

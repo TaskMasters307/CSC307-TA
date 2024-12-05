@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import '../css/Calendar.css';
 
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "";
+
 const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const dates = generateDatesForMonth(currentDate);
@@ -27,14 +31,39 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     };
 
     // Handles drop event to update the task's date
-    const handleDrop = (e, date) => {
+    const handleDrop = async (e, date) => {
         e.preventDefault();
         const taskId = e.dataTransfer.getData('taskId');
+        const taskToUpdate = tasks.find(task => task._id === taskId);
+
+        if (!taskToUpdate)
+            return;
+        try{
+            const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...taskToUpdate,
+                    date: date
+                })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update task');
+        }
+
+        const updatedTask = await response.json();
+        
         setTasks(tasks.map(task => 
-            task.id === taskId 
+            task._id === taskId 
                 ? { ...task, date: date }
                 : task
         ));
+        } catch (error) {
+            console.error('Error updating task date:', error);
+            // Optionally add user feedback here
+        }
     };
 
     const handleDragOver = (e) => {
