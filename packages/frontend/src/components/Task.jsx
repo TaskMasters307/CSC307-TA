@@ -11,6 +11,30 @@ const Task = ({ userId, tasks, setTasks }) => {
     const [filter, setFilter] = useState(null)
     const [activeFilter, setActiveFilter] = useState(null);
     
+    useEffect(() => {
+        const fetchTasks = async () => {
+            if (!userId) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/tasks/${userId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
+
+                const fetchedTasks = await response.json();
+                setTasks(fetchedTasks);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+
+        fetchTasks();
+    }, [userId, setTasks]); // Re-run when userId changes
+
     const filteredTasks = filter
         ? tasks.filter((task) => task.priority === filter)
         : tasks;

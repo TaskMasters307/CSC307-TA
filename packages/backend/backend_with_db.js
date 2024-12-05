@@ -90,18 +90,6 @@ app.get('/users/:id', async (req, res) => {
     }
 })
 
-app.get('/tasks/:userId', async (req, res) => {
-    const userId = req.params.userId;
-    try {
-        const tasks = await taskServices.getTasksByUser(userId);
-        res.status(200).send(tasks); // Return tasks (empty array if none found)
-    } catch (error) {
-        console.error('Error fetching tasks:', error);
-        res.status(500).send('Error fetching tasks');
-    }
-});
-
-
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
     const savedUser = req.body
