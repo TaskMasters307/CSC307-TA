@@ -3,7 +3,7 @@ import '../css/Calendar.css';
 import deployment from './env.jsx';
 const API_URL = deployment 
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-    : "";
+    : "http://localhost:8001";
 
 const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
