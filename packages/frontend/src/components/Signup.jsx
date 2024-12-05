@@ -12,33 +12,31 @@ function Signup({ closeForm, LoginSuccess }) {
     async function CreateAccount(account) {
         Is_User_Name_Exist(username)
             .then((exist) => {
-                //If User name already exits alert
                 if (exist) {
-                    //alert("Username already exist");
-                    setError('Account already exist')
-                    //setError(null);
-                }
-                // else if username not exits then create an account on data
-                else {
+                    setError('Account already exists');
+                } else {
                     FetchSignUp(account)
                         .then((res) => {
                             if (res.status === 500) {
-                                setError('error 500')
-                                throw error('PostUser error 500')
+                                setError('Error: Unable to create account');
+                                throw new Error('PostUser error 500');
                             } else {
-                                alert('Account created successful')
-                                LoginSuccess()
+                                res.json().then((data) => {
+                                    alert('Account created successfully');
+                                    LoginSuccess(data.userId); // Pass the userId to LoginSuccess
+                                });
                             }
                         })
                         .catch((error) => {
-                            console.log(error)
-                        })
+                            console.log('Error during account creation:', error);
+                        });
                 }
             })
             .catch((error) => {
-                console.log('Is_User_Name_Exist() error')
-            })
+                console.log('Error checking username existence:', error);
+            });
     }
+    
 
     function handleSignup(e) {
         e.preventDefault()

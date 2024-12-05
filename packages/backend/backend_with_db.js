@@ -1,11 +1,10 @@
 import express from 'express'
 import cors from 'cors'
-
-
+import taskServices from './models/task-services.js'
 import userServices from './models/user-services.js'
 
 import "./auth.js"
-import { authenticateUser, loginUser, registerUser } from './auth.js';
+import { authenticateUser, loginUser2, registerUser } from './auth.js';
 import  dotenv from "dotenv"
 dotenv.config()
 const app = express()
@@ -76,6 +75,18 @@ app.get('/users/:id', async (req, res) => {
     }
 })
 
+app.get('/tasks/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const tasks = await taskServices.getTasksByUser(userId);
+        res.status(200).send(tasks); // Return tasks (empty array if none found)
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        res.status(500).send('Error fetching tasks');
+    }
+});
+
+
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
     const savedUser = req.body
@@ -86,14 +97,60 @@ app.post('/signup', registerUser, async (req, res, next) => {
     else res.status(500).end()
 })
 // LOGIN
-app.post('/login',loginUser, async (req, res, next) => {
-    const savedUser = req.body
-    const username = req.body.username;
-    const password = req.body.password;
-    //res.send("sending from login/ ")
-    //console.log(savedUser);
-   
-})
+app.post('/login', loginUser2, async (req, res) => {
+    try {
+        const user = req.user; // Access the validated user from `loginUser`
+
+        // Send the successful login response
+        res.status(200).json({
+            userId: user._id, // MongoDB `_id`
+            username: user.username,
+            message: "Login successful",
+        });
+    } catch (error) {
+        console.error("Error during login route handler:", error);
+        res.status(500).json({ error: "An error occurred during login" });
+    }
+});
+
+
+
+
+
+app.post('/tasks', async (req, res) => {
+    const { title, date, priority, userId } = req.body;
+
+    if (!title || !date || !userId) {
+        return res.status(400).send('Missing required fields');
+    }
+
+    try {
+        const task = await taskServices.addTask({ title, date, priority, userId });
+        res.status(201).send(task);
+    } catch (error) {
+        console.error('Error adding task:', error);
+        res.status(500).send('Error adding task');
+    }
+});
+
+app.put('/tasks/:taskId', async (req, res) => {
+    const { taskId } = req.params;
+    const updatedData = req.body;
+
+    try {
+
+        const updatedTask = await taskServices.findByIdAndUpdate(taskId, updatedData, { new: true });
+        if (!updatedTask) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).json(updatedTask);
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).send({ error: 'Failed to update task' });
+    }
+});
+
+
 
 //-------------delete-----------------
 app.delete('/users/:id', async (req, res) => {

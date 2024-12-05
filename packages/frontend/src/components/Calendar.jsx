@@ -1,61 +1,68 @@
-import React, { useState } from 'react'
-import '../css/Calendar.css'
+import React, { useState } from 'react';
+import '../css/Calendar.css';
 
-const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
-    const [currentDate, setCurrentDate] = useState(new Date())
-    const dates = generateDatesForMonth(currentDate)
+const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const dates = generateDatesForMonth(currentDate);
 
+    // Renders tasks for a specific date
     const renderTasksForDate = (date) => {
         return tasks
-            .filter(task => task.date === date)
-            .map(task => (
+            .filter((task) => task.date === date)
+            .map((task) => (
                 <div
-                    key={task.id}
-                    className={`calendar-task ${task.priority} ${task.isCompleted ? 'completed' : ''}`}
+                    key={task._id}
+                    className={`calendar-task ${task.priority} ${
+                        task.isCompleted ? 'completed' : ''
+                    }`}
                     draggable
-                    onDragStart={(e) => handleDragStart(e, task.id)}
+                    onDragStart={(e) => handleDragStart(e, task._id)}
                 >
                     <span>{task.title}</span>
                 </div>
-            ))
-    }
+            ));
+    };
 
+    // Handles drag start for tasks
     const handleDragStart = (e, taskId) => {
         e.dataTransfer.setData('taskId', taskId);
-    }
+    };
 
+    // Handles drop event to update the task's date
     const handleDrop = (e, date) => {
         e.preventDefault();
-        const taskId = parseInt(e.dataTransfer.getData('taskId'));
-        
-        // Update the task's date
-        setTasks(tasks.map(task => 
-            task.id === taskId 
-                ? { ...task, date: date }
-                : task
-        ));
-    }
+        const taskId = e.dataTransfer.getData('taskId');
+        const updatedTasks = tasks.map((task) =>
+            task._id === taskId ? { ...task, date } : task
+        );
+        setTasks(updatedTasks);
+    };
 
     const handleDragOver = (e) => {
         e.preventDefault();
-    }
+    };
 
+    // Changes the current month being viewed
     const changeMonth = (offset) => {
-        const newDate = new Date(currentDate)
-        newDate.setMonth(currentDate.getMonth() + offset)
-        setCurrentDate(newDate)
-    }
+        const newDate = new Date(currentDate);
+        newDate.setMonth(currentDate.getMonth() + offset);
+        setCurrentDate(newDate);
+    };
 
     return (
         <div className="calendar-container">
             <h1>Task Calendar</h1>
             <div className="month-navigation">
-                <span onClick={() => changeMonth(-1)} className="arrow">◀</span>
+                <span onClick={() => changeMonth(-1)} className="arrow">
+                    ◀
+                </span>
                 <span>
                     {currentDate.toLocaleString('default', { month: 'long' })}{' '}
                     {currentDate.getFullYear()}
                 </span>
-                <span onClick={() => changeMonth(1)} className="arrow">▶</span>
+                <span onClick={() => changeMonth(1)} className="arrow">
+                    ▶
+                </span>
             </div>
             <div className="calendar-grid">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
@@ -63,9 +70,9 @@ const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
                         {day}
                     </div>
                 ))}
-                {dates.map((date) => (
+                {dates.map((date, index) => (
                     <div
-                        key={date || Math.random()} // use random key for null dates
+                        key={index}
                         className={`calendar-day ${!date ? 'empty' : ''}`}
                         onDrop={(e) => date && handleDrop(e, date)}
                         onDragOver={handleDragOver}
@@ -82,9 +89,10 @@ const Calendar = ( { selectedDate, setSelectedDate, tasks, setTasks }) => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
+// Helper function to generate all dates for the current month
 const generateDatesForMonth = (currentDate) => {
     // Get first day of current month
     const firstOfMonth = new Date(
@@ -109,15 +117,11 @@ const generateDatesForMonth = (currentDate) => {
 
     // Add dates for current month starting from 0 to offset the visual shift
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            day + 1
-        ).toISOString().split('T')[0];
-        dates.push(date);
+        const date = new Date(Date.UTC(year, month, day))
+        dates.push(date.toISOString().split('T')[0])
     }
-
-    return dates;
+    console.log("Generated dates:", dates)
+    return dates
 }
 
-export default Calendar
+export default Calendar;

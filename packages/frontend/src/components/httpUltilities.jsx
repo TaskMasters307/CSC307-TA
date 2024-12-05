@@ -1,5 +1,5 @@
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+//const URL = "http://localhost:8001"
 function FetchSignUp(account) {
     const promise = fetch(`${URL}/signup`, {
       method: "POST",
@@ -39,6 +39,8 @@ function FetchSignUp(account) {
     const promise = fetch (`${URL}/findaccount?username=${username}&password=${password}`);
     return promise;
   }
+
+  
   export  {
     FetchFindUserName,
     FetchSignUp,

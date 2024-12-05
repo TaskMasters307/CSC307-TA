@@ -17,17 +17,17 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
         <div className="tasks">
             {tasks.map((task) => (
                 <div
-                    key={task.id}
+                    key={task._id} // Use the MongoDB `_id` for a unique key
                     className={`task-item ${task.priority}`}
                     draggable
                     onDragStart={(e) =>
-                        e.dataTransfer.setData('taskId', task.id)
+                        e.dataTransfer.setData('taskId', task._id) // Use `_id` for drag data
                     }
                 >
                     <input
                         type="checkbox"
                         checked={task.isCompleted}
-                        onChange={() => toggleTask(task.id)}
+                        onChange={() => toggleTask(task._id)} // Use `_id` to toggle tasks
                     />
                     <span className={task.isCompleted ? 'completed' : ''}>
                         {task.title} - {formatDisplayDate(task.date)}
@@ -48,4 +48,4 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
 )
 }
 
-export default TaskList
+export default TaskList;
