@@ -26,7 +26,7 @@ function App() {
     // Function to fetch tasks for the logged-in user
     const fetchUserTasks = async (userId) => {
         try {
-            const response = await fetch(`${API_URL}/tasks/${userId}`);
+            const response = await fetch(`${API_URL}/api/tasks/${userId}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch tasks: ${response.status}`);
             }
