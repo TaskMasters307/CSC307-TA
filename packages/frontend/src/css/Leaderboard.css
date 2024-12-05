@@ -36,3 +36,21 @@ header {
     color: #007bff;
     font-weight: bold;
 }
+/* Dark mode styles */
+.dark-mode .leaderboard {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+    box-shadow: none;
+}
+
+.dark-mode .leaderboard-item {
+    border-bottom-color: #444;
+}
+
+.dark-mode .rank {
+    color: #aaa;
+}
+
+.dark-mode .points {
+    color: #4285F4;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from './components/Calendar';
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
@@ -43,8 +43,45 @@ function App() {
         setUserId(id); // Save the userId for task association
         setCurrentView('welcome'); // Switch to main content on successful login
         fetchUserTasks(id); // Fetch tasks immediately after login
+        return (
+        <div>
+        <h1>TaskArena</h1>
+        <Navigation
+            currentView={currentView}
+            setCurrentView={setCurrentView}
+        />
+        <main>
+            {currentView === 'welcome' && (
+                <Welcome
+                    setCurrentView={setCurrentView}
+                    username={username}
+                />
+            )}
+            {currentView === 'tasks' && <Task 
+                tasks={tasks}
+                setTasks={setTasks}
+                addTask={addTask}
+                toggleTaskCompletion={toggleTaskCompletion}
+            />}
+            {currentView === 'calendar' && (
+                <Calendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+            )}
+            {currentView === 'leaderboard' && <Leaderboard />}
+        </main>
+    </div>
+        
+        )
+    };
+    function CloseForm() {
+        
+        setIsLoggedIn(false);
+        setCurrentView('login'); // Switch to main content on successful login
     };
 
+    //settings component
     // Toggle dark mode
     const toggleDarkMode = () => {
         setIsDarkMode((prevMode) => !prevMode);
@@ -57,6 +94,10 @@ function App() {
         setTasks([]); 
         setCurrentView('login');
     };
+
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', isDarkMode);
+    }, [isDarkMode]);
 
     // Switch back to signup
     const handleSignup = () => {
@@ -74,29 +115,41 @@ function App() {
                     />
                     <main>
                         {currentView === 'welcome' && (
-                            <Welcome
+                            <div className="welcome-container">
+                                <Welcome
                                 setCurrentView={setCurrentView}
                                 username={username}
                             />
+                            </div>
                         )}
                         {currentView === 'tasks' && (
+                            <div className="task-container">
                             <Task userId={userId} tasks={tasks} setTasks={setTasks} />
+                            </div>
                         )}
                         {currentView === 'calendar' && (
+                            <div className="calendar-container">
                             <Calendar
-                                selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
-                                tasks={tasks}
-                                setTasks={setTasks}
+                              selectedDate={selectedDate}
+                              setSelectedDate={setSelectedDate}
+                              tasks={tasks}
+                              setTasks={setTasks}
                             />
+                            </div>
                         )}
-                        {currentView === 'leaderboard' && <Leaderboard />}
+                        {currentView === 'leaderboard' && (
+                        <div className="leaderboard-container">
+                        <Leaderboard />
+                      </div>
+                      )}
                         {currentView === 'settings' && (
+                            <div className="settings-container">
                             <Settings
                                 onLogout={handleLogout}
                                 toggleDarkMode={toggleDarkMode}
                                 isDarkMode={isDarkMode}
                             />
+                            </div>
                         )}
                     </main>
                 </div>

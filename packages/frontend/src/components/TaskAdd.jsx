@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 //import { AddUserTask } from './httpUltilities.jsx'
 import '../css/Task.css'
-const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-//const URL = "http://localhost:8001"
+//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+const URL = "http://localhost:8001"
 /**
  * TaskAdd Component
  * Form for adding new tasks with date and priority
@@ -18,11 +18,14 @@ const TaskAdd = ({ userId, onTaskAdded }) => {
             console.error('Missing fields: title, date, or userId');
             return;
         }
-    
-        // Create the task object
-        const newTask = { title, date, priority, userId };
-    
-        // Debugging: Log the task to ensure it's correct
+        const taskDate = new Date(date);
+        taskDate.setDate(taskDate.getDate() + 1);
+        const newTask = { 
+            id: Date.now(), 
+            title, 
+            date: taskDate.toISOString().split('T')[0], 
+            priority, 
+            userId };
         console.log('Adding task:', newTask);
     
         fetch(`${URL}/tasks`, {

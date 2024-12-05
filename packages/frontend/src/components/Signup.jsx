@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Is_User_Name_Exist } from './Utilities'
 import { FetchSignUp } from './httpUltilities'
+import logo from '../assets/taskarena-logo.jpeg';
+import '../css/LoginSignup.css'
 
 function Signup({ closeForm, LoginSuccess }) {
     const [username, setUsername] = useState('')
@@ -75,6 +77,7 @@ function Signup({ closeForm, LoginSuccess }) {
 
     return (
         <div className="Signup-Form" id="myForm">
+            <img src={logo} alt="Task Arena" className="task-arena-logo" />
             <h1 className="Signup-header">Sign Up</h1>
             <form className="Signup-form">
                 <label className="login-label">
