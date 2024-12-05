@@ -1,6 +1,6 @@
 import express from 'express';
 import userServices from '../models/user-services.js';
-import User from './user.js'
+import User from '../models/user.js'
 
 const router = express.Router();
 
@@ -32,7 +32,8 @@ router.put('/:userId/stats', async (req, res) => {
 router.get('/leaderboard', async (req, res) => {
     try {
         // Get all users, sorted by points in descending order
-        const users = await User.find({}, 'username statistics')
+        const users = await User.find({})
+            .select('username statistics.totalPoints statistics.tasksCompleted')
             .sort({ 'statistics.totalPoints': -1 })
             .limit(10);  // Limit to top 10 users
 
@@ -42,7 +43,7 @@ router.get('/leaderboard', async (req, res) => {
             points: user.statistics?.totalPoints || 0,
             tasksCompleted: user.statistics?.tasksCompleted || 0
         }));
-
+        console.log('Leaderboard data being sent:', leaderboardData);
         res.status(200).json(leaderboardData);
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
