@@ -1,14 +1,15 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import userServices from './models/user-services.js'
-import dotenv from 'dotenv'
+import  dotenv from "dotenv"
 dotenv.config()
 
-const creds = []
+
+const creds = [];
 
 export function registerUser(req, res, next) {
-    const username = req.body.username // from form
-    const pwd = req.body.password
+  const username = req.body.username; // from form
+  const pwd = req.body.password  
 
   if (!username || !pwd) {
     res.status(400).send("Bad request: Invalid input data.");
@@ -32,6 +33,7 @@ export function registerUser(req, res, next) {
   }
 }
 
+
 function generateAccessToken(username) {
 
   return new Promise((resolve, reject) => {
@@ -51,25 +53,30 @@ function generateAccessToken(username) {
 }
 
 export function authenticateUser(req, res, next) {
-    const authHeader = req.headers['authorization']
-    //Getting the 2nd part of the auth header (the token)
-    const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers["authorization"];
+  //Getting the 2nd part of the auth header (the token)
+  const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) {
-        console.log('No token received')
-        res.status(401).end()
-    } else {
-        console.log('verifying...')
-        jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
-            if (decoded) {
-                next()
-            } else {
-                console.log('JWT error:', error)
-                res.status(401).end()
-            }
-        })
-    }
+  if (!token) {
+    console.log("No token received");
+    res.status(401).end();
+  } else {
+    console.log("verifying...")
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET,
+      (error, decoded) => {
+        if (decoded) {
+          next();
+        } else {
+          console.log("JWT error:", error);
+          res.status(401).end();
+        }
+      }
+    );
+  }
 }
+
 
 export async function loginUser(req, res, next) {
   const LoginUser = req.body;
@@ -104,30 +111,33 @@ export async function loginUser(req, res, next) {
   catch(error) {
     res.send(`mongo findUerByName() error: ${error}`);
   }
-    
-   
-    
-    
+ 
+}
 
-  
+export async function loginUser2(req, res, next) {
+  const { username, password } = req.body;
+  console.log("Received login request:", req.body);
 
- /* if (!retrievedUser) {
-    // invalid username
-    res.status(401).send("Unauthorized");
-  }  else {
-    bcrypt
-      .compare(pwd, retrievedUser.hashedPassword)
-      .then((matched) => {
-        if (matched) {
-          generateAccessToken(username).then((token) => {
-            res.status(200).send({ token: token });
-          });
-        } else {
-            console.log('Password did not match');
-            res.status(401).json({ error: 'Invalid username or password' });
-        }
-    } catch (error) {
-        console.error('Error in loginUser:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+  try {
+      const findOne = await userServices.findUserByName(username);
+      if (!findOne) {
+          console.log("User not found:", username);
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      console.log("User found:", findOne);
+
+      const matchedPassword = await bcrypt.compare(password, findOne.password);
+      if (!matchedPassword) {
+          console.log("Invalid password for user:", username);
+          return res.status(401).json({ error: "Invalid password" });
+      }
+
+      console.log("Password matched for user:", username);
+      req.user = findOne;
+      next();
+  } catch (error) {
+      console.error("Error in loginUser middleware:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
 }

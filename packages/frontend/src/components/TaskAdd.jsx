@@ -1,35 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 //import { AddUserTask } from './httpUltilities.jsx'
 import '../css/Task.css'
 /**
  * TaskAdd Component
  * Form for adding new tasks with date and priority
  */
-const TaskAdd = ({ addTask }) => {
-    // State for task fields
-    const [title, setTitle] = useState('')
-    const [date, setDate] = useState('')
-    const [priority, setPriority] = useState('low')
-    //const [error, setError] = useState('')
+const TaskAdd = ({ userId, onTaskAdded }) => {
+    const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
+    const [priority, setPriority] = useState('low');
 
     const handleAddTask = () => {
-        if (title && date) {
-            // Create new task with selected date and priority
-            const newTask = {
-                id: Date.now(),
-                title,
-                date,
-                priority,
-                isCompleted: false,
-            }
-            addTask(newTask)
-
-            // Reset form fields
-            setTitle('')
-            setDate('')
-            setPriority('low')
+        if (!title || !date || !userId) {
+            console.error('Missing fields: title, date, or userId');
+            return;
         }
-    }
+
+        const newTask = { title, date, priority, userId };
+        console.log('Adding task:', newTask);
+
+        fetch('http://localhost:8001/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newTask),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to add task: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((task) => {
+                console.log('Task added successfully:', task);
+                onTaskAdded(task);
+                setTitle('');
+                setDate('');
+                setPriority('low');
+            })
+            .catch((error) => console.error('Error adding task:', error));
+    };
+
 
     return (
         <div className="task-add">

@@ -48,8 +48,6 @@ function findUserById(id) {
 }
 
 function addUser(user) {
-
-
   const userToAdd = new userModel(user);
   console.log("adding user: ", user)
   const promise = userToAdd.save();
