@@ -91,3 +91,32 @@ input {
     width: 100%;
     height: auto;
   }
+
+
+/* Style the close button */
+.btn.cancel {
+    padding: 0;
+    display: flex; 
+    justify-content: center; /* Center the content horizontally */
+    align-items: center;
+    width: 100%; 
+}
+
+.btn.cancel .nav-button {
+    display: inline-block;
+    width: 100%; /* Ensure the NavLink fills the button width */
+    padding: 5px 10px; 
+    background: #dc3545; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    font-size: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn.cancel .nav-button:hover {
+    background: #a71d2a;
+}

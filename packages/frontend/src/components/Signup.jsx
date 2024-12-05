@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Is_User_Name_Exist } from './Utilities'
 import { FetchSignUp } from './httpUltilities'
 import logo from '../assets/taskarena-logo.jpeg';
+import { NavLink } from 'react-router-dom';
 import '../css/LoginSignup.css'
 
 function Signup({ closeForm, LoginSuccess }) {
@@ -120,12 +121,10 @@ function Signup({ closeForm, LoginSuccess }) {
                 >
                     Sign up
                 </button>
-                <button
-                    type="button"
-                    className="btn cancel"
-                    onClick={closeForm}
-                >
-                    Close
+                <button type="button" className="btn cancel">
+                    <NavLink to="/login" className="nav-button">
+                        Close
+                    </NavLink>
                 </button>
             </form>
             </div>
