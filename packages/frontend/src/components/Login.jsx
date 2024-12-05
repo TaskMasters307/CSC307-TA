@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/LoginSignup.css'
 import logo from '../assets/taskarena-logo.jpeg';
 import deployment from "./env.jsx"
+import { useNavigate } from 'react-router-dom';
 
 //const deployment = false;
 
@@ -13,7 +14,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-  
+    const navigate = useNavigate();
     async function FetchLogin(account) {
       try {
           const response = await fetch(`${API_URL}/login`, {
@@ -57,8 +58,11 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     }
 };
 
-  
-    
+const handleSignupClick = (e) => {
+  e.preventDefault();
+  navigate('/signup');  // This will navigate to the signup route
+};
+
   
     return (
       <div> <img src={logo} alt="Task Arena" className="task-arena-logo" />
@@ -95,7 +99,7 @@ const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
             <button type="submit" className="login-button">
               Login
             </button>
-            <button className="open-button" onClick={PopSignup} >Sign up</button>
+            <button className="open-button" onClick={handleSignupClick} type="button">Sign up</button>
           </form>
         </div>
         </div>
