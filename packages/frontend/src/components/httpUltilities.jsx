@@ -1,5 +1,5 @@
-// const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+// const URL = "http://localhost:8001"
 
 // Helper function to get auth header
 const getAuthHeader = () => {

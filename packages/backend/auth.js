@@ -6,45 +6,61 @@ dotenv.config()
 
 const creds = []
 
-export function registerUser(req, res, next) {
-    const username = req.body.username // from form
-    const pwd = req.body.password
+export async function registerUser(req, res, next) {
+  const username = req.body.username; // from form
+  const pwd = req.body.password;
 
-    if (!username || !pwd) {
-        res.status(400).send("Bad request: Invalid input data.");
-    } else if (creds.find((c) => c.username === username)) {
-        res.status(409).send("Username already taken");
-    } else {
-        bcrypt
-            .genSalt(10)
-            .then((salt) => bcrypt.hash(pwd, salt))
-            .then((hashedPassword) => {
-                generateAccessToken(username).then((token) => {
-                    console.log("Token:", token);
-                    req.body.password = hashedPassword;
-                    console.log(`req.body.password`, req.body.password)
-                    creds.push({ username, hashedPassword });
-                    next();
-                });
-            });
+  if (!username || !pwd) {
+    return res.status(400).send("Bad request: Invalid input data.");
+  }
+
+  try {
+    const existingUser = await userServices.findUserByName(username);
+    if (existingUser) {
+      return res.status(409).send("Username already taken");
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(pwd, salt);
+
+    req.body.password = hashedPassword; // Attach the hashed password for saving
+    const newUser = await userServices.addUser(req.body); // Save the user to the database
+
+    if (newUser) {
+      const token = await generateAccessToken(username); 
+      console.log("Token:", token);
+
+      // Send the user ID and token to the client
+      return res.status(201).json({
+        userId: newUser._id,
+        message: "User registered successfully",
+        token, 
+      });
+    } else {
+      res.status(500).send("Failed to create user.");
+    }
+  } catch (error) {
+    console.error("Error during user registration:", error);
+    res.status(500).send("Internal server error.");
+  }
 }
 
 export function generateAccessToken(username) {
-    return new Promise((resolve, reject) => {
-        jwt.sign(
-            { username: username },
-            process.env.TOKEN_SECRET,
-            { expiresIn: "1d" },
-            (error, token) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(token);
-                }
-            }
-        );
-    });
+
+  return new Promise((resolve, reject) => {
+    jwt.sign(
+      { username: username },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "1d" },
+      (error, token) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(token);
+        }
+      }
+    );
+  });
 }
 
 export function authenticateUser(req, res, next) {
@@ -74,15 +90,15 @@ export async function loginUser(req, res, next) {
     console.log("LoginUser", LoginUser);
     
     try {
-        const findOne = creds.find((c) => c.username === username);
+        const findOne = await userServices.findUserByName(username);
         
         if(!findOne) {
-            res.status(404).send(`User not found ${loginUser}`);
+            res.status(404).send(`Mongo database not found ${loginUser}`);
         }
         else {
-            console.log("User found in creds")
+            console.log("mongo found account")
             
-            const matchedPassword = await bcrypt.compare(req.body.password, findOne.hashedPassword)
+            const matchedPassword = await bcrypt.compare(req.body.password, findOne.password)
             if(matchedPassword) {
                 console.log("password matched")
                 // Generate token here
@@ -107,4 +123,45 @@ export async function loginUser(req, res, next) {
             message: `Login error: ${error.message}`
         });
     }
+}
+
+export async function loginUser2(req, res, next) {
+  const LoginUser = req.body;
+  const username = req.body.username;
+  console.log("LoginUser", LoginUser);
+  
+  try {
+      const findOne = await userServices.findUserByName(username);
+      
+      if(!findOne) {
+          res.status(404).send(`Mongo database not found ${loginUser}`);
+      }
+      else {
+          console.log("mongo found account")
+          
+          const matchedPassword = await bcrypt.compare(req.body.password, findOne.password)
+          if(matchedPassword) {
+              console.log("password matched")
+              // Generate token here
+              const token = await generateAccessToken(username);
+              // Send token in response
+              res.status(200).json({
+                  message: "Login successful",
+                  token: token
+              });
+          }
+          else {
+              console.log("password not matched")
+              res.status(401).json({
+                  message: "Invalid credentials"
+              });
+          }
+      }
+  }
+  catch(error) {
+      console.error('Login error:', error);
+      res.status(500).json({
+          message: `Login error: ${error.message}`
+      });
+  }
 }

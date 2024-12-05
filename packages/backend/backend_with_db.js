@@ -1,13 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+
 import userServices from './models/user-services.js'
+
 import "./auth.js"
-import { authenticateUser, loginUser, registerUser } from './auth.js';
-import dotenv from "dotenv"
-import jwt from 'jsonwebtoken'
-
+import { authenticateUser, loginUser, loginUser2, registerUser } from './auth.js';
+import  dotenv from "dotenv"
 dotenv.config()
-
 const app = express()
 const port = process.env.PORT || 8001
 
@@ -17,65 +16,24 @@ app.use(express.json())
 console.log(`process.env.SECRET_TOKEN`, process.env.TOKEN_SECRET)
 console.log(`process.env.MONGODB_URI`, process.env.MONGODB_URI)
 
-// Public routes (no authentication needed)
 app.get('/', (req, res) => {
     res.send(`Hello World! ${process.env.MONGODB_URI}`)
 })
 
-app.post('/signup', registerUser, async (req, res) => {
-    const savedUser = req.body
-    try {
-        await userServices.addUser(savedUser);
-        const token = await generateAccessToken(savedUser.username);
-        res.status(201).json({ 
-            message: "Registration successful",
-            token: token,
-            user: {
-                username: savedUser.username
-            }
-        });
-    } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({ message: 'Registration failed' });
-    }
-})
-
-function generateAccessToken(username) {
-    return new Promise((resolve, reject) => {
-        jwt.sign(
-            { username: username },
-            process.env.TOKEN_SECRET,
-            { expiresIn: "1d" },
-            (error, token) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(token);
-                }
-            }
-        );
-    });
-}
-
-app.post('/login', loginUser, async (req, res) => {
-    // loginUser middleware handles the response
-    // No need for additional logic here
-})
-
-// Protected routes (require authentication)
-app.get('/users', authenticateUser, async (req, res) => {
+//  FIRST FETCH
+app.get('/users', async (req, res) => {
     const name = req.query['username']
     const job = req.query['password']
     try {
         const result = await userServices.getUsers(name, job)
-        res.json({ users_list: result })
+        console.log('app.get-result== ', result)
     } catch (error) {
         console.log(error)
-        res.status(500).send('An error occurred in the server.')
+        res.status(500).send('An error ocurred in the server.')
     }
 })
 
-app.get('/findaccount', authenticateUser, async (req, res) => {
+app.get('/findaccount', async (req, res) => {
     const username = req.query.username
     const password = req.query.password
     console.log(req.query)
@@ -92,48 +50,119 @@ app.get('/findaccount', authenticateUser, async (req, res) => {
     }
 })
 
-app.get('/findusername', authenticateUser, async (req, res) => {
+app.get('/findusername', async (req, res) => {
     const username = req.query['username']
     try {
         const result = await userServices.findUserByName(username)
+        //console.log('backend result is === ', result)
         if (result) {
-            res.status(200).send({ exists: true, message: 'account exist' })
+            res.status(200).send({ exits: true, message: 'account exist' })
         } else {
-            res.status(201).send({ exists: false, message: 'account NOT exist' })
+            res.status(201).send({ exits: false, message: 'account NOT exist' })
         }
     } catch (error) {
         console.log(error)
         res.status(500).send('users/findusername has error')
     }
 })
-
-app.get('/users/:id', authenticateUser, async (req, res) => {
+app.get('/users/:id', async (req, res) => {
     const id = req.params['id']
-    try {
-        const result = await userServices.findUserById(id)
-        if (!result) {
-            res.status(404).send('Resource not found.')
-        } else {
-            res.send({ users_list: result })
-        }
-    } catch (error) {
-        res.status(500).send('Error retrieving user')
+    const result = await userServices.findUserById(id)
+    if (result === undefined || result === null)
+        res.status(404).send('Resource not found.')
+    else {
+        res.send({ users_list: result })
     }
 })
 
-app.delete('/users/:id', authenticateUser, async (req, res) => {
-    const id = req.params['id']
+//   ADD USER
+app.post('/signup', registerUser, async (req, res, next) => {
+    const savedUser = req.body
+   // console.log(`/signup `, savedUser)
+    userServices.addUser(savedUser);
+    if (savedUser) res.status(201).send(savedUser)
+    
+    else res.status(500).end()
+})
+// LOGIN
+app.post('/login', loginUser2, async (req, res) => {
+    try {
+        const user = req.user; // Access the validated user from `loginUser`
+
+        // Send the successful login response
+        res.status(200).json({
+            userId: user._id, // MongoDB `_id`
+            username: user.username,
+            message: "Login successful",
+        });
+    } catch (error) {
+        console.error("Error during login route handler:", error);
+        res.status(500).json({ error: "An error occurred during login" });
+    }
+});
+
+
+//-------------delete-----------------
+app.delete('/users/:id', async (req, res) => {
+    const id = req.params['id'] //or req.params.id
     try {
         const deleting = await userServices.deleteUser(id)
+
         if (deleting) {
             res.status(204).send()
         } else {
             res.status(404).send('404 no user found to delete')
         }
-    } catch (error) {
+    } catch {
         res.status(404).send('no user found to delete')
     }
 })
+//--------------------------------------------
+
+
+
+app.get('/tasks/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const tasks = await taskServices.getTasksByUser(userId);
+        res.status(200).send(tasks); // Return tasks (empty array if none found)
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        res.status(500).send('Error fetching tasks');
+    }
+});
+app.post('/tasks', async (req, res) => {
+    const { title, date, priority, userId } = req.body;
+
+    if (!title || !date || !userId) {
+        return res.status(400).send('Missing required fields');
+    }
+
+    try {
+        const task = await taskServices.addTask({ title, date, priority, userId });
+        res.status(201).send(task);
+    } catch (error) {
+        console.error('Error adding task:', error);
+        res.status(500).send('Error adding task');
+    }
+});
+
+app.put('/tasks/:taskId', async (req, res) => {
+    const { taskId } = req.params;
+    const updatedData = req.body;
+
+    try {
+
+        const updatedTask = await taskServices.findByIdAndUpdate(taskId, updatedData, { new: true });
+        if (!updatedTask) {
+            return res.status(404).send({ error: 'Task not found' });
+        }
+        res.status(200).json(updatedTask);
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).send({ error: 'Failed to update task' });
+    }
+});
 
 app.listen(process.env.PORT || port, () => {
     console.log('REST API is listening.')
