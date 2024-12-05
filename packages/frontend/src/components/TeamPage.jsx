@@ -1,57 +1,62 @@
 import React from 'react';
 import { Github, Linkedin } from 'lucide-react';
 import '../css/TeamPage.css';
+import arianhoush from '../assets/arianhoush.jpeg';
+import trey_martin from '../assets/trey_martin.jpeg';
+import Austin from '../assets/Austin.jpg';
+import duy from '../assets/duy.png';
+import sameer from '../assets/sameer.JPG';
 
 const TeamPage = () => {
   const teamMembers = [
     {
       name: 'Austin Voong',
       role: 'Developer',
-      image: '/api/placeholder/300/300',
-      bio: 'Passionate about building innovative solutions and leading teams to success.',
+      image: Austin,
+      bio: 'Adding dark mode was my first real feature - was stoked when it actually worked!',
       socials: {
-        linkedin: 'https://linkedin.com/in/john',
-        github: 'https://github.com/john'
+        linkedin: 'https://www.linkedin.com/in/austin-voong-6a5573253/',
+        github: 'https://github.com/austinvoong'
       }
     },
     {
       name: 'Trey Martin',
       role: 'Developer',
-      image: '/api/placeholder/300/300',
-      bio: 'Full-stack developer with 8 years of experience in building scalable applications.',
+      image: trey_martin,
+      bio: '"Managing the database seemed scary at first, but it ended up being my favorite part."',
       socials: {
-        linkedin: 'https://linkedin.com/in/sarah',
-        github: 'https://github.com/sarah'
+        linkedin: 'https://www.linkedin.com/in/jam3s-m4rtin/',
+        github: 'https://github.com/TreyMartin0'
       }
     },
     {
       name: 'Duy Nguyen',
       role: 'Developer',
-      image: '/api/placeholder/300/300',
-      bio: 'Creating user-centered designs with a focus on accessibility and usability.',
+      image: duy,
+      bio: '"Learned so much about teamwork while building something I actually needed for my own classes."',
       socials: {
-        linkedin: 'https://linkedin.com/in/michael',
-        github: 'https://github.com/michael'
+        linkedin: 'https://www.linkedin.com/in/dnguyen-proverb2528/',
+        github: 'https://github.com/DuyNguyen2528'
       }
     },
     {
       name: 'Arian Houshmand',
       role: 'Developer',
-      image: '/api/placeholder/300/300',
-      bio: 'Specialized in building robust and scalable backend systems with a focus on performance.',
+      image: arianhoush,
+      bio: '"Making the interface user-friendly was tough but seeing my friends actually use it made it worth it."',
       socials: {
-        linkedin: 'https://linkedin.com/in/emily',
-        github: 'https://github.com/emily'
+        linkedin: 'https://www.linkedin.com/in/arian-housh/',
+        github: 'https://github.com/arian-housh'
       }
     },
     {
       name: 'Sameer Nadeem',
       role: 'Developer',
-      image: '/api/placeholder/300/300',
-      bio: 'Passionate about creating intuitive and engaging user experiences through thoughtful design.',
+      image: sameer,
+      bio: '"The calendar feature started as a simple idea but turned out really useful for all of us."',
       socials: {
-        linkedin: 'https://linkedin.com/in/alex',
-        github: 'https://github.com/alex'
+        linkedin: 'https://www.linkedin.com/in/sameer--nadeem/',
+        github: 'https://github.com/SameerNadeem'
       }
     }
   ];

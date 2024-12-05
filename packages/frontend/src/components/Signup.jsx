@@ -9,7 +9,32 @@ function Signup({ closeForm, LoginSuccess }) {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null)
 
+    // Password validation function
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const specialChars = /[!@#$%^&*(),.?":{}|<>]/;
+        
+        const errors = [];
+        
+        if (password.length < minLength) {
+            errors.push(`Password must be at least ${minLength} characters long`);
+        }
+        
+        if (!specialChars.test(password)) {
+            errors.push('Password must contain at least one special character');
+        }
+        
+        return errors;
+    };
+
     async function CreateAccount(account) {
+        // First validate password
+        const passwordErrors = validatePassword(account.password);
+        if (passwordErrors.length > 0) {
+            setError(passwordErrors.join('. '));
+            return;
+        }
+
         Is_User_Name_Exist(username)
             .then((exist) => {
                 if (exist) {
@@ -23,7 +48,7 @@ function Signup({ closeForm, LoginSuccess }) {
                             } else {
                                 res.json().then((data) => {
                                     alert('Account created successfully');
-                                    LoginSuccess(data.userId); // Pass the userId to LoginSuccess
+                                    LoginSuccess(data.userId);
                                 });
                             }
                         })
@@ -36,7 +61,6 @@ function Signup({ closeForm, LoginSuccess }) {
                 console.log('Error checking username existence:', error);
             });
     }
-    
 
     function handleSignup(e) {
         e.preventDefault()
@@ -46,32 +70,7 @@ function Signup({ closeForm, LoginSuccess }) {
             return
         } else {
             const account = { username: username, password: password }
-            //console.log("account= " , account);
             CreateAccount(account)
-
-            /* if(!Is_User_Name_Exist(username)) {
-        console.log("creating account");
-        postUser(account).
-        then((res) => {
-        //console.log(res.status);
-        if(res.status === 500) {
-          throw new Error("error ading user");
-        }
-        else {
-          console.log(res.json());
-          return res.json();
-        }
-        
-        }).then((data) => {
-
-          alert(`Sign up successful`);
-        }).catch((error) => {
-          console.log("catching error:", error);
-        })
-      }
-      else {
-        //alert("Username already exsits");
-      } */
         }
     }
 
@@ -99,7 +98,7 @@ function Signup({ closeForm, LoginSuccess }) {
                 </label>
                 <input
                     type="password"
-                    placeholder="Enter Password"
+                    placeholder="Enter Password (min 8 chars, 1 special char)"
                     name="password"
                     required
                     value={password}
@@ -132,4 +131,5 @@ function Signup({ closeForm, LoginSuccess }) {
         </div>
     )
 }
+
 export default Signup
