@@ -20,7 +20,6 @@ function App() {
     const [userId, setUserId] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [tasks, setTasks] = useState([]); // Centralized tasks state
-
     // Function to fetch tasks for the logged-in user
     const fetchUserTasks = async (userId) => {
         try {
@@ -66,7 +65,7 @@ function App() {
     useEffect(() => {
         document.body.classList.toggle('dark-mode', isDarkMode);
     }, [isDarkMode]);
-    
+
     return (
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             {isLoggedIn ? (
@@ -80,8 +79,8 @@ function App() {
                         {currentView === 'welcome' && (
                             <div className="welcome-container">
                                 <Welcome
-                                setCurrentView={setCurrentView}
                                 username={username}
+                                userId={userId}
                             />
                             </div>
                         )}

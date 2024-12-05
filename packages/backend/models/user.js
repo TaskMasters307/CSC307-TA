@@ -21,6 +21,24 @@ const UserSchema = new mongoose.Schema(
           throw new Error("Invalid job, must be at least 2 characters.");
       },
     },
+    statistics: {
+      totalPoints: {
+        type: Number,
+        default: 0
+      },
+      tasksCompleted: {
+        type: Number,
+        default: 0
+      },
+      currentStreak: {
+        type: Number,
+        default: 0
+      },
+      lastTaskCompletion: {
+        type: Date,
+        default: null
+      }
+    }
   },
   { collection: "users_list" }
 );
