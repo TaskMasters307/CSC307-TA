@@ -1,6 +1,11 @@
 // src/components/Leaderboard.jsx
 import React, { useState, useEffect } from 'react'
 import '../css/Leaderboard.css'
+import deployment from './env.jsx'  
+
+const API_URL = deployment 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "http://localhost:8001";
 
 const Leaderboard = () => {
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -11,7 +16,7 @@ const Leaderboard = () => {
         let isMounted=true;
         const fetchLeaderboard = async () => {
             try {
-                const response = await fetch(`/api/users/leaderboard`);
+                const response = await fetch(`${API_URL}/api/users/leaderboard`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch leaderboard data');
                 }
