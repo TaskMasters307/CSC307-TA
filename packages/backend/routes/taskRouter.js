@@ -36,6 +36,7 @@ router.post('/', async (req, res) => {
 router.put('/:taskId', async (req, res) => {
     const { taskId } = req.params;
     const updatedData = req.body;
+    console.log('Received update data:', updatedData);
 
     try {
         const updatedTask = await taskServices.findByIdAndUpdate(taskId, updatedData);

@@ -34,29 +34,32 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     const handleDrop = async (e, date) => {
         e.preventDefault();
         const taskId = e.dataTransfer.getData('taskId');
-        const taskToUpdate = tasks.find(task => task._id === taskId);
+        if (!taskId) return;
+        
+        try {
+            const task = tasks.find(task => task._id === taskId);
+            if (!task) return;
 
-        if (!taskToUpdate)
-            return;
-        try{
+            console.log('Sending update for task:', taskId);
+            
             const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    ...taskToUpdate,
-                    date: date
-                })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to update task');
-        }
+                body: JSON.stringify({date: date,
+                    dateUpdate: true})
+             });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log('Error response:', errorData);  // Add this debug log
+                throw new Error('Failed to update task');
+            }
 
-        const updatedTask = await response.json();
-        
-        setTasks(tasks.map(task => 
-            task._id === taskId 
+            const updatedTask = await response.json();
+            console.log('Server response: ', updatedTask)
+            setTasks(tasks.map(task => 
+                task._id === taskId 
                 ? { ...task, date: date }
                 : task
         ));

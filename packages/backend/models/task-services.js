@@ -150,7 +150,10 @@ async function findByIdAndUpdate(taskId, updates) {
     if ('isCompleted' in updates) {
         return await handleTaskCompletion(taskId, updates.isCompleted);
     }
-    return await Task.findByIdAndUpdate(taskId, updates, { new: true });}
+    return await Task.findByIdAndUpdate(
+        taskId, 
+        { ...updates },
+         { new: true });}
 
 // Delete a task
 async function deleteTask(taskId) {

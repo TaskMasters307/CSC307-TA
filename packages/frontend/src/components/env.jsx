@@ -1,3 +1,3 @@
 
-const deployment = false 
+const deployment = true 
 export default deployment
