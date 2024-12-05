@@ -104,7 +104,6 @@ function App() {
                         {currentView === 'leaderboard' && (
                         <div className="leaderboard-container">
                         <Leaderboard 
-                            userId={userId}
                         />
                       </div>
                       )}
