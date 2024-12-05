@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/Calendar.css';
-
-const API_URL = process.env.NODE_ENV === 'production' 
+import deployment from './env.jsx';
+const API_URL = deployment 
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
     : "";
 
