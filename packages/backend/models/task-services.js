@@ -73,30 +73,59 @@ async function handleTaskCompletion(taskId, isCompleted) {
 
         // Calculate streak
         const now = new Date();
-        const lastCompletion = user.statistics?.lastTaskCompletion;
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const lastCompletion = user.statistics?.lastTaskCompletion
+            ? new Date(user.statistics.lastTaskCompletion) 
+            : null;
         let newStreak = user.statistics?.currentStreak || 0;
-        
         if (isCompleted) {
-            // If completing a task
             if (lastCompletion) {
-                const daysSinceLastTask = Math.floor((now - new Date(lastCompletion)) / (1000 * 60 * 60 * 24));
-                if (daysSinceLastTask <= 1) {
+                // If completing a task
+                const lastCompletionDate = new Date(
+                    lastCompletion.getFullYear(),
+                    lastCompletion.getMonth(),
+                    lastCompletion.getDate()
+                );
+                
+                // Calculate days between last completion and today
+                const daysDiff = Math.floor((today - lastCompletionDate) / (1000 * 60 * 60 * 24));
+
+                if (daysDiff === 0) {
+                    // Completion before due date, maintain streak
                     newStreak += 1;
                 } else {
+                    // More than one day gap, reset streak
                     newStreak = 1;
                 }
             } else {
-                newStreak = 1;
+                newStreak = 1; //First ever task
+            }
+        
+        // Check for missed days and reset streak if needed
+        const hasTasksDueToday = await Task.exists({
+            userId: task.userId,
+            date: today.toISOString().split('T')[0],
+            isCompleted: false
+        });
+
+            const hasUncompletedPastTasks = await Task.exists({
+                userId: task.userId,
+                date: { $lt: today.toISOString().split('T')[0] },
+                isCompleted: false
+            });
+
+            if (hasUncompletedPastTasks || (hasTasksDueToday && !isCompleted)) {
+                newStreak = 0;  // Reset streak if tasks were missed
             }
         }
 
         // Calculate multiplier based on streak
-        const multiplier = 1 + (Math.min(newStreak, 7) * 0.1); // Max 1.7x multiplier
+        const multiplier = 1 + (Math.min(newStreak, 20) * 0.1); // Max 3x multiplier
 
         // Update user stats
         await userServices.updateUserStats(task.userId, {
-            totalPoints: (user.statistics?.totalPoints || 0) + (isCompleted ? pointsEarned * multiplier : 0),
-            tasksCompleted: (user.statistics?.tasksCompleted || 0) + (isCompleted ? 1 : 0),
+            totalPoints: (user.statistics?.totalPoints || 0) + (isCompleted ? pointsEarned * multiplier : -pointsEarned),
+            tasksCompleted: (user.statistics?.tasksCompleted || 0) + (isCompleted ? 1 : -1),
             currentStreak: newStreak,
             lastTaskCompletion: isCompleted ? now : lastCompletion
         });
