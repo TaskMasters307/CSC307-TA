@@ -14,8 +14,11 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
             : "http://localhost:8001";
             console.log('Deleting task with ID:', taskId);
             // Delete from backend
-            const response = await fetch(`/api/tasks/${taskId}`, {
+            const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
                 method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json'
+                }
             });
             if (!response.ok) {
                 throw new Error('Failed to delete task');
