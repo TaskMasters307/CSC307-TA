@@ -91,6 +91,11 @@ function App() {
                             />
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}
+                        {currentView === 'team' && (
+                            <div className="team-container">
+                                <TeamPage />
+                            </div>
+                        )}
                         {currentView === 'settings' && (
                             <Settings
                                 onLogout={handleLogout}

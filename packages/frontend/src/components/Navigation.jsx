@@ -11,6 +11,7 @@ const Navigation = ({ currentView, setCurrentView }) => {
         { view: 'tasks', label: ' Tasks', icon: '📝' },
         { view: 'calendar', label: ' Calendar', icon: '📅' },
         { view: 'leaderboard', label: ' Leaderboard', icon: '🏆' },
+        { view: 'team', label: ' Team', icon: '👥' },
         { view: 'settings', label: ' Settings', icon: '⚙️' },
     ];
     return (
