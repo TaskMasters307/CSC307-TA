@@ -3,6 +3,7 @@ import TaskAdd from './TaskAdd';
 import TaskList from './TaskList';
 import '../css/Task.css';
 const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+//const URL = "http://localhost:8001"
 
 const Task = ({ userId, tasks, setTasks }) => {
     const handleAddTask = async (newTask) => {
@@ -18,7 +19,7 @@ const Task = ({ userId, tasks, setTasks }) => {
             }
 
             const savedTask = await response.json();
-            setTasks((prevTasks) => [...prevTasks, savedTask]); // Update state with the new task
+            setTasks((prevTasks) => [...prevTasks, savedTask]);
         } catch (error) {
             console.error('Error adding task:', error);
         }
@@ -55,7 +56,7 @@ const Task = ({ userId, tasks, setTasks }) => {
 
     return (
         <div className="task-container">
-            <TaskAdd userId={userId} onTaskAdded={handleAddTask} />
+            <TaskAdd userId={userId} onTaskAdded={(newTask) => setTasks((prevTasks) => [...prevTasks, newTask])} />
             <TaskList tasks={tasks} toggleTask={toggleTaskCompletion} />
         </div>
     );

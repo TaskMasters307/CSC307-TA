@@ -6,8 +6,8 @@ import Leaderboard from './components/Leaderboard';
 import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
-const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-
+//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+const URL = "http://localhost:8001"
 
 import './App.css';
 import Signup from './components/Signup';
@@ -29,11 +29,12 @@ function App() {
                 throw new Error(`Failed to fetch tasks: ${response.status}`);
             }
             const data = await response.json();
-            setTasks(data || []); // Set fetched tasks
+            setTasks(data || []); // Replace state with fetched tasks
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
     };
+    
 
     // Handle login success
     const handleLoginSuccess = (id) => {
@@ -53,7 +54,7 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         setUserId(null);
-        setTasks([]); // Clear tasks on logout
+        setTasks([]); 
         setCurrentView('login');
     };
 
