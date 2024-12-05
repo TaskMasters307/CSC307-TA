@@ -5,7 +5,7 @@ const API_URL = deployment
     : "http://localhost:8001";
 
 function FetchSignUp(account) {
-    const promise = fetch(`${API_URL}/api/signup`, {
+    const promise = fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
