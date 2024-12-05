@@ -1,5 +1,6 @@
 import React from 'react'
 import '../css/Task.css'
+import deployment from './env.jsx';
 const TaskList = ({ tasks, toggleTask, setTasks }) => {
     const formatDisplayDate = (dateString) => {
         const taskDate = new Date(dateString);
@@ -9,9 +10,9 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
 
     const deleteTask = async (taskId) => {
         try {
-            const API_URL = process.env.NODE_ENV === 'production' 
+            const API_URL = deployment 
             ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-            : "";
+            : "http://localhost:8001";
             console.log('Deleting task with ID:', taskId);
             // Delete from backend
             const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {

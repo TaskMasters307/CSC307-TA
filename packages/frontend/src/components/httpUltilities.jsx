@@ -1,9 +1,11 @@
-const API_URL = process.env.NODE_ENV === 'production' 
+import deployment from "./env.jsx";
+
+const API_URL = deployment 
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-    : "";
+    : "http://localhost:8001";
 
 function FetchSignUp(account) {
-    const promise = fetch(`${API_URL}/api/signup`, {
+    const promise = fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

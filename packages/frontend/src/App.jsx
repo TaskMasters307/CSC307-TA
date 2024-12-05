@@ -6,8 +6,10 @@ import Leaderboard from './components/Leaderboard';
 import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+import deployment from './components/env.jsx';
+const API_URL = deployment 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "http://localhost:8001";  
 
 import './App.css';
 import Signup from './components/Signup';
@@ -23,7 +25,7 @@ function App() {
     // Function to fetch tasks for the logged-in user
     const fetchUserTasks = async (userId) => {
         try {
-            const response = await fetch(`${URL}/tasks/${userId}`);
+            const response = await fetch(`${API_URL}/api/tasks/${userId}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch tasks: ${response.status}`);
             }
@@ -106,6 +108,11 @@ function App() {
                         />
                       </div>
                       )}
+                        {currentView === 'team' && (
+                            <div className="team-container">
+                                <TeamPage />
+                            </div>
+                        )}
                         {currentView === 'settings' && (
                             <div className="settings-container">
                             <Settings

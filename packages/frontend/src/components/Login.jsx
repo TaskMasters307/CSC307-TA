@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import '../css/LoginSignup.css'
 import logo from '../assets/taskarena-logo.jpeg';
+import deployment from "./env.jsx"
 
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-    : "http://localhost:8001";
+//const deployment = false;
+
+const API_URL = deployment 
+    ? ("https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net")
+    : ("http://localhost:8001");
 
 const Login = ({ onLoginSuccess, PopSignup }) => { // Accept onLoginSuccess prop
     const [username, setUsername] = useState('');
