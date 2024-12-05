@@ -66,6 +66,43 @@ function deleteUser(id) {
   return userModel.findByIdAndDelete(id);
 }
 
+async function updateUserStats(userId, updates) {
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Update statistics
+    user.statistics = {
+      ...user.statistics,
+      ...updates
+    };
+
+    // Save and return updated user
+    return await user.save();
+  } catch (error) {
+    console.error('Error updating user stats:', error);
+    throw error;
+  }
+}
+
+async function getUserStats(userId) {
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return {
+      username: user.username,
+      ...user.statistics
+    };
+  } catch (error) {
+    console.error('Error getting user stats:', error);
+    throw error;
+  }
+}
+
 export default {
   addUser,
   getUsers,
@@ -74,5 +111,6 @@ export default {
   findUserByJob,
   deleteUser,
   findOneAccount,
-
+  updateUserStats,
+  getUserStats
 };

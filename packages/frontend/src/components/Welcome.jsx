@@ -1,43 +1,77 @@
 // src/components/Welcome.jsx
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import '../css/Welcome.css'
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
-const Welcome = ({ setCurrentView, username = 'User' }) => {
-    // Quick Navigation, not really necessary but looks cool i guess
-    /*const quickNavButtons = [
-        { view: 'tasks', label: 'Task List', icon: '📝' },
-        { view: 'calendar', label: 'Calendar', icon: '📅' },
-        { view: 'leaderboard', label: 'Leaderboard', icon: '🏆' },
-    ]
-    */
-    // Stats summary, currently hard coded but will need to link with database
-    // IDEA: add a point multiplier for current streak?
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "";
+
+const Welcome = ({ userId }) => {
+    const [stats, setStats] = useState({
+        username: '',
+        totalPoints: 0,
+        tasksCompleted: 0,
+        currentStreak: 0,
+        multiplier: 1.0,
+        rank: '-'
+    });
+
+    useEffect(() => {
+        const fetchUserStats = async () => {
+            if (!userId) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/users/${userId}/stats`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user stats');
+                }
+                const data = await response.json();
+                
+                // Calculate multiplier based on streak
+                const multiplier = 1 + (Math.min(data.currentStreak, 7) * 0.1);
+                
+                setStats({
+                    username: data.username,
+                    totalPoints: Math.round(data.totalPoints),
+                    tasksCompleted: data.tasksCompleted,
+                    currentStreak: data.currentStreak,
+                    multiplier: multiplier.toFixed(1),
+                    rank: data.rank || '-'
+                });
+            } catch (error) {
+                console.error('Error fetching user stats:', error);
+            }
+        };
+
+        fetchUserStats();
+    }, [userId]);
+
     return (
         <div className="welcome">
-            <h2>Welcome, {username}!</h2>
+            <h2>Welcome, {stats.username}!</h2>
             <div className="stats-summary">
                 <div className="stat-card">
                     <h3>Your Points</h3>
-                    <p className="stat-value">150</p>
+                    <p className="stat-value">{stats.totalPoints}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Tasks Completed</h3>
-                    <p className="stat-value">12</p>
+                    <p className="stat-value">{stats.tasksCompleted}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Streak</h3>
-                    <p className="stat-value">5 days</p>
+                    <p className="stat-value">{stats.currentStreak}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Point Multiplier</h3>
-                    <p className="stat-value">1.5X</p>
+                    <p className="stat-value">{stats.multiplier}X</p>
                 </div>
                 <div className="stat-card">
                     <h3>Current Global Rank</h3>
-                    <p className="stat-value">#5</p>
+                    <p className="stat-value">#{stats.rank}</p>
                 </div>
             </div>
         </div>

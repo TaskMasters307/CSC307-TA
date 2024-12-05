@@ -7,6 +7,7 @@ import "./auth.js"
 import { authenticateUser, loginUser2, registerUser } from './auth.js';
 import  dotenv from "dotenv"
 import mongoose from 'mongoose';
+import userRoutes from './routes/userRouter.js'
 
 dotenv.config()
 const app = express()
@@ -15,6 +16,7 @@ const port = process.env.PORT || 8001
 app.use(cors())
 app.use(express.json())
 app.use('/api/tasks', taskRoutes);
+app.use('/api/users', userRoutes);
 
 mongoose
     .connect(
