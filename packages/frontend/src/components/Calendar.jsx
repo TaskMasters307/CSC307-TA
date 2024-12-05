@@ -94,6 +94,11 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
 
 // Helper function to generate all dates for the current month
 const generateDatesForMonth = (currentDate) => {
+    
+    console.log(currentDate); // Add this line
+        
+ 
+    
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const firstOfMonth = new Date(year, month, 1);
