@@ -100,42 +100,46 @@ async function handleTaskCompletion(taskId, isCompleted) {
             } else {
                 newStreak = 1; //First ever task
             }
-        
-        // Check for missed days and reset streak if needed
-        const hasTasksDueToday = await Task.exists({
-            userId: task.userId,
-            date: today.toISOString().split('T')[0],
-            isCompleted: false
-        });
+            // Calculate multiplier based on streak
+            const multiplier = 1 + (Math.min(newStreak, 20) * 0.1); // Max 3x multiplier
+            const totalPointsEarned = Math.round(pointsEarned * multiplier);
 
-            const hasUncompletedPastTasks = await Task.exists({
-                userId: task.userId,
-                date: { $lt: today.toISOString().split('T')[0] },
-                isCompleted: false
+            // Update user stats
+            await userServices.updateUserStats(task.userId, {
+                totalPoints: (user.statistics?.totalPoints || 0) + totalPointsEarned,
+                tasksCompleted: (user.statistics?.tasksCompleted || 0) + (isCompleted ? 1 : -1),
+                currentStreak: newStreak,
+                lastTaskCompletion: now
             });
 
-            if (hasUncompletedPastTasks || (hasTasksDueToday && !isCompleted)) {
-                newStreak = 0;  // Reset streak if tasks were missed
-            }
+            // Update task
+            return await Task.findByIdAndUpdate(
+                taskId,
+                { isCompleted: true,
+                    pointsAwarded: totalPointsEarned
+                },
+                { new: true }
+            );
+        } else {
+            // Task is being uncompleted
+            // Subtract the exact points that were awarded
+            await userServices.updateUserStats(task.userId, {
+                totalPoints: (user.statistics?.totalPoints || 0) - (task.pointsAwarded || 0),
+                tasksCompleted: (user.statistics?.tasksCompleted || 0) - 1,
+                currentStreak: newStreak, // Maintain streak logic
+                lastTaskCompletion: lastCompletion
+            });
+
+            // Reset the points awarded when uncompleting
+            return await Task.findByIdAndUpdate(
+                taskId,
+                { 
+                    isCompleted: false,
+                    pointsAwarded: 0 
+                },
+                { new: true }
+            );
         }
-
-        // Calculate multiplier based on streak
-        const multiplier = 1 + (Math.min(newStreak, 20) * 0.1); // Max 3x multiplier
-
-        // Update user stats
-        await userServices.updateUserStats(task.userId, {
-            totalPoints: (user.statistics?.totalPoints || 0) + (isCompleted ? pointsEarned * multiplier : -pointsEarned),
-            tasksCompleted: (user.statistics?.tasksCompleted || 0) + (isCompleted ? 1 : -1),
-            currentStreak: newStreak,
-            lastTaskCompletion: isCompleted ? now : lastCompletion
-        });
-
-        // Update task
-        return await Task.findByIdAndUpdate(
-            taskId,
-            { isCompleted },
-            { new: true }
-        );
     } catch (error) {
         console.error('Error in handleTaskCompletion:', error.message);
         throw error;

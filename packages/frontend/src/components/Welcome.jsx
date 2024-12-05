@@ -9,8 +9,9 @@ const API_URL = process.env.NODE_ENV === 'production'
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
     : "";
 
-const Welcome = ({ username = 'User', userId }) => {
+const Welcome = ({ userId }) => {
     const [stats, setStats] = useState({
+        username: '',
         totalPoints: 0,
         tasksCompleted: 0,
         currentStreak: 0,
@@ -33,6 +34,7 @@ const Welcome = ({ username = 'User', userId }) => {
                 const multiplier = 1 + (Math.min(data.currentStreak, 7) * 0.1);
                 
                 setStats({
+                    username: data.username,
                     totalPoints: Math.round(data.totalPoints),
                     tasksCompleted: data.tasksCompleted,
                     currentStreak: data.currentStreak,
@@ -49,7 +51,7 @@ const Welcome = ({ username = 'User', userId }) => {
 
     return (
         <div className="welcome">
-            <h2>Welcome, {username}!</h2>
+            <h2>Welcome, {stats.username}!</h2>
             <div className="stats-summary">
                 <div className="stat-card">
                     <h3>Your Points</h3>
