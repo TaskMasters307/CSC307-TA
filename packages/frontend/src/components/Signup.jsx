@@ -75,9 +75,9 @@ function Signup({ closeForm, LoginSuccess }) {
     }
 
     return (
-        <div className="Signup-Form" id="myForm">
-            <img src={logo} alt="Task Arena" className="task-arena-logo" />
-            <h1 className="Signup-header">Sign Up</h1>
+        <div> <img src={logo} alt="Task Arena" className="task-arena-logo" />
+            <div className="login-container">
+            <h2 className="Signup-header">Sign Up</h2>
             <form className="Signup-form">
                 <label className="login-label">
                     <b>Username</b>
@@ -128,6 +128,7 @@ function Signup({ closeForm, LoginSuccess }) {
                     Close
                 </button>
             </form>
+            </div>
         </div>
     )
 }
