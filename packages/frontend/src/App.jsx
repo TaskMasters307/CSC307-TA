@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from './components/Calendar';
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
@@ -63,6 +63,10 @@ function App() {
         setCurrentView('signup');
     };
 
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', isDarkMode);
+    }, [isDarkMode]);
+    
     return (
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             {isLoggedIn ? (
@@ -74,29 +78,41 @@ function App() {
                     />
                     <main>
                         {currentView === 'welcome' && (
-                            <Welcome
+                            <div className="welcome-container">
+                                <Welcome
                                 setCurrentView={setCurrentView}
                                 username={username}
                             />
+                            </div>
                         )}
                         {currentView === 'tasks' && (
+                            <div className="task-container">
                             <Task userId={userId} tasks={tasks} setTasks={setTasks} />
+                            </div>
                         )}
                         {currentView === 'calendar' && (
+                            <div className="calendar-container">
                             <Calendar
-                                selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
-                                tasks={tasks}
-                                setTasks={setTasks}
+                              selectedDate={selectedDate}
+                              setSelectedDate={setSelectedDate}
+                              tasks={tasks}
+                              setTasks={setTasks}
                             />
+                            </div>
                         )}
-                        {currentView === 'leaderboard' && <Leaderboard />}
+                        {currentView === 'leaderboard' && (
+                        <div className="leaderboard-container">
+                        <Leaderboard />
+                      </div>
+                      )}
                         {currentView === 'settings' && (
+                            <div className="settings-container">
                             <Settings
                                 onLogout={handleLogout}
                                 toggleDarkMode={toggleDarkMode}
                                 isDarkMode={isDarkMode}
                             />
+                            </div>
                         )}
                     </main>
                 </div>
