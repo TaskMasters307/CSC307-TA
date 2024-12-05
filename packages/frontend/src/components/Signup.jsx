@@ -1,83 +1,77 @@
 import React, { useState } from 'react';
-import { Is_User_Name_Exist } from './Utilities'
-import { FetchSignUp } from './httpUltilities'
-import logo from '../assets/taskarena-logo.jpeg';
-import '../css/LoginSignup.css'
+import { Is_User_Name_Exist } from './Utilities';
+import { FetchSignUp } from './httpUltilities';
 
 function Signup({ closeForm, LoginSuccess }) {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const validateUsername = (username) => {
+        const usernameRegex = /^[a-zA-Z0-9]{3,20}$/; // Allows 3-20 alphanumeric characters
+        return usernameRegex.test(username);
+    };
 
     async function CreateAccount(account) {
         Is_User_Name_Exist(username)
             .then((exist) => {
                 if (exist) {
-                    setError('Account already exists');
+                    setError('Username already exists.');
                 } else {
                     FetchSignUp(account)
                         .then((res) => {
                             if (res.status === 500) {
-                                setError('Error: Unable to create account');
-                                throw new Error('PostUser error 500');
+                                setError('Error creating account.');
                             } else {
-                                res.json().then((data) => {
-                                    alert('Account created successfully');
-                                    LoginSuccess(data.userId); // Pass the userId to LoginSuccess
-                                });
+                                alert('Account created successfully!');
+                                LoginSuccess();
                             }
                         })
                         .catch((error) => {
-                            console.log('Error during account creation:', error);
+                            console.error('Error during sign-up:', error);
                         });
                 }
             })
-            .catch((error) => {
-                console.log('Error checking username existence:', error);
+            .catch(() => {
+                console.error('Error checking username existence.');
+                setError('An error occurred. Please try again.');
             });
     }
-    
 
     function handleSignup(e) {
-        e.preventDefault()
-        setError(null)
+        e.preventDefault();
+        setError(null);
+
         if (!username || !password) {
-            setError('Username and password are required.')
-            return
-        } else {
-            const account = { username: username, password: password }
-            //console.log("account= " , account);
-            CreateAccount(account)
+            setError('Username and password are required.');
+            return;
+        }
 
-            /* if(!Is_User_Name_Exist(username)) {
-        console.log("creating account");
-        postUser(account).
-        then((res) => {
-        //console.log(res.status);
-        if(res.status === 500) {
-          throw new Error("error ading user");
+        if (!validateUsername(username)) {
+            setError(
+                'Username must be 3-20 characters long and contain only alphanumeric characters.'
+            );
+            return;
         }
-        else {
-          console.log(res.json());
-          return res.json();
-        }
-        
-        }).then((data) => {
 
-          alert(`Sign up successful`);
-        }).catch((error) => {
-          console.log("catching error:", error);
-        })
-      }
-      else {
-        //alert("Username already exsits");
-      } */
+        if (!validatePassword(password)) {
+            setError(
+                'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+            );
+            return;
         }
+
+        const account = { username, password };
+        CreateAccount(account);
     }
 
     return (
         <div className="Signup-Form" id="myForm">
-            <img src={logo} alt="Task Arena" className="task-arena-logo" />
             <h1 className="Signup-header">Sign Up</h1>
             <form className="Signup-form">
                 <label className="login-label">
@@ -89,9 +83,7 @@ function Signup({ closeForm, LoginSuccess }) {
                     name="username"
                     required
                     value={username}
-                    onChange={(e) => {
-                        setUsername(e.target.value)
-                    }}
+                    onChange={(e) => setUsername(e.target.value)}
                 ></input>
 
                 <label className="login-label">
@@ -103,10 +95,9 @@ function Signup({ closeForm, LoginSuccess }) {
                     name="password"
                     required
                     value={password}
-                    onChange={(e) => {
-                        setPassword(e.target.value)
-                    }}
+                    onChange={(e) => setPassword(e.target.value)}
                 ></input>
+
                 {error && (
                     <p
                         className={`signup-error-message ${error ? 'animate' : ''}`}
@@ -114,6 +105,7 @@ function Signup({ closeForm, LoginSuccess }) {
                         {error}
                     </p>
                 )}
+
                 <button
                     type="submit"
                     className="login-button"
@@ -130,6 +122,7 @@ function Signup({ closeForm, LoginSuccess }) {
                 </button>
             </form>
         </div>
-    )
+    );
 }
-export default Signup
+
+export default Signup;
