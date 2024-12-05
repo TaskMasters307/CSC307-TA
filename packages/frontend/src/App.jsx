@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
 import deployment from './components/env.jsx';
+import TeamPage from './components/TeamPage.jsx'
 const API_URL = deployment 
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
     : "http://localhost:8001";  

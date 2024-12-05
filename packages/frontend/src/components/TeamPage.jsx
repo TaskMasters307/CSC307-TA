@@ -5,7 +5,7 @@ import arianhoush from '../assets/arianhoush.jpeg';
 import trey_martin from '../assets/trey_martin.jpeg';
 import Austin from '../assets/Austin.jpg';
 import duy from '../assets/duy.png';
-import sameer from '../assets/sameer.JPG';
+import sameer from '../assets/sameer.jpg';
 
 const TeamPage = () => {
   const teamMembers = [
