@@ -4,17 +4,19 @@
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
-    background-color: #ebead4
+    min-height: 100vh;
+    background-color: #ebead4;
+    transition: background-color 0.3s ease;
   }
   
   .app {
-    min-height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: inherit;
   }
   
   h1 {
@@ -58,6 +60,11 @@ body, html {
   }
   
   /* Dark mode styles */
+
+  body.dark-mode {
+    background-color: #1f1f1f;
+  }
+
   .dark-mode,
   .dark-mode body,
   .dark-mode html

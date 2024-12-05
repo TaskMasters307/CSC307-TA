@@ -74,13 +74,19 @@ async function handleTaskCompletion(taskId, isCompleted) {
         // Calculate streak
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const taskDueDate = new Date(task.date); // Convert task due date to Date object
         const lastCompletion = user.statistics?.lastTaskCompletion
             ? new Date(user.statistics.lastTaskCompletion) 
             : null;
         let newStreak = user.statistics?.currentStreak || 0;
+
         if (isCompleted) {
-            if (lastCompletion) {
-                // If completing a task
+            // Check if the task is being completed after its due date
+            if (today > taskDueDate) {
+                // Task is overdue, reset streak
+                newStreak = 0;
+            } else if (lastCompletion) {
+                // Task is completed on time, check streak continuation
                 const lastCompletionDate = new Date(
                     lastCompletion.getFullYear(),
                     lastCompletion.getMonth(),
@@ -91,15 +97,20 @@ async function handleTaskCompletion(taskId, isCompleted) {
                 const daysDiff = Math.floor((today - lastCompletionDate) / (1000 * 60 * 60 * 24));
 
                 if (daysDiff === 0) {
-                    // Completion before due date, maintain streak
+                    // Same day completion
+                    newStreak += 1;
+                } else if (daysDiff === 1) {
+                    // Next day completion
                     newStreak += 1;
                 } else {
-                    // More than one day gap, reset streak
+                    // Gap in completions
                     newStreak = 1;
                 }
             } else {
-                newStreak = 1; //First ever task
+                // First ever task completion
+                newStreak = 1;
             }
+
             // Calculate multiplier based on streak
             const multiplier = 1 + (Math.min(newStreak, 20) * 0.1); // Max 3x multiplier
             const totalPointsEarned = Math.round(pointsEarned * multiplier);
