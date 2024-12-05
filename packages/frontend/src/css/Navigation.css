@@ -1,4 +1,4 @@
-/* Navigation css*/
+/* Navigation CSS */
 .navigation {
     display: flex;
     justify-content: center;
@@ -6,15 +6,26 @@
     margin-bottom: 20px;
 }
 
-.navigation button {
+.navigation a {
     padding: 8px 16px;
     border: 1px solid #ddd;
     background: white;
+    text-decoration: none; /* Removes the underline */
+    color: black; /* Default text color */
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.navigation button.active {
-    background: #007bff;
-    color: white;
-    border-color: #0056b3;
+.navigation a:hover {
+    background: #f0f0f0; /* Change background color on hover */
+}
+
+.navigation a.active {
+    background: #007bff; /* Active background */
+    color: white; /* Active text color */
+    border-color: #0056b3; /* Active border color */
+}
+
+.navigation a:visited {
+    color: black; /* Ensure visited links have the same color as unvisited */
 }

@@ -1,29 +1,33 @@
-// src/components/Navigation.jsx
 import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import '../css/Navigation.css'
+
 /**
  * Navigation Component
- * Handles switching between different views
+ * Handles navigation between different views using React Router
  */
-const Navigation = ({ currentView, setCurrentView }) => {
+const Navigation = () => {
+    const location = useLocation();
+
     const navItems = [
-        { view: 'welcome', label: ' Home', icon: '🏠' },
-        { view: 'tasks', label: ' Tasks', icon: '📝' },
-        { view: 'calendar', label: ' Calendar', icon: '📅' },
-        { view: 'leaderboard', label: ' Leaderboard', icon: '🏆' },
-        { view: 'settings', label: ' Settings', icon: '⚙️' },
+        { path: '/welcome', view: 'welcome', label: ' Home', icon: '🏠' },
+        { path: '/tasks', view: 'tasks', label: ' Tasks', icon: '📝' },
+        { path: '/calendar', view: 'calendar', label: ' Calendar', icon: '📅' },
+        { path: '/leaderboard', view: 'leaderboard', label: ' Leaderboard', icon: '🏆' },
+        { path: '/settings', view: 'settings', label: ' Settings', icon: '⚙️' },
     ];
+
     return (
         <nav className="navigation">
             {navItems.map(item => (
-                <button
+                <Link
                     key={item.view}
-                    className={`nav-button ${currentView === item.view ? 'active' : ''}`}
-                    onClick={() => setCurrentView(item.view)}
+                    to={item.path}
+                    className={`nav-button ${location.pathname === item.path ? 'active' : ''}`}
                 >
                     <span className="nav-icon">{item.icon}</span>
                     <span className="nav-label">{item.label}</span>
-                </button>
+                </Link>
             ))}
         </nav>
     );
