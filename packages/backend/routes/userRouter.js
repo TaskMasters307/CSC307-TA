@@ -16,6 +16,21 @@ router.get('/:userId/stats', async (req, res) => {
     }
 });
 
+router.get('/:userId/rank', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const rank = await userServices.getUserRank(userId);
+        if (rank === null) {
+            res.status(404).json({ error: 'User not found' });
+        } else {
+            res.status(200).json({ rank });
+        }
+    } catch (error) {
+        console.error('Error fetching user rank:', error);
+        res.status(500).json({ error: 'Failed to fetch user rank' });
+    }
+});
+
 // Update user statistics (called when tasks are completed)
 router.put('/:userId/stats', async (req, res) => {
     const userId = req.params.userId;

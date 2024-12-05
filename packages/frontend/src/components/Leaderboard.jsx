@@ -21,7 +21,6 @@ const Leaderboard = () => {
                     throw new Error('Failed to fetch leaderboard data');
                 }
                 const data = await response.json();
-                console.log('Leaderboard data received:', data)
                 if (isMounted){
                     setLeaderboardData(data);
                     setIsLoading(false);
