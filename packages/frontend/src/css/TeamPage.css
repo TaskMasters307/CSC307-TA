@@ -153,6 +153,47 @@
     border-color: #444;
 }
 
+/* Team Vision Section */
+.team-vision-container {
+    text-align: center;
+    margin-bottom: 2rem; /* Add spacing below the vision section */
+    padding: 1rem 2rem; /* Optional: Add padding around the vision section */
+    background: #f9fafb; /* Optional: Light background for distinction */
+    border-radius: 8px; /* Optional: Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
+}
+
+.vision-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #3b82f6; /* Match the team title color */
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.vision-description {
+    font-size: 1.1rem;
+    color: #64748b; /* Match the team description color */
+    line-height: 1.6; /* Improve readability */
+    max-width: 800px; /* Optional: Limit text width for better layout */
+    margin: 0 2rem; /* Center the text */
+}
+
+.dark-mode .team-vision-container {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+    box-shadow: none;
+}
+
+.dark-mode .vision-title {
+    color: #60a5fa; /* Lighter blue for dark mode */
+}
+
+.dark-mode .vision-description {
+    color: #e2e8f0; /* Light text for dark mode */
+}
+
+
 /* Responsive design matching Task.css breakpoints */
 @media (max-width: 968px) {
     .team-grid {
