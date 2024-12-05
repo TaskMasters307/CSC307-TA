@@ -12,9 +12,7 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
             .map((task) => (
                 <div
                     key={task._id}
-                    className={`calendar-task ${task.priority} ${
-                        task.isCompleted ? 'completed' : ''
-                    }`}
+                    className={`calendar-task ${task.priority} ${task.isCompleted ? 'completed' : ''}`}
                     draggable
                     onDragStart={(e) => handleDragStart(e, task._id)}
                 >
@@ -32,10 +30,11 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
     const handleDrop = (e, date) => {
         e.preventDefault();
         const taskId = e.dataTransfer.getData('taskId');
-        const updatedTasks = tasks.map((task) =>
-            task._id === taskId ? { ...task, date } : task
-        );
-        setTasks(updatedTasks);
+        setTasks(tasks.map(task => 
+            task.id === taskId 
+                ? { ...task, date: date }
+                : task
+        ));
     };
 
     const handleDragOver = (e) => {
@@ -94,30 +93,38 @@ const Calendar = ({ selectedDate, setSelectedDate, tasks, setTasks }) => {
 
 // Helper function to generate all dates for the current month
 const generateDatesForMonth = (currentDate) => {
+    // Get first day of current month
+    const firstOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+    );
     
-    console.log(currentDate); // Add this line
-        
- 
-    
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstOfMonth = new Date(year, month, 1);
+    const daysInMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+    ).getDate();
+
     const firstDayOfWeek = firstOfMonth.getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
     const dates = [];
 
-    // Add empty slots for days before the first day of the month
+    // Add empty slots for previous month
     for (let i = 0; i < firstDayOfWeek; i++) {
         dates.push(null);
     }
 
-    // Add actual dates for the month
+    // Add dates for current month starting from 0 to offset the visual shift
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day).toISOString().split('T')[0];
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day + 1
+        ).toISOString().split('T')[0];
         dates.push(date);
     }
 
     return dates;
-};
+}
 
 export default Calendar;

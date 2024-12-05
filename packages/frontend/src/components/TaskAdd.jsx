@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 //import { AddUserTask } from './httpUltilities.jsx'
 import '../css/Task.css'
-const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-
+//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+const URL = "http://localhost:8001"
 /**
  * TaskAdd Component
  * Form for adding new tasks with date and priority
@@ -13,18 +13,25 @@ const TaskAdd = ({ userId, onTaskAdded }) => {
     const [priority, setPriority] = useState('low');
 
     const handleAddTask = () => {
+        // Validate input fields
         if (!title || !date || !userId) {
             console.error('Missing fields: title, date, or userId');
             return;
         }
-
-        const newTask = { title, date, priority, userId };
+        const taskDate = new Date(date);
+        taskDate.setDate(taskDate.getDate() + 1);
+        const newTask = { 
+            id: Date.now(), 
+            title, 
+            date: taskDate.toISOString().split('T')[0], 
+            priority, 
+            userId };
         console.log('Adding task:', newTask);
-
+    
         fetch(`${URL}/tasks`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newTask),
+            body: JSON.stringify(newTask), // Ensure newTask is a plain object
         })
             .then((response) => {
                 if (!response.ok) {
@@ -34,13 +41,14 @@ const TaskAdd = ({ userId, onTaskAdded }) => {
             })
             .then((task) => {
                 console.log('Task added successfully:', task);
-                onTaskAdded(task);
+                onTaskAdded(task); // Add the task to the parent state
                 setTitle('');
                 setDate('');
                 setPriority('low');
             })
             .catch((error) => console.error('Error adding task:', error));
     };
+    
 
 
     return (

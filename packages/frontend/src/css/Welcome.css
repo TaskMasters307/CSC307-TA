@@ -12,16 +12,17 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-.welcome {
+.welcome-container {
     padding: 2rem;
     background: white;
     border-radius: 16px;
     box-shadow: var(--shadow-md);
     max-width: 1200px;
     margin: 0 auto;
+    border: none
 }
 
-.welcome h2 {
+.welcome-container h2 {
     color: var(--text-primary);
     font-size: 2rem;
     font-weight: 700;
@@ -44,7 +45,7 @@
     border-radius: 12px;
     text-align: center;
     transition: all 0.3s ease;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #ebead4;
     position: relative;
     overflow: hidden;
 }
@@ -89,59 +90,6 @@
     justify-content: center;
     gap: 0.25rem;
 }
-/*
-.quick-nav {
-    margin-top: 2.5rem;
-}
-
-.quick-nav h3 {
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    padding-left: 0.5rem;
-    border-left: 4px solid var(--primary-color);
-  }
-
-.quick-nav-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.quick-nav-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1rem 1.5rem;
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-.quick-nav-button:hover {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.icon {
-    font-size: 1.25rem;
-    transition: transform 0.2s ease;
-}
-
-.quick-nav-button:hover .icon {
-    transform: scale(1.1);
-  }
-    */
   
   /* Responsive adjustments */
   @media (max-width: 768px) {
@@ -158,3 +106,32 @@
       font-size: 1.5rem;
     }
   }
+
+/* Dark Mode Styles */
+.dark-mode .welcome-container {
+    background-color: #2f2f2f;
+    color: #f5f5f5;
+    box-shadow: none;
+    border: none;
+}
+
+.dark-mode .welcome-container h2 {
+    color: #3b82f6; /* Match the stat value color in dark mode as well */
+}
+
+.dark-mode .stats-summary .stat-card {
+    background-color: #1f1f1f;
+    border-color: #444;
+}
+
+.dark-mode .stats-summary .stat-card::before {
+    opacity: 1;
+}
+
+.dark-mode .stats-summary .stat-card:hover {
+    border-color: var(--primary-light);
+}
+
+.dark-mode .stat-value {
+    color: var(--primary-light);
+}
