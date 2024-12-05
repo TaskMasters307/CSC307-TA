@@ -105,6 +105,11 @@ function App() {
                         <Leaderboard />
                       </div>
                       )}
+                        {currentView === 'team' && (
+                            <div className="team-container">
+                                <TeamPage />
+                            </div>
+                        )}
                         {currentView === 'settings' && (
                             <div className="settings-container">
                             <Settings
