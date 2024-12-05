@@ -66,6 +66,27 @@ function deleteUser(id) {
   return userModel.findByIdAndDelete(id);
 }
 
+async function appPoints(userId, points) {
+  if (!userId || typeof points !== "number" || points <= 0) {
+    throw new Error("Invalid input for appPoints");
+  }
+
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    user.totalPoints += points;
+    await user.save();
+    console.log(`Points updated successfully for user ${userId}: ${user.totalPoints}`);
+    return user;
+  } catch (error) {
+    console.error("Error updating points:", error);
+    throw error;
+  }
+}
+
 export default {
   addUser,
   getUsers,
@@ -74,5 +95,6 @@ export default {
   findUserByJob,
   deleteUser,
   findOneAccount,
+  appPoints
 
 };

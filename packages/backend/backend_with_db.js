@@ -86,6 +86,31 @@ app.get('/tasks/:userId', async (req, res) => {
     }
 });
 
+app.get('/users/:userId/stats', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const tasksCompleted = await Task.countDocuments({
+            userId: userId,
+            isCompleted: true,
+        });
+
+        res.status(200).json({
+            totalPoints: user.totalPoints,
+            tasksCompleted,
+        });
+    } catch (error) {
+        console.error('Error fetching user stats:', error);
+        res.status(500).send('Failed to fetch user stats');
+    }
+});
+
+
 
 //   ADD USER
 app.post('/signup', registerUser, async (req, res, next) => {
@@ -149,6 +174,33 @@ app.put('/tasks/:taskId', async (req, res) => {
         res.status(500).send({ error: 'Failed to update task' });
     }
 });
+
+app.put('/users/:userId/addPoints', async (req, res) => {
+    console.log('Request body:', req.body); // Add this line for debugging
+    const { userId } = req.params;
+    const { points } = req.body;
+
+    if (!points || typeof points !== 'number') {
+        console.log('Invalid points data:', points);
+        return res.status(400).send('Invalid points data');
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        user.totalPoints += points;
+        await user.save();
+
+        res.status(200).send({ message: 'Points updated successfully', user });
+    } catch (error) {
+        console.error('Error updating user points:', error);
+        res.status(500).send('Failed to update user points');
+    }
+});
+
 
 
 

@@ -1,47 +1,52 @@
-// src/components/Welcome.jsx
-import React from 'react'
-import '../css/Welcome.css'
+import React, { useEffect, useState } from 'react';
+import '../css/Welcome.css';
+
+const URL = "http://localhost:8001"; // Change to your backend URL
+
 /**
  * Welcome Component
  * Landing page that displays user welcome message and quick access to main features
  */
-const Welcome = ({ setCurrentView, username = 'User' }) => {
-    // Quick Navigation, not really necessary but looks cool i guess
-    /*const quickNavButtons = [
-        { view: 'tasks', label: 'Task List', icon: '📝' },
-        { view: 'calendar', label: 'Calendar', icon: '📅' },
-        { view: 'leaderboard', label: 'Leaderboard', icon: '🏆' },
-    ]
-    */
-    // Stats summary, currently hard coded but will need to link with database
-    // IDEA: add a point multiplier for current streak?
+const Welcome = ({ setCurrentView, userId, username = 'User' }) => {
+    const [userStats, setUserStats] = useState({
+        totalPoints: 0,
+        tasksCompleted: 0,
+    });
+
+    useEffect(() => {
+        if (userId) {
+            fetchUserStats(userId);
+        }
+    }, [userId]);
+
+    const fetchUserStats = async (id) => {
+        try {
+            const response = await fetch(`${URL}/users/${id}/stats`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user stats: ${response.status}`);
+            }
+            const data = await response.json();
+            setUserStats(data);
+        } catch (error) {
+            console.error('Error fetching user stats:', error);
+        }
+    };
+
     return (
         <div className="welcome">
             <h2>Welcome, {username}!</h2>
             <div className="stats-summary">
                 <div className="stat-card">
                     <h3>Your Points</h3>
-                    <p className="stat-value">150</p>
+                    <p className="stat-value">{userStats.totalPoints}</p>
                 </div>
                 <div className="stat-card">
                     <h3>Tasks Completed</h3>
-                    <p className="stat-value">12</p>
-                </div>
-                <div className="stat-card">
-                    <h3>Current Streak</h3>
-                    <p className="stat-value">5 days</p>
-                </div>
-                <div className="stat-card">
-                    <h3>Point Multiplier</h3>
-                    <p className="stat-value">1.5X</p>
-                </div>
-                <div className="stat-card">
-                    <h3>Current Global Rank</h3>
-                    <p className="stat-value">#5</p>
+                    <p className="stat-value">{userStats.tasksCompleted}</p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Welcome
+export default Welcome;
