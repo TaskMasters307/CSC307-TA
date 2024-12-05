@@ -9,6 +9,9 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
 
     const deleteTask = async (taskId) => {
         try {
+            const API_URL = process.env.NODE_ENV === 'production' 
+            ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+            : "http://localhost:8001";
             console.log('Deleting task with ID:', taskId);
             // Delete from backend
             const response = await fetch(`/api/tasks/${taskId}`, {
