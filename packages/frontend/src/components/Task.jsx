@@ -76,7 +76,7 @@ const Task = ({ userId, tasks, setTasks }) => {
     return (
         <div className="task-container">
             <div className="task-controls">
-                <TaskAdd userId={userId} onTaskAdded={handleAddTask} />
+                <TaskAdd userId={userId} onTaskAdded={(newTask) => setTasks((prevTasks) => [...prevTasks, newTask])} />
                 <div className="task-list-container">
                     <TaskList tasks={filteredTasks} 
                     toggleTask={toggleTaskCompletion}
