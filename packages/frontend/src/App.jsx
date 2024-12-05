@@ -56,6 +56,9 @@ function App() {
     };
 
     const handleLogout = () => {
+        setIsDarkMode(false);
+        document.body.classList.remove('dark-mode');
+
         setIsLoggedIn(false);
         setUserId(null);
         setTasks([]);
