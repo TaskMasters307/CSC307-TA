@@ -2,16 +2,31 @@ import express from 'express'
 import cors from 'cors'
 import taskServices from './models/task-services.js'
 import userServices from './models/user-services.js'
-
+import taskRoutes from './routes/taskRouter.js'
 import "./auth.js"
 import { authenticateUser, loginUser2, registerUser } from './auth.js';
 import  dotenv from "dotenv"
+import mongoose from 'mongoose';
+
 dotenv.config()
 const app = express()
 const port = process.env.PORT || 8001
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/tasks', taskRoutes);
+
+mongoose
+    .connect(
+        'mongodb+srv://csc-307-ta:csc307ta@csc-307-ta.j0i3u.mongodb.net/hashPassword?retryWrites=true&w=majority&appName=CSC-307-TA',
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }
+    )
+    .catch((error) =>
+        console.log('cant connect to mongodb\nERROR say:\n', error)
+    );
 
 console.log(`process.env.SECRET_TOKEN`, process.env.TOKEN_SECRET)
 console.log(`process.env.MONGODB_URI`, process.env.MONGODB_URI)
@@ -112,45 +127,6 @@ app.post('/login', loginUser2, async (req, res) => {
         res.status(500).json({ error: "An error occurred during login" });
     }
 });
-
-
-
-
-
-app.post('/tasks', async (req, res) => {
-    const { title, date, priority, userId } = req.body;
-
-    if (!title || !date || !userId) {
-        return res.status(400).send('Missing required fields');
-    }
-
-    try {
-        const task = await taskServices.addTask({ title, date, priority, userId });
-        res.status(201).send(task);
-    } catch (error) {
-        console.error('Error adding task:', error);
-        res.status(500).send('Error adding task');
-    }
-});
-
-app.put('/tasks/:taskId', async (req, res) => {
-    const { taskId } = req.params;
-    const updatedData = req.body;
-
-    try {
-
-        const updatedTask = await taskServices.findByIdAndUpdate(taskId, updatedData, { new: true });
-        if (!updatedTask) {
-            return res.status(404).send({ error: 'Task not found' });
-        }
-        res.status(200).json(updatedTask);
-    } catch (error) {
-        console.error('Error updating task:', error);
-        res.status(500).send({ error: 'Failed to update task' });
-    }
-});
-
-
 
 //-------------delete-----------------
 app.delete('/users/:id', async (req, res) => {

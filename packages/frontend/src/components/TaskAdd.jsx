@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 //import { AddUserTask } from './httpUltilities.jsx'
 import '../css/Task.css'
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "";
 /**
  * TaskAdd Component
  * Form for adding new tasks with date and priority
@@ -27,7 +29,7 @@ const TaskAdd = ({ userId, onTaskAdded }) => {
             userId };
         console.log('Adding task:', newTask);
 
-        fetch(`${URL}/tasks`, {
+        fetch(`${API_URL}/api/tasks`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newTask),

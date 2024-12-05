@@ -1,7 +1,9 @@
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "";
+
 function FetchSignUp(account) {
-    const promise = fetch(`${URL}/signup`, {
+    const promise = fetch(`${API_URL}/api/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +18,7 @@ function FetchSignUp(account) {
   }
 
   function FetchLogin(account) {
-    const promise = fetch(`${URL}/login`, {
+    const promise = fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,12 +33,12 @@ function FetchSignUp(account) {
   }
 
   function FetchFindUserName(username) {
-    const promise = fetch(`${URL}/findusername?username=${username}`);
+    const promise = fetch(`${API_URL}/api/findusername?username=${username}`);
     return promise;
   }
   function FindAccount(username, password) {
     //console.log(username, password);
-    const promise = fetch (`${URL}/findaccount?username=${username}&password=${password}`);
+    const promise = fetch (`${API_URL}/api/findaccount?username=${username}&password=${password}`);
     return promise;
   }
 

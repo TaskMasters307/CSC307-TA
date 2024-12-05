@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import TaskAdd from './TaskAdd';
 import TaskList from './TaskList';
 import '../css/Task.css';
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "";  
 
 const Task = ({ userId, tasks, setTasks }) => {
     const [filter, setFilter] = useState(null)
@@ -27,7 +29,7 @@ const Task = ({ userId, tasks, setTasks }) => {
 
     const handleAddTask = async (newTask) => {
         try {
-            const response = await fetch(`${URL}/tasks`, {
+            const response = await fetch(`${API_URL}/api/tasks`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newTask, userId }),
@@ -51,7 +53,7 @@ const Task = ({ userId, tasks, setTasks }) => {
             const updatedTask = { ...taskToToggle, isCompleted: !taskToToggle.isCompleted };
 
             try {
-                const response = await fetch(`${URL}/tasks/${taskId}`, {
+                const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedTask),

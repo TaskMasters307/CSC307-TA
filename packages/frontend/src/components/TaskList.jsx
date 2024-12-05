@@ -7,8 +7,21 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
         return taskDate.toISOString().split('T')[0];
     };
 
-    const deleteTask = (taskId) => {
-        setTasks(tasks.filter(task => task.id !== taskId));
+    const deleteTask = async (taskId) => {
+        try {
+            console.log('Deleting task with ID:', taskId);
+            // Delete from backend
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete task');
+            }
+            // Only update frontend state if backend deletion was successful
+            setTasks(tasks.filter(task => task._id !== taskId));
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
     };
 
     return (
@@ -35,7 +48,7 @@ const TaskList = ({ tasks, toggleTask, setTasks }) => {
                     <span className="priority">{task.priority}</span>
                     {task.isCompleted && (
                             <button 
-                                onClick={() => deleteTask(task.id)}
+                                onClick={() => deleteTask(task._id)}
                                 className="delete-button"
                             >
                                 ×
