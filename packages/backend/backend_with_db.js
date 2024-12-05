@@ -133,7 +133,16 @@ app.delete('/users/:id', async (req, res) => {
         res.status(404).send('no user found to delete')
     }
 })
-//--------------------------------------------
+//------leaderboard--------------------------------------
+app.get('/api/leaderboard', async (req, res) => {
+    try {
+        const leaderboard = await userServices.getLeaderboard();
+        res.status(200).json(leaderboard);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).send('Error fetching leaderboard data.');
+    }
+});
 
 app.listen(process.env.PORT || port, () => {
     console.log('REST API is listening.')

@@ -103,6 +103,12 @@ async function getUserStats(userId) {
   }
 }
 
+async function getLeaderboard() {
+  return userModel.find({}, { username: 1, "statistics.totalPoints": 1 })
+      .sort({ "statistics.totalPoints": -1 })
+      .limit(10); // Fetch top 10 users
+}
+
 export default {
   addUser,
   getUsers,
@@ -112,5 +118,6 @@ export default {
   deleteUser,
   findOneAccount,
   updateUserStats,
-  getUserStats
+  getUserStats,
+  getLeaderboard
 };
