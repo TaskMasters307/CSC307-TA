@@ -7,31 +7,45 @@ dotenv.config()
 
 const creds = [];
 
-export function registerUser(req, res, next) {
+export async function registerUser(req, res, next) {
   const username = req.body.username; // from form
-  const pwd = req.body.password  
+  const pwd = req.body.password;
 
   if (!username || !pwd) {
-    res.status(400).send("Bad request: Invalid input data.");
-  } else if (userServices.findOneAccount(username)) {
-    res.status(409).send("Username already taken");
-  } else {
-    bcrypt
-      .genSalt(10)
-      .then((salt) => bcrypt.hash(pwd, salt))
-      .then((hashedPassword) => {
-        generateAccessToken(username).then((token) => {
-          console.log("Token:", token);
+    return res.status(400).send("Bad request: Invalid input data.");
+  }
 
-          req.body.password = hashedPassword;
-          console.log(`req.body.password`, req.body.password)
-          //res.status(201).send({ token: token });
-            next();
+  try {
+    const existingUser = await userServices.findUserByName(username);
+    if (existingUser) {
+      return res.status(409).send("Username already taken");
+    }
 
-        });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(pwd, salt);
+
+    req.body.password = hashedPassword; // Attach the hashed password for saving
+    const newUser = await userServices.addUser(req.body); // Save the user to the database
+
+    if (newUser) {
+      const token = await generateAccessToken(username); // Optional: Generate a token
+      console.log("Token:", token);
+
+      // Send the user ID and token to the client
+      return res.status(201).json({
+        userId: newUser._id,
+        message: "User registered successfully",
+        token, // Optional
       });
+    } else {
+      res.status(500).send("Failed to create user.");
+    }
+  } catch (error) {
+    console.error("Error during user registration:", error);
+    res.status(500).send("Internal server error.");
   }
 }
+
 
 
 function generateAccessToken(username) {
