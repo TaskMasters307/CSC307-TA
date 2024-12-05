@@ -17,7 +17,7 @@
     background: white;
     cursor: pointer;
     text-decoration: none !important; /* Added !important */
-    color: inherit;
+    color: black !important;
     display: flex;
     align-items: center;
 }
