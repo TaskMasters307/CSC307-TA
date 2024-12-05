@@ -1,6 +1,11 @@
 // src/components/Leaderboard.jsx
 import React, { useState, useEffect } from 'react'
 import '../css/Leaderboard.css'
+import deployment from './env.jsx'  
+
+const API_URL = deployment 
+    ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+    : "http://localhost:8001";
 
 const Leaderboard = () => {
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -8,25 +13,31 @@ const Leaderboard = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        let isMounted=true;
         const fetchLeaderboard = async () => {
             try {
-                const response = await fetch(`/api/leaderboard`);
+                const response = await fetch(`${API_URL}/api/users/leaderboard`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch leaderboard data');
                 }
                 const data = await response.json();
-                setLeaderboardData(data);
-                setIsLoading(false);
+                if (isMounted){
+                    setLeaderboardData(data);
+                    setIsLoading(false);
+                }
       } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
+            console.error('Leaderboard fetch error:', err);
+            if (isMounted) {  // Only update state if component is mounted
+                setError(err.message);
+                setIsLoading(false);
+            }
       }
     };
 
         fetchLeaderboard();
         // Refresh leaderboard every 10 seconds
         const interval = setInterval(fetchLeaderboard, 10000);
-        return () => clearInterval(interval);
+        return () => {isMounted=false; clearInterval(interval);};
     }, []);
 
     if (isLoading) return <div className="leaderboard-loading">Loading...</div>;
@@ -56,7 +67,7 @@ const Leaderboard = () => {
           </div>
           {leaderboardData.map((user, index) => (
             <div
-              key={user._id || index} 
+              key={index} 
               className={`leaderboard-row ${
                 index === 0
                   ? "rank-1"
@@ -71,7 +82,7 @@ const Leaderboard = () => {
                 {renderTrophy(index + 1)}
                 #{index + 1}</span> 
               <span className="username">{user.username || "Anonymous"}</span> 
-              <span className="points">{user.statistics?.totalPoints || 0}</span>
+              <span className="points">{user.points || 0}</span>
             </div>
           ))}
         </div>

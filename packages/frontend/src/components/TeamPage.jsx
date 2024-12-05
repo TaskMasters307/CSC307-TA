@@ -1,19 +1,14 @@
 import React from 'react';
 import { Github, Linkedin } from 'lucide-react';
 import '../css/TeamPage.css';
-import arianhoush from '../assets/arianhoush.jpeg';
-import trey_martin from '../assets/trey_martin.jpeg';
-import Austin from '../assets/Austin.jpg';
-import duy from '../assets/duy.png';
-import sameer from '../assets/sameer.jpg';
 
 const TeamPage = () => {
   const teamMembers = [
     {
       name: 'Austin Voong',
       role: 'Developer',
-      image: Austin,
-      bio: 'Adding dark mode was my first real feature - was stoked when it actually worked!',
+      image: '/assets/team/Austin.jpg',
+      bio: '"I love coding!"',
       socials: {
         linkedin: 'https://www.linkedin.com/in/austin-voong-6a5573253/',
         github: 'https://github.com/austinvoong'
@@ -22,7 +17,7 @@ const TeamPage = () => {
     {
       name: 'Trey Martin',
       role: 'Developer',
-      image: trey_martin,
+      image: '/assets/team/trey_martin.jpeg',
       bio: '"Managing the database seemed scary at first, but it ended up being my favorite part."',
       socials: {
         linkedin: 'https://www.linkedin.com/in/jam3s-m4rtin/',
@@ -32,7 +27,7 @@ const TeamPage = () => {
     {
       name: 'Duy Nguyen',
       role: 'Developer',
-      image: duy,
+      image: '/assets/team/duy.png',
       bio: '"Learned so much about teamwork while building something I actually needed for my own classes."',
       socials: {
         linkedin: 'https://www.linkedin.com/in/dnguyen-proverb2528/',
@@ -42,7 +37,7 @@ const TeamPage = () => {
     {
       name: 'Arian Houshmand',
       role: 'Developer',
-      image: arianhoush,
+      image: '/assets/team/arianhoush.jpeg',
       bio: '"Making the interface user-friendly was tough but seeing my friends actually use it made it worth it."',
       socials: {
         linkedin: 'https://www.linkedin.com/in/arian-housh/',
@@ -52,7 +47,7 @@ const TeamPage = () => {
     {
       name: 'Sameer Nadeem',
       role: 'Developer',
-      image: sameer,
+      image: '/assets/team/sameer.jpg',
       bio: '"The calendar feature started as a simple idea but turned out really useful for all of us."',
       socials: {
         linkedin: 'https://www.linkedin.com/in/sameer--nadeem/',

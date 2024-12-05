@@ -13,7 +13,13 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 8001
 
-app.use(cors())
+app.use(cors({
+    origin: [
+        'https://icy-tree-0c95d891e.4.azurestaticapps.net',
+        'http://localhost:5173'  
+    ],
+    credentials: true
+}))
 app.use(express.json())
 app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
@@ -134,6 +140,7 @@ app.delete('/users/:id', async (req, res) => {
     }
 })
 //------leaderboard--------------------------------------
+/*
 app.get('/api/leaderboard', async (req, res) => {
     try {
         const leaderboard = await userServices.getLeaderboard();
@@ -143,7 +150,7 @@ app.get('/api/leaderboard', async (req, res) => {
         res.status(500).send('Error fetching leaderboard data.');
     }
 });
-
+*/
 app.listen(process.env.PORT || port, () => {
     console.log('REST API is listening.')
 })

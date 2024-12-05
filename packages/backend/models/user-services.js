@@ -93,9 +93,20 @@ async function getUserStats(userId) {
     if (!user) {
       throw new Error('User not found');
     }
+
+      // Get all users sorted by points to calculate rank
+      const allUsers = await userModel
+            .find({})
+            .sort({ 'statistics.totalPoints': -1 });
+
+        // Calculate rank (add 1 because array index starts at 0)
+      const userRank = allUsers.findIndex(u => 
+         u._id.toString() === userId.toString()
+      ) + 1;
     return {
       username: user.username,
-      ...user.statistics
+      ...user.statistics,
+      rank: userRank
     };
   } catch (error) {
     console.error('Error getting user stats:', error);
@@ -109,6 +120,23 @@ async function getLeaderboard() {
       .limit(10); // Fetch top 10 users
 }
 
+async function getUserRank(userId) {
+  try {
+      // Get all users sorted by points
+      const users = await userModel.find({})
+          .sort({ 'statistics.totalPoints': -1 });
+      
+      // Find the index of our user
+      const userIndex = users.findIndex(user => user._id.toString() === userId);
+      
+      // Return rank (index + 1) if found, otherwise return null
+      return userIndex !== -1 ? userIndex + 1 : null;
+  } catch (error) {
+      console.error('Error getting user rank:', error);
+      throw error;
+  }
+}
+
 export default {
   addUser,
   getUsers,
@@ -119,5 +147,6 @@ export default {
   findOneAccount,
   updateUserStats,
   getUserStats,
-  getLeaderboard
+  getLeaderboard,
+  getUserRank
 };
