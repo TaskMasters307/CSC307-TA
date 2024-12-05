@@ -1,30 +1,30 @@
-// src/components/Navigation.jsx
-import React from 'react'
-import '../css/Navigation.css'
-/**
- * Navigation Component
- * Handles switching between different views
- */
-const Navigation = ({ currentView, setCurrentView }) => {
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import '../css/Navigation.css';
+
+const Navigation = () => {
     const navItems = [
-        { view: 'welcome', label: ' Home', icon: '🏠' },
-        { view: 'tasks', label: ' Tasks', icon: '📝' },
-        { view: 'calendar', label: ' Calendar', icon: '📅' },
-        { view: 'leaderboard', label: ' Leaderboard', icon: '🏆' },
-        { view: 'team', label: ' Team', icon: '👥' },
-        { view: 'settings', label: ' Settings', icon: '⚙️' },
+        { path: '/welcome', label: ' Home', icon: '🏠' },
+        { path: '/tasks', label: ' Tasks', icon: '📝' },
+        { path: '/calendar', label: ' Calendar', icon: '📅' },
+        { path: '/leaderboard', label: ' Leaderboard', icon: '🏆' },
+        { path: '/team', label: ' Team', icon: '👥' },
+        { path: '/settings', label: ' Settings', icon: '⚙️' },
     ];
+
     return (
         <nav className="navigation">
             {navItems.map(item => (
-                <button
-                    key={item.view}
-                    className={`nav-button ${currentView === item.view ? 'active' : ''}`}
-                    onClick={() => setCurrentView(item.view)}
+                <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={({ isActive }) => 
+                        `nav-button ${isActive ? 'active' : ''}`
+                    }
                 >
                     <span className="nav-icon">{item.icon}</span>
                     <span className="nav-label">{item.label}</span>
-                </button>
+                </NavLink>
             ))}
         </nav>
     );

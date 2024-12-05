@@ -1,4 +1,4 @@
-/* Navigation css*/
+/* Navigation.css */
 .navigation {
     display: flex;
     justify-content: center;
@@ -6,15 +6,48 @@
     margin-bottom: 20px;
 }
 
-.navigation button {
+/* Remove all underlines from links */
+.navigation a {
+    text-decoration: none !important;
+}
+
+.nav-link {
     padding: 8px 16px;
     border: 1px solid #ddd;
     background: white;
     cursor: pointer;
+    text-decoration: none !important; /* Added !important */
+    color: inherit;
+    display: flex;
+    align-items: center;
 }
 
-.navigation button.active {
+.nav-link:hover {
+    text-decoration: none !important; /* Also prevent hover underline */
+}
+
+.nav-link.active {
     background: #007bff;
     color: white;
     border-color: #0056b3;
+}
+
+.nav-icon {
+    margin-right: 4px;
+}
+
+.nav-label {
+    font-size: inherit;
+}
+
+/* Dark mode support if needed */
+.dark-mode .nav-link {
+    background: #333;
+    border-color: #444;
+    color: #fff;
+}
+
+.dark-mode .nav-link.active {
+    background: #0056b3;
+    border-color: #003d80;
 }

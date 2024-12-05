@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Calendar from './components/Calendar';
 import Navigation from './components/Navigation';
 import Welcome from './components/Welcome';
@@ -7,23 +8,30 @@ import Login from './components/Login';
 import Task from './components/Task';
 import Settings from './components/Settings';
 import deployment from './components/env.jsx';
-import TeamPage from './components/TeamPage.jsx'
+import TeamPage from './components/TeamPage.jsx';
+import Signup from './components/Signup';
+import './App.css';
+
 const API_URL = deployment 
     ? "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-    : "http://localhost:8001";  
+    : "http://localhost:8001";
 
-import './App.css';
-import Signup from './components/Signup';
+// Protected Route Component
+const ProtectedRoute = ({ children, isLoggedIn }) => {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function App() {
-    const [currentView, setCurrentView] = useState('signup'); // Controls which view is displayed
-    const [selectedDate, setSelectedDate] = useState(new Date()); // Selected date for the calendar
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [tasks, setTasks] = useState([]); // Centralized tasks state
-    // Function to fetch tasks for the logged-in user
+    const [tasks, setTasks] = useState([]);
+
     const fetchUserTasks = async (userId) => {
         try {
             const response = await fetch(`${API_URL}/api/tasks/${userId}`);
@@ -31,38 +39,26 @@ function App() {
                 throw new Error(`Failed to fetch tasks: ${response.status}`);
             }
             const data = await response.json();
-            setTasks(data || []); // Replace state with fetched tasks
+            setTasks(data || []);
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
     };
-    
 
-    // Handle login success
     const handleLoginSuccess = (id) => {
-        console.log('Setting userId:', id);
         setIsLoggedIn(true);
-        setUserId(id); // Save the userId for task association
-        setCurrentView('welcome'); // Switch to main content on successful login
-        fetchUserTasks(id); // Fetch tasks immediately after login
+        setUserId(id);
+        fetchUserTasks(id);
     };
 
-    // Toggle dark mode
     const toggleDarkMode = () => {
         setIsDarkMode((prevMode) => !prevMode);
     };
 
-    // Handle logout
     const handleLogout = () => {
         setIsLoggedIn(false);
         setUserId(null);
-        setTasks([]); 
-        setCurrentView('login');
-    };
-
-    // Switch back to signup
-    const handleSignup = () => {
-        setCurrentView('signup');
+        setTasks([]);
     };
 
     useEffect(() => {
@@ -70,76 +66,82 @@ function App() {
     }, [isDarkMode]);
 
     return (
-        <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
-            {isLoggedIn ? (
-                <div>
-                    <h1>TaskArena</h1>
-                    <Navigation
-                        currentView={currentView}
-                        setCurrentView={setCurrentView}
-                    />
-                    <main>
-                        {currentView === 'welcome' && (
-                            <div className="welcome-container">
-                                <Welcome
-                                username={username}
-                                userId={userId}
-                            />
-                            </div>
-                        )}
-                        {currentView === 'tasks' && (
-                            <div className="task-container">
-                            <Task userId={userId} tasks={tasks} setTasks={setTasks} />
-                            </div>
-                        )}
-                        {currentView === 'calendar' && (
-                            <div className="calendar-container">
-                            <Calendar
-                              selectedDate={selectedDate}
-                              setSelectedDate={setSelectedDate}
-                              tasks={tasks}
-                              setTasks={setTasks}
-                            />
-                            </div>
-                        )}
-                        {currentView === 'leaderboard' && (
-                        <div className="leaderboard-container">
-                        <Leaderboard 
-                        />
-                      </div>
-                      )}
-                        {currentView === 'team' && (
-                            <div className="team-container">
+        <BrowserRouter>
+            <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
+                {isLoggedIn && (
+                    <>
+                        <h1>TaskArena</h1>
+                        <Navigation />
+                    </>
+                )}
+                <main>
+                    <Routes>
+                        <Route path="/login" element={
+                            isLoggedIn ? 
+                                <Navigate to="/welcome" replace /> : 
+                                <Login onLoginSuccess={handleLoginSuccess} />
+                        } />
+                        
+                        <Route path="/signup" element={
+                            isLoggedIn ? 
+                                <Navigate to="/welcome" replace /> : 
+                                <Signup LoginSuccess={handleLoginSuccess} />
+                        } />
+
+                        <Route path="/welcome" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <Welcome username={username} userId={userId} />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/tasks" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <Task userId={userId} tasks={tasks} setTasks={setTasks} />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/calendar" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <Calendar
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={setSelectedDate}
+                                    tasks={tasks}
+                                    setTasks={setTasks}
+                                />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/leaderboard" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <Leaderboard />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/team" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
                                 <TeamPage />
-                            </div>
-                        )}
-                        {currentView === 'settings' && (
-                            <div className="settings-container">
-                            <Settings
-                                onLogout={handleLogout}
-                                toggleDarkMode={toggleDarkMode}
-                                isDarkMode={isDarkMode}
-                            />
-                            </div>
-                        )}
-                    </main>
-                </div>
-            ) : (
-                <>
-                    {currentView === 'login' ? (
-                        <Login
-                            onLoginSuccess={handleLoginSuccess}
-                            PopSignup={handleSignup}
-                        />
-                    ) : currentView === 'signup' ? (
-                        <Signup
-                            LoginSuccess={handleLoginSuccess}
-                            closeForm={() => setCurrentView('login')}
-                        />
-                    ) : null}
-                </>
-            )}
-        </div>
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/settings" element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <Settings
+                                    onLogout={handleLogout}
+                                    toggleDarkMode={toggleDarkMode}
+                                    isDarkMode={isDarkMode}
+                                />
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="/" element={
+                            isLoggedIn ? 
+                                <Navigate to="/welcome" replace /> : 
+                                <Navigate to="/login" replace />
+                        } />
+                    </Routes>
+                </main>
+            </div>
+        </BrowserRouter>
     );
 }
 
