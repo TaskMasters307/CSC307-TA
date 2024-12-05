@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TaskAdd from './TaskAdd';
 import TaskList from './TaskList';
 import '../css/Task.css';
-//const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
-const URL = "http://localhost:8001"
+const URL = "https://backend-task-arena-bhaxftapffehhhcj.westus3-01.azurewebsites.net"
+//const URL = "http://localhost:8001"
 
 const Task = ({ userId, tasks, setTasks }) => {
     const [filter, setFilter] = useState(null)
