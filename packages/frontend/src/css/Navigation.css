@@ -4,50 +4,46 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
-}
-
-/* Remove all underlines from links */
-.navigation a {
+  }
+  /* Remove all underlines from links */
+  .navigation a {
     text-decoration: none !important;
-}
-
-.nav-link {
+  }
+  .nav-button {  /* Changed from .nav-link to .nav-button */
     padding: 8px 16px;
     border: 1px solid #ddd;
     background: white;
+    color: black !important; /* Force black color */
     cursor: pointer;
-    text-decoration: none !important; /* Added !important */
-    color: black !important;
     display: flex;
     align-items: center;
-}
-
-.nav-link:hover {
+    text-decoration: none !important;
+  }
+  .nav-button:hover {
     text-decoration: none !important; /* Also prevent hover underline */
-}
-
-.nav-link.active {
+  }
+  .nav-button.active {
     background: #007bff;
-    color: white;
+    color: white !important;
     border-color: #0056b3;
-}
-
-.nav-icon {
+  }
+  .nav-icon {
     margin-right: 4px;
-}
-
-.nav-label {
+  }
+  .nav-label {
     font-size: inherit;
-}
+  }
 
-/* Dark mode support if needed */
-.dark-mode .nav-link {
+  
+/* Dark mode */
+.dark-mode .nav-button {
     background: #333;
     border-color: #444;
-    color: #fff;
-}
+    color: white !important; /* Ensures text is white in dark mode */
+    }
 
-.dark-mode .nav-link.active {
-    background: #0056b3;
-    border-color: #003d80;
-}
+.dark-mode .nav-button.active {
+    background: #007bff;
+    border-color: #0056b3;
+    color: white !important;
+    }
