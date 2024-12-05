@@ -58,6 +58,12 @@ const TeamPage = () => {
 
   return (
     <div className="team-container">
+      <div className="team-vision-container">
+        <h1 className="vision-title">Team Vision</h1>
+        <p className="vision-description">
+          For students and career focused individuals who need to plan and record their daily tasks. The TaskArena is a To-Do List that allows an indiviual to track the tasks they have to complete. Our product will gamify completing tasks by rewarding points with a global leader board.
+        </p>
+      </div>
       <div className="team-header">
         <h1 className="team-title">Our Team</h1>
         <p className="team-description">

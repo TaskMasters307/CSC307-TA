@@ -210,13 +210,14 @@
     }
 }
 
-/* Dark Mode Styles */
+
 .dark-mode .task-list,
 .dark-mode .task-add {
-    background-color: #2f2f2f;
-    color: #f5f5f5;
-    box-shadow: none;
+    background-color: #3a3a3a; /* Slightly lighter to stand out */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+    border: 1px solid #444; /* Add a border for separation */
 }
+
 
 .darkmode .task-container {
     background-color: #2f2f2f;

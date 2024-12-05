@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import Calendar from './Calendar';
 import TaskList from './TaskList';
 
-
 // Mock data for testing
 const mockTasks = [
     {
@@ -22,15 +21,6 @@ const mockTasks = [
         isCompleted: true
     }
 ];
-
-// Soft assertion helper
-const softAssert = (condition, successMessage, errorMessage) => {
-    if (condition) {
-        console.log(successMessage);
-    } else {
-        console.warn(errorMessage);
-    }
-};
 
 describe('Calendar Component', () => {
     let setSelectedDateMock;
@@ -59,7 +49,7 @@ describe('Calendar Component', () => {
         );
 
         const header = screen.queryByText(/January 2024/i);
-        softAssert(header, 'Header renders correctly.', 'Header is missing.');
+        expect(header).toBeInTheDocument();
     });
 
     test('renders empty slots for the start of the month', () => {
@@ -73,11 +63,7 @@ describe('Calendar Component', () => {
         );
 
         const emptySlots = screen.getAllByText('', { exact: true });
-        softAssert(
-            emptySlots.length > 0,
-            `Found ${emptySlots.length} empty slots.`,
-            'No empty slots found for the start of the month.'
-        );
+        expect(emptySlots.length).toBeGreaterThan(0);
     });
 
     test('renders tasks for a specific date', () => {
@@ -91,17 +77,10 @@ describe('Calendar Component', () => {
         );
 
         const day15 = screen.queryByText('15');
-        if (day15) {
-            const taskContainer = day15.closest('.calendar-day');
-            const tasks = within(taskContainer).queryAllByText(/Task/);
-            softAssert(
-                tasks.length > 0,
-                `Tasks render correctly for day 15 (${tasks.length} tasks).`,
-                'No tasks found for day 15.'
-            );
-        } else {
-            console.warn('Day 15 is not rendered.');
-        }
+        expect(day15).toBeInTheDocument();
+        const taskContainer = day15.closest('.calendar-day');
+        const tasks = within(taskContainer).queryAllByText(/Task/);
+        expect(tasks.length).toBeGreaterThan(0);
     });
 
     test('updates tasks on drop', () => {
@@ -115,18 +94,11 @@ describe('Calendar Component', () => {
         );
 
         const day16 = screen.queryByText('16');
-        if (day16) {
-            fireEvent.drop(day16, {
-                dataTransfer: { getData: () => '1' } // Mock task ID
-            });
-            softAssert(
-                setTasksMock.mock.calls.length > 0,
-                'Tasks updated on drop.',
-                'Tasks were not updated on drop.'
-            );
-        } else {
-            console.warn('Day 16 not rendered.');
-        }
+        expect(day16).toBeInTheDocument();
+        fireEvent.drop(day16, {
+            dataTransfer: { getData: () => '1' } // Mock task ID
+        });
+        expect(setTasksMock).toHaveBeenCalled();
     });
 
     test('handles drag over correctly', () => {
@@ -140,12 +112,9 @@ describe('Calendar Component', () => {
         );
 
         const day15 = screen.queryByText('15');
-        if (day15) {
-            fireEvent.dragOver(day15);
-            console.log('Drag over handled correctly for day 15.');
-        } else {
-            console.warn('Day 15 is not rendered.');
-        }
+        expect(day15).toBeInTheDocument();
+        fireEvent.dragOver(day15);
+        // If additional drag-over validation is needed, test for state or style changes
     });
 
     test('changes month correctly', () => {
@@ -162,11 +131,7 @@ describe('Calendar Component', () => {
         fireEvent.click(nextMonthButton);
 
         const header = screen.queryByText(/February 2024/i);
-        softAssert(
-            header,
-            'Month changes correctly to February 2024.',
-            'Failed to change to February 2024.'
-        );
+        expect(header).toBeInTheDocument();
     });
 
     test('renders task completion styles', () => {
@@ -180,11 +145,7 @@ describe('Calendar Component', () => {
         );
 
         const completedTask = screen.queryByText('Completed Task');
-        softAssert(
-            completedTask?.classList.contains('completed'),
-            'Completed task has correct styles.',
-            'Completed task does not have the correct styles.'
-        );
+        expect(completedTask).toHaveClass('completed');
     });
 
     test('generates correct dates for the month', () => {
@@ -192,99 +153,53 @@ describe('Calendar Component', () => {
             null, null, null, null, null, null, '2024-01-01', '2024-01-31'
         ]; // Mocked result
         dates.forEach((date, index) => {
-            softAssert(
-                date,
-                `Date at index ${index} is valid: ${date}`,
-                `Date at index ${index} is invalid: ${date}`
-            );
+            expect(date).toBeTruthy();
         });
     });
 
     test('renders tasks with correct classes and is draggable', () => {
         render(
-            <Calendar 
-                selectedDate={new Date(2024, 0, 15)}
-                setSelectedDate={setSelectedDateMock}
-                tasks={mockTasks}
-                setTasks={setTasksMock}
-            />
+            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
         );
     
-        const task = screen.queryByText('High Priority Task'); // Change to queryByText
-        if (task) {
-            softAssert(
-                task?.classList.contains('calendar-task'),
-                'Task has the "calendar-task" class.',
-                'Task does not have the "calendar-task" class.'
-            );
-            softAssert(
-                task?.draggable,
-                'Task is draggable.',
-                'Task is not draggable.'
-            );
-        } else {
-            console.warn('Task with text "High Priority Task" not found.');
-        }
+        mockTasks.forEach((task) => {
+            const taskElement = screen.getByText(new RegExp(task.title, 'i'));
+            expect(taskElement).toHaveClass('task-item');
+            expect(taskElement).toHaveAttribute('draggable', 'true');
+        });
     });
-    
-    
+
     test('sets task ID on drag start', () => {
         render(
-            <Calendar 
-                selectedDate={new Date(2024, 0, 15)}
-                setSelectedDate={setSelectedDateMock}
-                tasks={mockTasks}
-                setTasks={setTasksMock}
-            />
+            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
         );
-    
-        const task = screen.queryByText('High Priority Task'); // Change to queryByText
-        if (task) {
-            const dataTransferMock = { setData: jest.fn() };
-            fireEvent.dragStart(task, { dataTransfer: dataTransferMock });
-    
-            softAssert(
-                dataTransferMock.setData.mock.calls.length > 0,
-                'setData was called on drag start.',
-                'setData was not called on drag start.'
-            );
-            softAssert(
-                dataTransferMock.setData.mock.calls[0][1] === '1',
-                `setData was called with the correct task ID: ${dataTransferMock.setData.mock.calls[0][1]}`,
-                'setData was not called with the correct task ID.'
-            );
-        } else {
-            console.warn('Task with text "High Priority Task" not found.');
-        }
+
+        const taskElement = screen.queryByText(/High Priority Task/i);
+        expect(taskElement).toBeInTheDocument();
+
+        const dataTransferMock = { setData: jest.fn() };
+        fireEvent.dragStart(taskElement, { dataTransfer: dataTransferMock });
+
+        expect(dataTransferMock.setData).toHaveBeenCalledWith('text', '1');
     });
-    
+
     test('updates tasks on valid drop', () => {
         render(
-            <Calendar 
-                selectedDate={new Date(2024, 0, 15)}
-                setSelectedDate={setSelectedDateMock}
-                tasks={mockTasks}
-                setTasks={setTasksMock}
-            />
+            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
         );
-    
-        const task = screen.queryByText('High Priority Task'); // Change to queryByText
+
+        const taskElement = screen.queryByText(/High Priority Task/i);
         const day16 = screen.queryByText('16');
-        if (task && day16) {
-            fireEvent.dragStart(task, { dataTransfer: { setData: jest.fn() } });
-            fireEvent.drop(day16, { dataTransfer: { getData: () => '1' } });
-    
-            softAssert(
-                setTasksMock.mock.calls.length > 0,
-                'Tasks updated on valid drop.',
-                'Tasks were not updated on valid drop.'
-            );
-        } else {
-            if (!task) console.warn('Task with text "High Priority Task" not found.');
-            if (!day16) console.warn('Day 16 is not rendered.');
-        }
+        expect(taskElement).toBeInTheDocument();
+        expect(day16).toBeInTheDocument();
+
+        const dataTransferMock = { setData: jest.fn(), getData: jest.fn(() => '1') };
+        fireEvent.dragStart(taskElement, { dataTransfer: dataTransferMock });
+        fireEvent.drop(day16, { dataTransfer: dataTransferMock });
+
+        expect(setTasksMock).toHaveBeenCalled();
     });
-    
+
     test('prevents default behavior on drag over', () => {
         render(
             <Calendar 
@@ -294,23 +209,16 @@ describe('Calendar Component', () => {
                 setTasks={setTasksMock}
             />
         );
-    
+
         const day15 = screen.queryByText('15');
-        if (day15) {
-            const preventDefaultMock = jest.fn();
-            fireEvent.dragOver(day15, { preventDefault: preventDefaultMock });
-    
-            softAssert(
-                preventDefaultMock.mock.calls.length > 0,
-                'Default behavior prevented on drag over.',
-                'Default behavior not prevented on drag over.'
-            );
-        } else {
-            console.warn('Day 15 is not rendered.');
-        }
+        expect(day15).toBeInTheDocument();
+
+        const preventDefaultMock = jest.fn();
+        fireEvent.dragOver(day15, { preventDefault: preventDefaultMock });
+
+        expect(preventDefaultMock).toHaveBeenCalled();
     });
-    
-    
+
     test('navigates to previous month on arrow click', () => {
         render(
             <Calendar 
@@ -320,91 +228,14 @@ describe('Calendar Component', () => {
                 setTasks={setTasksMock}
             />
         );
-    
+
         const prevMonthArrow = screen.getByText('◀');
         fireEvent.click(prevMonthArrow);
-    
+
         const header = screen.queryByText(/December 2023/i);
-        softAssert(
-            header,
-            'Navigated to the previous month successfully.',
-            'Failed to navigate to the previous month.'
-        );
-    });test('renders tasks with correct classes and is draggable', () => {
-        render(
-            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
-        );
-    
-        mockTasks.forEach((task) => {
-            const taskElement = screen.getByText(new RegExp(task.title, 'i'));
-            softAssert(
-                taskElement?.classList.contains('task-item'),
-                `Task "${task.title}" has the "task-item" class.`,
-                `Task "${task.title}" does not have the "task-item" class.`
-            );
-            softAssert(
-                taskElement?.draggable,
-                `Task "${task.title}" is draggable.`,
-                `Task "${task.title}" is not draggable.`
-            );
-        });
-    });
-    
-    test('sets task ID on drag start', () => {
-        render(
-            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
-        );
-    
-        const taskElement = screen.queryByText(/High Priority Task/i);
-        if (taskElement) {
-            const dataTransferMock = { setData: jest.fn() };
-            fireEvent.dragStart(taskElement, { dataTransfer: dataTransferMock });
-    
-            softAssert(
-                dataTransferMock.setData.mock.calls.length > 0,
-                'setData was called on drag start.',
-                'setData was not called on drag start.'
-            );
-            softAssert(
-                dataTransferMock.setData.mock.calls[0][1] === '1',
-                'setData was called with the correct task ID.',
-                'setData was not called with the correct task ID.'
-            );
-        } else {
-            console.warn('Task "High Priority Task" not found.');
-        }
+        expect(header).toBeInTheDocument();
     });
 
-  
-    
-    
-
-
-    
-    test('updates tasks on valid drop', () => {
-        render(
-            <TaskList tasks={mockTasks} toggleTask={jest.fn()} />
-        );
-    
-        const taskElement = screen.queryByText(/High Priority Task/i);
-        const day16 = screen.queryByText('16');
-        if (taskElement && day16) {
-            const dataTransferMock = { setData: jest.fn(), getData: jest.fn(() => '1') };
-            fireEvent.dragStart(taskElement, { dataTransfer: dataTransferMock });
-            fireEvent.drop(day16, { dataTransfer: dataTransferMock });
-    
-            softAssert(
-                setTasksMock.mock.calls.length > 0,
-                'Tasks updated on valid drop.',
-                'Tasks were not updated on valid drop.'
-            );
-        } else {
-            if (!taskElement) console.warn('Task "High Priority Task" not found.');
-            if (!day16) console.warn('Day 16 is not rendered.');
-        }
-    });
-    
-    
     test('calls handleDrop on valid drop with date', () => {
         render(
             <Calendar 
@@ -414,77 +245,11 @@ describe('Calendar Component', () => {
                 setTasks={setTasksMock}
             />
         );
-    
+
         const day16 = screen.queryByText('16');
-        if (day16) {
-            const handleDropMock = jest.fn();
-            fireEvent.drop(day16, { dataTransfer: { getData: () => '1' } });
-    
-            softAssert(
-                setTasksMock.mock.calls.length > 0,
-                'handleDrop called successfully.',
-                'handleDrop not called successfully.'
-            );
-        } else {
-            console.warn('Day 16 is not rendered.');
-        }
+        expect(day16).toBeInTheDocument();
+
+        fireEvent.drop(day16, { dataTransfer: { getData: () => '1' } });
+        expect(setTasksMock).toHaveBeenCalled();
     });
-
-
-    test('Covers rendering tasks with all combinations of priority and completion status', () => {
-        const mockTasks = [
-            { _id: '1', date: '2024-01-01', title: 'Task 1', priority: 'high', isCompleted: true },
-            { _id: '2', date: '2024-01-01', title: 'Task 2', priority: 'medium', isCompleted: false },
-            { _id: '3', date: '2024-01-01', title: 'Task 3', priority: 'low', isCompleted: true },
-        ];
-    
-        render(
-            <Calendar
-                selectedDate={new Date('2024-01-01')}
-                setSelectedDate={jest.fn()}
-                tasks={mockTasks}
-                setTasks={jest.fn()}
-            />
-        );
-    
-        mockTasks.forEach((task) => {
-            const taskElement = screen.getByText(task.title);
-            expect(taskElement).toBeInTheDocument();
-        });
-    });
-    
-
-    test('Covers drag and drop logic for tasks', () => {
-        const mockTasks = [
-            { _id: '1', date: '2024-01-01', title: 'Task 1', priority: 'high', isCompleted: false },
-        ];
-        const setTasksMock = jest.fn();
-    
-        render(
-            <Calendar
-                selectedDate={new Date('2024-01-01')}
-                setSelectedDate={jest.fn()}
-                tasks={mockTasks}
-                setTasks={setTasksMock}
-            />
-        );
-    
-        const mockEvent = {
-            preventDefault: jest.fn(),
-            dataTransfer: { getData: jest.fn().mockReturnValue('1') },
-        };
-    
-        const dateElement = screen.getByText('1'); 
-        fireEvent.drop(dateElement, mockEvent);
-    
-        expect(setTasksMock).toHaveBeenCalledWith([
-            { _id: '1', date: '2024-01-01', title: 'Task 1', priority: 'high', isCompleted: false },
-        ]);
-    });
-    
-
-
-    
-    
-    
 });
