@@ -138,11 +138,8 @@ app.put('/tasks/:taskId', async (req, res) => {
     const updatedData = req.body;
 
     try {
-        if (!mongoose.Types.ObjectId.isValid(taskId)) {
-            return res.status(400).send({ error: 'Invalid task ID' });
-        }
 
-        const updatedTask = await Task.findByIdAndUpdate(taskId, updatedData, { new: true });
+        const updatedTask = await taskServices.findByIdAndUpdate(taskId, updatedData, { new: true });
         if (!updatedTask) {
             return res.status(404).send({ error: 'Task not found' });
         }

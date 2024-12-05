@@ -56,6 +56,9 @@ async function getTasksByUser(userId) {
         throw error; // Propagate the error to the caller
     }
 }
+async function findByIdAndUpdate(taskId, updates) {
+    return await Task.findByIdAndUpdate(taskId, updates, { new: true });
+}
 
 
 
@@ -66,4 +69,5 @@ export default {
     addTask,
     updateTask,
     deleteTask,
+    findByIdAndUpdate
 };

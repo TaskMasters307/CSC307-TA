@@ -11,13 +11,27 @@ import './App.css';
 import Signup from './components/Signup';
 
 function App() {
-    // State for overall app management
     const [currentView, setCurrentView] = useState('signup'); // Controls which view is displayed
     const [selectedDate, setSelectedDate] = useState(new Date()); // Selected date for the calendar
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [tasks, setTasks] = useState([]); // Centralized tasks state
+
+    // Function to fetch tasks for the logged-in user
+    const fetchUserTasks = async (userId) => {
+        try {
+            const response = await fetch(`http://localhost:8001/tasks/${userId}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tasks: ${response.status}`);
+            }
+            const data = await response.json();
+            setTasks(data || []); // Set fetched tasks
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        }
+    };
 
     // Handle login success
     const handleLoginSuccess = (id) => {
@@ -25,6 +39,7 @@ function App() {
         setIsLoggedIn(true);
         setUserId(id); // Save the userId for task association
         setCurrentView('welcome'); // Switch to main content on successful login
+        fetchUserTasks(id); // Fetch tasks immediately after login
     };
 
     // Toggle dark mode
@@ -36,6 +51,7 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         setUserId(null);
+        setTasks([]); // Clear tasks on logout
         setCurrentView('login');
     };
 
@@ -47,7 +63,6 @@ function App() {
     return (
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             {isLoggedIn ? (
-                // Main app content after login
                 <div>
                     <h1>TaskArena</h1>
                     <Navigation
@@ -62,12 +77,14 @@ function App() {
                             />
                         )}
                         {currentView === 'tasks' && (
-                            <Task userId={userId} />
+                            <Task userId={userId} tasks={tasks} setTasks={setTasks} />
                         )}
                         {currentView === 'calendar' && (
                             <Calendar
                                 selectedDate={selectedDate}
                                 setSelectedDate={setSelectedDate}
+                                tasks={tasks}
+                                setTasks={setTasks}
                             />
                         )}
                         {currentView === 'leaderboard' && <Leaderboard />}
@@ -81,7 +98,6 @@ function App() {
                     </main>
                 </div>
             ) : (
-                // Login/Signup forms
                 <>
                     {currentView === 'login' ? (
                         <Login
