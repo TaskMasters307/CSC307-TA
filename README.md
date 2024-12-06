@@ -11,9 +11,10 @@ Project Vision: For students and career focused individuals who need to plan and
 
 
 **UI Prototype:**
+Last Updated: 11/20/2024
 Link to figma: https://www.figma.com/proto/KIxwDEJ3UhFwIYnl9dSTUG/treymartin.wv's-team-library?node-id=3318-2&starting-point-node-id=3318%3A2&scaling=contain&content-scaling=fixed
 
-Link to picture of figma in docs: https://github.com/TaskMasters307/CSC307-TA/blob/main/docs/figma_UI_prototypes.png
+Link to picture of figma in docs: https://github.com/TaskMasters307/CSC307-TA/blob/main/docs/figma_UI_prototypes.png 
 
 **Development Environment Set Up:**
 
@@ -54,8 +55,13 @@ Submitting code:
     4. git commit -m ""
     5. git push origin <your branch name>
 
-**UML Class Diagram:**
+If you want to run code locally:
+    1. Go to packages/frontend/src/components/env.jsx 
+    2. Change deployment to false
+    3. Once you are ready to commit and push to deploy, change back to true
 
+**UML Class Diagram:**
+Last Updated: 11/20/2024
 
 Link to diagram: https://drive.google.com/file/d/1jX6iP4qCyFg-Tok3iK1KulSrBmZrnmwZ/view
 
