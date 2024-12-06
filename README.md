@@ -61,7 +61,7 @@ If you want to run code locally:
     3. Once you are ready to commit and push to deploy, change back to true
 
 **UML Class Diagram:**
-Last Updated: 11/20/2024
+Last Updated: 11/05/2024
 
 Link to diagram: https://drive.google.com/file/d/1jX6iP4qCyFg-Tok3iK1KulSrBmZrnmwZ/view
 
