@@ -11,7 +11,7 @@ Project Vision: For students and career focused individuals who need to plan and
 
 
 **UI Prototype:**
-ADD Figma Link 
+Link to figma: https://www.figma.com/proto/KIxwDEJ3UhFwIYnl9dSTUG/treymartin.wv's-team-library?node-id=3318-2&starting-point-node-id=3318%3A2&scaling=contain&content-scaling=fixed
 
 
 **Development Environment Set Up:**
@@ -56,6 +56,8 @@ Submitting code:
 **UML Class Diagram:**
 
 
+
+
 **Testing:**
 
 We chose option 2 for testing. 
@@ -69,4 +71,6 @@ Here is some examples of what we tested:
 2. Task Rescheduling: Ensured that dragging a task to a different date updates the task's associated date and state correctly.
 3. Priority Display: Confirmed that task priority colors (e.g., high, medium, low) were rendered correctly based on task properties.
 
+Bottom line: coverage of 93% 
+Link to coverage: 
 
