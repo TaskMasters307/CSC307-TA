@@ -13,6 +13,7 @@ Project Vision: For students and career focused individuals who need to plan and
 **UI Prototype:**
 Link to figma: https://www.figma.com/proto/KIxwDEJ3UhFwIYnl9dSTUG/treymartin.wv's-team-library?node-id=3318-2&starting-point-node-id=3318%3A2&scaling=contain&content-scaling=fixed
 
+Link to picture of figma in docs: https://github.com/TaskMasters307/CSC307-TA/blob/main/docs/figma_UI_prototypes.png
 
 **Development Environment Set Up:**
 
@@ -56,7 +57,9 @@ Submitting code:
 **UML Class Diagram:**
 
 
+Link to diagram: https://drive.google.com/file/d/1jX6iP4qCyFg-Tok3iK1KulSrBmZrnmwZ/view
 
+link to .io file in docs: https://github.com/TaskMasters307/CSC307-TA/blob/main/docs/taskarena.drawio
 
 **Testing:**
 
@@ -72,5 +75,5 @@ Here is some examples of what we tested:
 3. Priority Display: Confirmed that task priority colors (e.g., high, medium, low) were rendered correctly based on task properties.
 
 Bottom line: coverage of 93% 
-Link to coverage: 
+Link to coverage:  https://github.com/TaskMasters307/CSC307-TA/blob/main/docs/CoverageReport.png
 
