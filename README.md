@@ -1,9 +1,20 @@
 # CSC-307-TA
 
-testing
 CSC 307 Team Assignment: Arian Houshmand, Trey Martin, Sameer Nadeem, Duy Nguyen, Austin Voong
 
-Contributing Steps:
+
+**Project Blurb:**
+
+Our Project is the Task Arena. TaskArena is a gamified task management application designed for students and career-focused individuals. It helps users plan, track, and complete their daily tasks while earning points for each accomplishment. Users can monitor their progress, set priorities for tasks, and compete globally via a leaderboard. Features include task creation and tracking, calendar integration for rescheduling, and a robust authentication system. Unlike conventional task management tools like Apple’s Reminder, TaskArena adds a fun and competitive edge to productivity by incorporating gamification.
+
+Project Vision: For students and career focused individuals who need to plan and record their daily tasks. The TaskArena is a To-Do List that allows an indiviual to track the tasks they have to complete. Our product will gamify completing tasks by rewarding points with a global leader board. 
+
+
+**UI Prototype:**
+ADD Figma Link 
+
+
+**Development Environment Set Up:**
 
 To get started:
 
@@ -41,3 +52,21 @@ Submitting code:
     3. git add <>
     4. git commit -m ""
     5. git push origin <your branch name>
+
+**UML Class Diagram:**
+
+
+**Testing:**
+
+We chose option 2 for testing. 
+
+We tested the Calendar component of our React app, which is the most extensive component in the project. This component allows users to interact with a variety of elements, including navigating between months, selecting dates, and dragging and dropping tasks for rescheduling. It also features a color-coded task priority system.
+
+The Calendar component was ideal for testing because it uses useState to manage internal states such as the currently selected date, the visible month, and task data. Additionally, it has at least three inputs or buttons: navigation arrows for changing months, date selection buttons, and a task rescheduling feature. We used Jest and React Testing Library to write tests that simulate user interactions such as clicking navigation arrows, selecting dates, and dragging tasks. Mock data was used to populate the calendar, ensuring that the tests reflected real-world usage scenarios. We also checked the component's state transitions and DOM updates to verify correctness.
+
+Here is some examples of what we tested:
+1. State Updates: Verified that navigation buttons correctly update the current month and selected date in the component's state.
+2. Task Rescheduling: Ensured that dragging a task to a different date updates the task's associated date and state correctly.
+3. Priority Display: Confirmed that task priority colors (e.g., high, medium, low) were rendered correctly based on task properties.
+
+
