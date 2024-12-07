@@ -2,6 +2,7 @@
 
 CSC 307 Team Assignment: Arian Houshmand, Trey Martin, Sameer Nadeem, Duy Nguyen, Austin Voong
 
+**Link to deployment**: https://icy-tree-0c95d891e.4.azurestaticapps.net/
 
 **Project Blurb:**
 
