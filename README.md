@@ -6,6 +6,8 @@ CSC 307 Team Assignment: Arian Houshmand, Trey Martin, Sameer Nadeem, Duy Nguyen
 
 **Link to demo**: https://drive.google.com/file/d/1LBIZdxJFTcjsYiHu6DT07B18dJSNYN_p/view?usp=sharing
 
+**Link to slides** https://drive.google.com/file/d/1X8Rq5OzmyyTjOLIfhuzQtUfYSrI8JIjQ/view?usp=sharing
+
 **Project Blurb:**
 
 Our Project is the Task Arena. TaskArena is a gamified task management application designed for students and career-focused individuals. It helps users plan, track, and complete their daily tasks while earning points for each accomplishment. Users can monitor their progress, set priorities for tasks, and compete globally via a leaderboard. Features include task creation and tracking, calendar integration for rescheduling, and a robust authentication system. Unlike conventional task management tools like Apple’s Reminder, TaskArena adds a fun and competitive edge to productivity by incorporating gamification.
